@@ -1,23 +1,25 @@
 <?php
 class Controller
 {
-  public function model($model)
-  {
-    if (file_exists("./app/models/frontend/" . $model . ".php")) {
-      require_once "./app/models/frontend/" . $model . ".php";
-    } else if (file_exists("./app/models/backend/" . $model . ".php")) {
-      require_once "./app/models/backend/" . $model . ".php";
-    }
-    return new $model;
-  }
-
   public function view($view, $data = [])
   {
-    if (file_exists("./app/views/frontend/" . $view . ".php")) {
-      require_once "./app/views/frontend/" . $view . ".php";
-    } else if (file_exists("./app/views/backend/" . $view . ".php")) {
-      require_once "./app/views/backend/" . $view . ".php";
+    if (file_exists("./app/views/" . $view . ".php")) {
+      include "./app/views/" . $view . ".php";
+    } else {
+      include "./app/views/frontend/404.php";
     }
   }
+
+  public function model($path)
+  {
+    if (file_exists("./app/models/" . $path . ".php")) {
+      include "./app/models/" . $path . ".php";
+      $parts = explode('/', $path);
+      $model = end($parts);
+      return new $model;
+    }
+    return false;
+  }
+
 }
 ?>

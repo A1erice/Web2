@@ -1,0 +1,76 @@
+/* colors: 
+  6096B4
+  93BFCF
+  BDCDD6
+  EEE9DA
+
+
+*/
+/* CAROUSEL / SLIDER */
+.carousel-item {
+  height: 32rem;
+  background-color: black;
+  color: white;
+  position: relative;
+  background-position: center;
+  background-size: cover;
+}
+.carousel-inner .container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3rem;
+}
+.overlay-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.5;
+}
+
+.contact-section {
+  height: 100vh;
+  background-color: palegoldenrod;
+}
+
+.about-section {
+  height: 100vh;
+  background-color: brown;
+}
+
+.product {
+  border-radius: 5%;
+}
+.product_name {
+  text-decoration: none;
+  cursor: pointer;
+}
+.product_name:hover {
+  opacity: 0.8;
+}
+.product_name:active {
+  opacity: 0.6;
+}
+.profile-container {
+  background-color: red;
+}
+.header a {
+  text-decoration: none;
+}
+.footer a {
+  text-decoration: none;
+}
+
+.footer h5 {
+  font-weight: bold;
+}
+
+.profile-container {
+  box-shadow: 0 0 rgba(0, 0, 0, 0), 0 0 rgba(0, 0, 0, 0),
+    0 0 16px rgba(0, 0, 0, 0.1);
+}

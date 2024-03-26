@@ -2,8 +2,19 @@
 
 class AdminHome extends Controller
 {
-  function welcome()
+  function index()
   {
-    $this->view("AdminHome");
+    $user = $this->model("backend/AdminUserModel");
+    $user_data = $user->check_login();
+    if (!is_null($user_data)) {
+      $data['page_title'] = "Admin - Home";
+      $data['user_data'] = $user_data;
+      $this->view("backend/AdminHome", $data);
+    } else {
+      $data['page_title'] = "Admin - Login";
+      $this->view("backend/AdminLogin", $data);
+    }
+
+
   }
 }

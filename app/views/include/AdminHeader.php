@@ -3,7 +3,9 @@
 
 <head>
   <meta charset="utf-8">
-  <title>DASHMIN - Bootstrap Admin Template</title>
+  <title>
+    <?php echo $data['page_title']; ?>
+  </title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -21,17 +23,16 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
   <!-- Libraries Stylesheet -->
-  <link href="./public/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-  <link href="./public/assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+  <!-- <link href="./public/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet"> -->
+  <!-- <link href="./public/assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" /> -->
 
   <!-- Customized Bootstrap Stylesheet -->
-  <link href="./public/assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo ASSETS ?>css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Template Stylesheet -->
-  <link href="./public/assets/css/admin.css" rel="stylesheet">
+  <link href="<?php echo ASSETS ?>css/admin.css" rel="stylesheet">
+  <script src="<?php echo ASSETS ?>js/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-
-
-  

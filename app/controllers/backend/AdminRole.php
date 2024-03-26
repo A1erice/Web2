@@ -1,7 +1,7 @@
 <?php
 class AdminRole extends Controller
 {
-  function welcome()
+  function index()
   {
     $this->view("AdminRole");
   }

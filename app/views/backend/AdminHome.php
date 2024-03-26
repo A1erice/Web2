@@ -1,10 +1,10 @@
-<?php require_once "./app/views/include/AdminHeader.php"; ?>
+<?php $this->view("include/AdminHeader", $data) ?>
 
 <div class="container-xxl position-relative bg-white d-flex p-0">
-  <?php require_once "./app/views/include/AdminSidebar.php"; ?>
+  <?php $this->view("include/AdminSidebar", $data) ?>
   <!-- Content Start -->
   <div class="content">
-    <?php require_once "./app/views/include/AdminNavbar.php"; ?>
+    <?php $this->view("include/AdminNavbar", $data) ?>
 
     <!-- Sale & Revenue Start -->
     <div class="container-fluid pt-4 px-4">
@@ -128,4 +128,4 @@
 </div>
 
 <!-- Content End -->
-<?php require_once "./app/views/include/AdminFooter.php"; ?>
+<?php $this->view("include/AdminFooter", $data) ?>
