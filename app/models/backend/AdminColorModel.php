@@ -134,6 +134,36 @@ class AdminColorModel extends Database
     echo $display;
   }
 
+  function getAll_AddProduct()
+  {
+    // dữ liệu hiển thị lên view
+    $display = "";
+    // bắt đầu từ 
+    $query = "SELECT * FROM color";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $colors = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $display = "
+    <div class='col-12 mb-3'>
+    ";
+    $count = $this->getSum();
+    if ($count > 0) {
+      foreach ($colors as $color) {
+        $display .=
+          "<input class='ms-3' type='checkbox' name='' id=''>
+            <label for=''>{$color->name}</label>";
+      }
+    } else {
+      $display .= "
+        <tr>
+          <td> Không có dữ liệu </td>
+        </tr>
+      ";
+    }
+
+    $display .= "</div>";
+    echo $display;
+  }
 
   // lấy ra tổng số tất cả bản ghi
   function getSum()

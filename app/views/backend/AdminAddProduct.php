@@ -54,26 +54,14 @@
         <div class="row text-start bg-white p-4">
           <h6 class="text-center">Màu Sắc Và Kích Cỡ</h6>
           <div class="col-12 mb-3">
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">Đen</label>
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">Trắng</label>
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">Xám</label>
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">Đỏ</label>
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">Vàng</label>
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">Cam</label>
+            <!-- Danh sách màu sắc -->
+            <div id="displayColorData_AddProduct">
+            </div>
           </div>
-          <div class="col-12">
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">39</label>
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">40</label>
-            <input class="ms-3" type="checkbox" name="" id="">
-            <label for="">41</label>
+          <div class="col-12 mb-3">
+            <!-- Danh sách màu sắc -->
+            <div id="displaySizeData_AddProduct">
+            </div>
           </div>
         </div>
 
@@ -189,4 +177,34 @@
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
+<script>
+  // hiển thị danh sách màu sắc
+  function fetch_data_color() {
+    $.ajax({
+      url: "<?= ROOT ?>index.php?url=AdminColor/getAll_AddProduct",
+      method: "POST",
+      data: {
+      },
+      success: function (data) {
+        console.log(data);
+        $("#displayColorData_AddProduct").html(data);
+      }
+    })
+  }
+  fetch_data_color();
+  // hiển thị danh sách size
+  function fetch_data_size() {
+    $.ajax({
+      url: "<?= ROOT ?>index.php?url=AdminSize/getAll_AddProduct",
+      method: "POST",
+      data: {
+      },
+      success: function (data) {
+        console.log(data);
+        $("#displaySizeData_AddProduct").html(data);
+      }
+    })
+  }
+  fetch_data_size();
+</script>
 <?php $this->view("include/AdminFooter", $data) ?>

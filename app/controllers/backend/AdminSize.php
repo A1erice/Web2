@@ -25,6 +25,13 @@ class AdminSize extends Controller
       $size->getAll();
     }
   }
+  function getAll_AddProduct()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $size = $this->model("backend/AdminSizeModel");
+      $size->getAll_AddProduct();
+    }
+  }
 
   // tìm kiếm các bản ghi dựa trên từ khóa liên quan
   function search()
