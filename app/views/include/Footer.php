@@ -232,7 +232,7 @@
               }).then((result) => {
                 location.reload();
               });
-            } else alert("Lỗi trong quá trình đăng ký. Vui lòng thử lại sau");
+            }
           },
           error: function () {
             alert("Lỗi trong quá trình đăng ký. Vui lòng thử lại sau");

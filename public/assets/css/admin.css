@@ -3,16 +3,20 @@
   --primary: #3459e6;
   --light: #f3f6f9;
   --dark: #191c24;
+  --bs-body-font-family: "Nunito Sans", sans-serif;
 }
-body {
-  font-family: "roboto";
-}
+
 .back-to-top {
   position: fixed;
   display: none;
   right: 45px;
   bottom: 45px;
   z-index: 99;
+}
+
+.error_message {
+  color: red;
+  font-size: 0.7rem;
 }
 
 /*** Spinner ***/

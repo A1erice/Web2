@@ -2,6 +2,7 @@
 
 class AdminSize extends Controller
 {
+  // hiển thị chính của quản lý kích cỡ
   function index()
   {
     $user = $this->model("backend/AdminUserModel");
@@ -16,13 +17,22 @@ class AdminSize extends Controller
     }
   }
 
+  // lấy toàn bộ bản ghi bảng kích cỡ
   function getAll()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $size = $this->model("backend/AdminSizeModel");
-      if (isset ($_POST['displaySend'])) {
-        $size->getAll();
-      }
+      $size->getAll();
+    }
+  }
+
+  // tìm kiếm các bản ghi dựa trên từ khóa liên quan
+  function search()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $keyword = $_POST['keyword'];
+      $size = $this->model("backend/AdminSizeModel");
+      $size->search($keyword);
     }
   }
 
@@ -34,12 +44,20 @@ class AdminSize extends Controller
     }
   }
 
+  // kiểm tra trùng lặp
+  function checkDuplicate()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $size = $this->model("backend/AdminSizeModel");
+      $size->checkDuplicate($_POST);
+    }
+  }
 
 
   function delete()
   {
 
-    if (isset ($_POST['deleteSend'])) {
+    if (isset($_POST['deleteSend'])) {
       $id = $_POST['deleteSend'];
       $size = $this->model("backend/AdminSizeModel");
       $size->delete($id);
@@ -49,7 +67,7 @@ class AdminSize extends Controller
   function getByID($id)
   {
     $size = $this->model("backend/AdminSizeModel");
-    if (isset ($_POST['id'])) {
+    if (isset($_POST['id'])) {
       $size_id = $_POST['id'];
       $size->getByID($size_id);
     }

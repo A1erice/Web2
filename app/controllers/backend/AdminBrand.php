@@ -2,8 +2,9 @@
 
 class AdminBrand extends Controller
 {
+  // trang chính quản lý thương hiệu
   function index()
-  {
+  {  
     $user = $this->model("backend/AdminUserModel");
     $user_data = $user->check_login();
     if (!is_null($user_data)) {
@@ -15,7 +16,8 @@ class AdminBrand extends Controller
       $this->view("backend/AdminLogin", $data);
     }
   }
-
+ 
+  // thêm mới 1 thương hiệu
   function insert()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -24,35 +26,56 @@ class AdminBrand extends Controller
     }
   }
 
+  // kiểm tra trùng lặp
+  function checkDuplicate()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $brand = $this->model("backend/AdminBrandModel");
+      $brand->checkDuplicate($_POST);
+    }
+  }
+
+  // lấy toàn bộ bản ghi bảng thương hiệu
   function getAll()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $brand = $this->model("backend/AdminBrandModel");
-      if (isset ($_POST['displaySend'])) {
-        $brand->getAll();
-      }
+      $brand->getAll();
     }
   }
 
+  // tìm kiếm các bản ghi dựa trên từ khóa liên quan
+  function search()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $keyword = $_POST['keyword'];
+      $brand = $this->model("backend/AdminBrandModel");
+      $brand->search($keyword);
+    }
+  }
+
+  // xóa 1 thương hiệu
   function delete()
   {
 
-    if (isset ($_POST['deleteSend'])) {
+    if (isset($_POST['deleteSend'])) {
       $id = $_POST['deleteSend'];
       $brand = $this->model("backend/AdminBrandModel");
       $brand->delete($id);
     }
   }
 
+  // lấy thương hiệu thông qua id
   function getByID($id)
   {
     $brand = $this->model("backend/AdminBrandModel");
-    if (isset ($_POST['id'])) {
+    if (isset($_POST['id'])) {
       $brand_id = $_POST['id'];
       $brand->getByID($brand_id);
     }
   }
 
+  // cập nhật thương hiệu
   function update()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {

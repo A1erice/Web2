@@ -11,8 +11,9 @@
   <!-- style css -->
   <link rel="stylesheet" href="<?php echo ASSETS ?>css/bootstrap.min.css" />
   <link rel="stylesheet" href="<?php echo ASSETS ?>css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+
+
   <!-- Icon Font Stylesheet -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -23,6 +24,13 @@
   <!-- JQUERY  -->
   <script src="<?php echo ASSETS ?>js/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- gg fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
 
 </head>
 
@@ -68,7 +76,7 @@
             </ul>
             <!-- Login / Sign up -->
             <div class="d-flex flex-column flex-lg-row justify-content-center align-items-center gap-3">
-              <?php if (isset ($data['user_data'])) {
+              <?php if (isset($data['user_data'])) {
                 echo "                
                 <div class='nav-item dropdown'>
                   <a href='#' class='dropdown-toggle btn btn-light text-dark' data-bs-toggle='dropdown'>
@@ -152,8 +160,7 @@
                               <i class="fa-solid fa-user"></i>
                             </span>
                             <input type="text" class="form-control" name="username" id="username_register"
-                              value="<?= isset ($_POST['username']) ? $_POST['username'] : '' ?>"
-                              placeholder="Username">
+                              value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>" placeholder="Username">
                           </div>
                           <span class="text-danger" name="" id="usernameError_register">
                         </div>
@@ -163,7 +170,7 @@
                               <i class="fa-solid fa-phone"></i>
                             </span>
                             <input type="tel" class="form-control" name="phone" id="phone_register"
-                              value="<?= isset ($_POST['phone']) ? $_POST['phone'] : '' ?>" placeholder="Phone">
+                              value="<?= isset($_POST['phone']) ? $_POST['phone'] : '' ?>" placeholder="Phone">
                           </div>
                           <span class="text-danger" name="" id="phoneError_register">
 
@@ -174,7 +181,7 @@
                               <i class="fa-solid fa-envelope"></i>
                             </span>
                             <input type="email" class="form-control" name="email" id="email_register"
-                              value="<?= isset ($_POST['email']) ? $_POST['email'] : '' ?>" placeholder="Email">
+                              value="<?= isset($_POST['email']) ? $_POST['email'] : '' ?>" placeholder="Email">
                           </div>
                           <span class="text-danger" name="" id="emailError_register">
 

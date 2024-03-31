@@ -2,6 +2,7 @@
 
 class AdminColor extends Controller
 {
+  // trang chính quản lý màu sắc
   function index()
   {
     $user = $this->model("backend/AdminUserModel");
@@ -17,16 +18,34 @@ class AdminColor extends Controller
   }
 
 
+  // lấy toàn bộ màu sắc
   function getAll()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $color = $this->model("backend/AdminColorModel");
-      if (isset ($_POST['displaySend'])) {
-        $color->getAll();
-      }
+      $color->getAll();
     }
   }
 
+  // tìm kiếm các bản ghi dựa trên từ khóa liên quan
+  function search()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $keyword = $_POST['keyword'];
+      $color = $this->model("backend/AdminColorModel");
+      $color->search($keyword);
+    }
+  }
+
+  // kiểm tra trùng lặp
+  function checkDuplicate()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $color = $this->model("backend/AdminColorModel");
+      $color->checkDuplicate($_POST);
+    }
+  }
+  // thêm mới 1 màu sắc
   function insert()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -35,24 +54,27 @@ class AdminColor extends Controller
     }
   }
 
+  // xóa 1 màu sắc
   function delete()
   {
-    if (isset ($_POST['deleteSend'])) {
+    if (isset($_POST['deleteSend'])) {
       $id = $_POST['deleteSend'];
       $color = $this->model("backend/AdminColorModel");
       $color->delete($id);
     }
   }
 
+  // lấy ra màu sắc qua id
   function getByID($id)
   {
     $color = $this->model("backend/AdminColorModel");
-    if (isset ($_POST['id'])) {
+    if (isset($_POST['id'])) {
       $color_id = $_POST['id'];
       $color->getByID($color_id);
     }
   }
 
+  // cập nhật màu sắc
   function update()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {

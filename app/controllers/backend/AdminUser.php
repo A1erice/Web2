@@ -8,8 +8,6 @@ class AdminUser extends Controller
     if (!is_null($user_data)) {
       $data['page_title'] = "Admin - User";
       $data['user_data'] = $user_data;
-      $data['users'] = $model->get_all();
-      $data['numpage'] = $model->get_numpage();
       $this->view("backend/AdminUser", $data);
     } else {
       $data['page_title'] = "Admin - Login";
@@ -33,6 +31,14 @@ class AdminUser extends Controller
       $this->view("backend/AdminLogin", $data);
     }
 
+  }
+
+  function getAll()
+  {
+    $user = $this->model("backend/AdminUserModel");
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $user->getAll();
+    }
   }
 }
 ?>

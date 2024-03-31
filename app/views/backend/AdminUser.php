@@ -8,79 +8,122 @@
     <!-- User list start -->
     <div class="container-fluid pt-4 px-4">
       <div class="bg-light text-center rounded p-4">
-        <form class="d-none d-md-flex mb-3 justify-content-center">
-          <input class="form-control border-0 w-50" type="search" placeholder="Tên Tài Khoản">
-        </form>
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h6 class="mb-0">Danh Sách Tài Khoản</h6>
-          <a href="AdminUserRegister" class="btn btn-primary">
-            <i class=" fa-solid
-            fa-plus"></i> Thêm Tài Khoản
+          <h5 class="fw-bold">Danh Sách Tài Khoản</h5>
+          <form class="d-none d-md-flex w-50">
+            <input class="form-control border-0" type="search" placeholder="Tìm kiếm">
+          </form>
+          <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal"
+            href="AdminUserRegister" class="btn btn-primary">
+            <i class="fa-solid fa-circle-plus"></i> Thêm Tài Khoản
           </a>
         </div>
-        <div class="table-responsive mb-4">
-          <table class="table text-start align-middle table-bordered table-hover mb-0">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Email</th>
-                <th scope="col">SĐT</th>
-                <th scope="col">Tên Tài Khoản</th>
-                <th scope="col">Nhóm Quyền</th>
-                <th scope="col">Ngày lập</th>
-                <th scope="col">Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php for ($i = 0; $i < count($data['users']); $i++) {
-                echo "<tr>";
-                echo "<td>" . $data['users'][$i]->id . "</td>";
-                echo "<td>" . $data['users'][$i]->email . "</td>";
-                echo "<td>" . $data['users'][$i]->phone . "</td>";
-                echo "<td>" . $data['users'][$i]->username . "</td>";
-                echo "<td>" . $data['users'][$i]->role_id . "</td>";
-                echo "<td>" . $data['users'][$i]->date . "</td>";
-                echo "
-                <td>
-                <a class='btn btn-sm btn-warning' href=''><i class='fa-solid fa-pen-to-square'></i></a>
-                <a class='btn btn-sm btn-danger' href=''><i class='fa-solid fa-trash'></i></a>
-                <a class='btn btn-sm btn-primary' href=''><i class='fa-solid fa-circle-info'></i></a>
-                </td>";
-                echo "</tr>";
-              } ?>
 
-            </tbody>
-          </table>
+        <!-- Add new user Modal -->
+        <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Thêm Tài Khoản</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-start">
+                <form action="" method="post">
+
+                  <div class="input-group mb-3 d-flex flex-column">
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fa-solid fa-user"></i>
+                      </span>
+                      <input type="text" class="form-control" name="username" id="username_register" value=""
+                        placeholder="Tên đăng nhập">
+                    </div>
+                    <span class="text-danger" name="" id="usernameError_register">
+                  </div>
+
+                  <div class="input-group mb-3 d-flex flex-column">
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fa-solid fa-phone"></i>
+                      </span>
+                      <input type="tel" class="form-control" name="phone" id="phone_register" value=""
+                        placeholder="Số điện thoại">
+                    </div>
+                    <span class="text-danger" name="" id="phoneError_register">
+                  </div>
+
+                  <div class="input-group mb-3 d-flex flex-column">
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fa-solid fa-envelope"></i>
+                      </span>
+                      <input type="email" class="form-control" name="email" id="email_register" value=""
+                        placeholder="Email">
+                    </div>
+                    <span class="text-danger" name="" id="emailError_register">
+                  </div>
+
+                  <div class="input-group mb-3 d-flex flex-column">
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                      </span>
+                      <input id="password_register" type="password" class="form-control" name="password_register"
+                        placeholder="Mật khẩu">
+                    </div>
+                    <span class="text-danger" name="" id="passwordError_register">
+
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupFile01"><i class="fa-solid fa-image"></i></label>
+                    <input type="file" class="form-control" id="inputGroupFile01">
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01"><i class="fa-solid fa-shield"></i></label>
+                    <select class="form-select" id="inputGroupSelect01">
+                      <option selected>Nhóm quyền</option>
+                      <option id="1" value="1">Admin</option>
+                      <option id="2" value="2">Quản lý</option>
+                      <option id="3" value="3">Nhân viên</option>
+                    </select>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary">Thêm</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-12 pb-1">
-          <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center mb-3">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <?php for ($i = 1; $i <= $data['numpage']; $i++) {
-                echo "<li class='page-item'><a class='page-link' href='" . ROOT . "AdminUser/$i'>$i</a></li>
-                ";
-              } ?>
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+
+        <div id="displayUserData">
         </div>
       </div>
     </div>
-    <!-- User list end -->
 
   </div>
   <!-- Content End -->
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
+
+<script>
+  function fetch_data(page) {
+    $.ajax({
+      url: "<?= ROOT ?>index.php?url=AdminUser/getAll",
+      type: 'post',
+      data: {
+        page: page
+      },
+      success: function (data, status) {
+        $('#displayUserData').html(data);
+      }
+    });
+  }
+  fetch_data();
+
+</script>
 <?php $this->view("include/AdminFooter", $data) ?>

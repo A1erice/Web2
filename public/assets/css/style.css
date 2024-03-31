@@ -6,6 +6,10 @@
 
 
 */
+:root {
+  --bs-body-font-family: "Ponpins", san-serif;
+}
+
 /* CAROUSEL / SLIDER */
 .carousel-item {
   height: 32rem;

@@ -19,9 +19,16 @@ class AdminCategory extends Controller
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $category = $this->model("backend/AdminCategoryModel");
-      if (isset ($_POST['displaySend'])) {
-        $category->getAll();
-      }
+      $category->getAll();
+    }
+  }
+
+  function search()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $keyword = $_POST['keyword'];
+      $category = $this->model("backend/AdminCategoryModel");
+      $category->search($keyword);
     }
   }
   function insert()
@@ -32,10 +39,18 @@ class AdminCategory extends Controller
     }
   }
 
+  function checkDuplicate()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $category = $this->model("backend/AdminCategoryModel");
+      $category->checkDuplicate($_POST);
+    }
+  }
+
   function delete()
   {
 
-    if (isset ($_POST['deleteSend'])) {
+    if (isset($_POST['deleteSend'])) {
       $id = $_POST['deleteSend'];
       $category = $this->model("backend/AdminCategoryModel");
       $category->delete($id);
@@ -45,7 +60,7 @@ class AdminCategory extends Controller
   function getByID($id)
   {
     $category = $this->model("backend/AdminCategoryModel");
-    if (isset ($_POST['id'])) {
+    if (isset($_POST['id'])) {
       $category_id = $_POST['id'];
       $category->getByID($category_id);
     }

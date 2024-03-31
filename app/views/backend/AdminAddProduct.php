@@ -6,12 +6,12 @@
     <?php $this->view("include/AdminNavbar", $data) ?>
     <div class="container-fluid pt-4 px-4">
       <div class="bg-light text-center rounded p-4">
-        <div class="row">
-          <h5 class="col-12">THÊM SẢN PHẨM</h5>
+        <div class="row mb-4">
+          <h6 class="col-12">THÊM SẢN PHẨM</h6>
           <form class="row text-start" action="" method="POST">
             <div class="col-sm-12 mb-3 ">
               <label for="" class="mb-2">Tên sản phẩm</label>
-              <input class="form-control" type="text" value="">
+              <input id="product_name" class="form-control" type="text" value="">
             </div>
             <div class="col-sm-12 col-md-6 mb-3 ">
               <label for="" class="mb-2">Thể Loại</label>
@@ -32,29 +32,154 @@
               </select>
             </div>
             <div class="col-sm-12 col-md-6 mb-3 ">
-              <label for="" class="mb-2">Màu Sắc</label>
+              <label for="" class="mb-2">Nhà Cung Cấp</label>
               <select class="form-select" aria-label="Default select example">
                 <option selected></option>
-                <option value="1">Đen</option>
-                <option value="2">Trắng</option>
-                <option value="3">Xám</option>
+                <option value="1">Nike Việt Nam</option>
+                <option value="2">Adidas Việt Nam</option>
+                <option value="3">Puma Việt Nam</option>
               </select>
             </div>
             <div class="col-sm-12 col-md-6 mb-3 ">
-              <label for="" class="mb-2">Kích Cỡ</label>
-              <select class="form-select" aria-label="Default select example">
-                <option selected></option>
-                <option value="1">39</option>
-                <option value="2">40</option>
-                <option value="3">41</option>
-              </select>
+              <label for="" class="mb-2">Giá Nhập</label>
+              <input id="product_name" class="form-control" type="text" value="">
             </div>
             <div class="col-sm-12 mb-3 ">
               <label for="" class="mb-2">Mô tả</label>
               <textarea rows="7" class="form-control" type="text" value=""></textarea>
             </div>
-
           </form>
+        </div>
+
+        <div class="row text-start bg-white p-4">
+          <h6 class="text-center">Màu Sắc Và Kích Cỡ</h6>
+          <div class="col-12 mb-3">
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">Đen</label>
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">Trắng</label>
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">Xám</label>
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">Đỏ</label>
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">Vàng</label>
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">Cam</label>
+          </div>
+          <div class="col-12">
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">39</label>
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">40</label>
+            <input class="ms-3" type="checkbox" name="" id="">
+            <label for="">41</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="table-responsive p-4 bg-white">
+            <h6>Sản phẩm có màu đen</h6>
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Tên Sản Phẩm</th>
+                  <th scope="col">Kích Cỡ</th>
+                  <th scope="col">Giá Bán</th>
+                  <th scope="col">Hình Ảnh</th>
+                  <th scope="col">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>GIÀY NIKE LỎ</td>
+                  <td>
+                    39
+                  </td>
+                  <td>
+                    200.000
+                  </td>
+                  <td>
+                    <input class="form-control" type="file" id="formFile">
+                  </td>
+                  <td>
+                    <button class='btn btn-sm btn-warning' onclick=''><i class='fa-solid fa-pen-to-square'></i></button>
+                    <button class='btn btn-sm btn-danger' onclick=''><i class='fa-solid fa-trash'></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>GIÀY NIKE LỎ</td>
+                  <td>
+                    40
+                  </td>
+                  <td>
+                    200.000
+                  </td>
+                  <td>
+                    <input class="form-control" type="file" id="formFile">
+                  </td>
+                  <td>
+                    <button class='btn btn-sm btn-warning' onclick=''><i class='fa-solid fa-pen-to-square'></i></button>
+                    <button class='btn btn-sm btn-danger' onclick=''><i class='fa-solid fa-trash'></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-responsive p-4 bg-white">
+            <h6>Sản phẩm có màu trắng</h6>
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Tên Sản Phẩm</th>
+                  <th scope="col">Kích Cỡ</th>
+                  <th scope="col">Giá Bán</th>
+                  <th scope="col">Hình Ảnh</th>
+                  <th scope="col">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>3</td>
+                  <td>GIÀY NIKE LỎ</td>
+                  <td>
+                    39
+                  </td>
+                  <td>
+                    200.000
+                  </td>
+                  <td>
+                    <input class="form-control" type="file" id="formFile">
+                  </td>
+                  <td>
+                    <button class='btn btn-sm btn-warning' onclick=''><i class='fa-solid fa-pen-to-square'></i></button>
+                    <button class='btn btn-sm btn-danger' onclick=''><i class='fa-solid fa-trash'></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>GIÀY NIKE LỎ</td>
+                  <td>
+                    40
+                  </td>
+                  <td>
+                    200.000
+                  </td>
+                  <td>
+                    <input class="form-control" type="file" id="formFile">
+                  </td>
+                  <td>
+                    <button class='btn btn-sm btn-warning' onclick=''><i class='fa-solid fa-pen-to-square'></i></button>
+                    <button class='btn btn-sm btn-danger' onclick=''><i class='fa-solid fa-trash'></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </div>

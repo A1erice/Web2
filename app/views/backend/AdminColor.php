@@ -9,12 +9,16 @@
     <div class="container-fluid pt-4 px-4">
       <div class="bg-light rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h6 class="mb-0">Màu Sắc</h6>
+          <h5 class="fw-bold">Danh sách màu sắc</h5>
+          <form class="d-none d-md-flex w-50">
+            <input id="search_color" class="form-control border-0" type="search" placeholder="Tìm Kiếm">
+          </form>
           <a class="btn btn-primary" href="" data-bs-toggle="modal" data-bs-target="#color_modal">
             <i class="fa-solid fa-circle-plus"></i> Thêm Màu Sắc
           </a>
         </div>
-        <!-- Modal -->
+
+        <!-- Modal thêm màu sắc -->
         <div class="modal fade" id="color_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
           aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -28,6 +32,7 @@
                   <div class="mb-3">
                     <label for="" class="form-label">Màu Sắc</label>
                     <input id="color_name" type="text" class="form-control" id="" placeholder="" name="color_name">
+                    <span id="colorName_Error" class="error_message"></span>
                   </div>
                 </form>
               </div>
@@ -39,8 +44,8 @@
           </div>
         </div>
 
-        <!-- Update modal -->
-        <div class="modal fade" id="update_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        <!-- Modal cập nhật màu sắc -->
+        <div class="modal fade" id="updateColor_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
           aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -54,6 +59,7 @@
                     <label for="" class="form-label">Màu Sắc</label>
                     <input id="update_colorName" type="text" class="form-control" placeholder="" name="color_name">
                     <input type="hidden" id="hidden_data">
+                    <span id="updateColorName_Error" class="error_message"></span>
                   </div>
                 </form>
               </div>
@@ -65,19 +71,9 @@
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table text-start align-middle table-bordered table-hover mb-0">
-            <thead>
-              <tr class="text-dark">
-                <th scope="col">ID</th>
-                <th scope="col">Tên Màu Sắc</th>
-                <th scope="col">Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody id="displayDataTable">
+        <!-- Danh sách màu sắc -->
+        <div id="displayColorData">
 
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
@@ -89,63 +85,136 @@
 
 
 <script>
-  $(document).ready(function () {
-    displayData();
-  })
 
   // hiển thị danh sách màu sắc
-  function displayData() {
-    var displayData = "true";
+  function fetch_data(page) {
     $.ajax({
       url: "<?= ROOT ?>index.php?url=AdminColor/getAll",
-      type: 'post',
+      method: "POST",
       data: {
-        displaySend: displayData
+        page: page
       },
-      success: function (data, status) {
-        $('#displayDataTable').html(data);
+      success: function (data) {
+        $("#displayColorData").html(data);
       }
-    });
+    })
   }
+  fetch_data();
+
+
+  // đổi trang toàn bộ danh sách
+  function changePageFetch(id) {
+    fetch_data(id);
+  }
+
+  // đổi trang khi tìm kiếm
+  function changePageSearch(keyword, page) {
+    search_data(keyword, page);
+  }
+
+  // tìm kiếm
+  function search_data(keyword, page) {
+    $.ajax({
+      url: "<?= ROOT ?>index.php?url=AdminColor/search",
+      method: "POST",
+      data: {
+        keyword: keyword,
+        page: page
+      },
+      success: function (data) {
+        $("#displayColorData").html(data);
+      }
+    })
+  }
+  // tìm kiếm 
+  $('#search_color').on("keyup", function () {
+    var searchText = $(this).val();
+    if (searchText.trim() == "") {
+      fetch_data();
+    } else {
+      var currentPage = 1;
+      search_data(searchText, currentPage);
+    }
+  })
 
   // thêm màu sắc mới vào database
   function insert_color() {
     var color_name = $('#color_name').val();
     if (color_name.trim() == "") {
-      alert("Vui lòng nhập tên màu sắc");
+      $("#colorName_Error").text("Vui lòng nhập tên màu sắc");
     } else {
       $.ajax({
-        url: "<?= ROOT ?>index.php?url=AdminColor/insert",
+        url: "<?= ROOT ?>index.php?url=AdminColor/checkDuplicate",
         type: 'post',
         data: {
           color_name: color_name
         },
         success: function (data, status) {
-          alert("Thêm thành công");
-          displayData();
-          $('#color_name').val('');
-          $('#color_modal').modal('hide');
+          if (data == "Đã tồn tại") {
+            Swal.fire({
+              title: "Đã tồn tại",
+              text: "Màu sắc sản phẩm đã tồn tại",
+              position: 'top',
+              showConfirmButton: true,
+              confirmButtonColor: "#3459e6",
+              icon: "error",
+            });
+          } else if (data == "Duy nhất") {
+            $.ajax({
+              url: "<?= ROOT ?>index.php?url=AdminColor/insert",
+              type: 'post',
+              data: {
+                color_name: color_name
+              },
+              success: function (data, status) {
+                Swal.fire({
+                  title: "Thành công",
+                  text: "Thêm thành công màu sắc sản phẩm",
+                  position: 'top',
+                  showConfirmButton: true,
+                  confirmButtonColor: "#3459e6",
+                  icon: "success",
+                }); fetch_data();
+                $('#color_name').val('');
+                $('#color_modal').modal('hide');
+                $("#colorName_Error").text("");
+              }
+            });
+          }
         }
-      });
+      })
+
     }
   }
 
   //xóa màu sắc
   function delete_color(id) {
-    var confirmDelete = confirm("Bạn có chắc chắn muốn xóa màu sắc ?");
-    if (confirmDelete) {
-      $.ajax({
-        url: "<?= ROOT ?>index.php?url=AdminColor/delete",
-        type: 'post',
-        data: {
-          deleteSend: id
-        },
-        success: function (data, status) {
-          alert('Xóa thành công');
-          displayData();
-        }
-      });
-    }
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa màu sắc?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3459e6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chắc chắn!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "<?= ROOT ?>index.php?url=AdminColor/delete",
+          type: 'post',
+          data: {
+            deleteSend: id
+          },
+          success: function (data, status) {
+            Swal.fire({
+              title: "Xóa thành công!",
+              text: "Xóa thành công màu sắc sản phẩm",
+              icon: "success",
+              confirmButtonColor: "#3459e6",
+            }); fetch_data();
+          }
+        });
+      }
+    });
   }
 
   // lấy dữ liệu qua id
@@ -156,7 +225,7 @@
       $('#update_colorName').val(color_id.name);
 
     });
-    $('#update_modal').modal("show");
+    $('#updateColor_Modal').modal("show");
 
   }
 
@@ -165,12 +234,42 @@
     var update_colorName = $('#update_colorName').val();
     var hidden_data = $('#hidden_data').val();
     if (update_colorName.trim() == "") {
-      alert("Vui lòng nhập tên màu sắc");
+      $('#updateColorName_Error').text("Vui lòng nhập tên màu sắc");
     } else {
-      $.post("<?= ROOT ?>index.php?url=AdminColor/update", { update_colorName: update_colorName, hidden_data: hidden_data }, function (data, status) {
-        $('#update_modal').modal('hide');
-        displayData();
-      });
+      $.ajax({
+        url: "<?= ROOT ?>index.php?url=AdminColor/checkDuplicate",
+        type: 'post',
+        data: {
+          color_name: update_colorName
+        },
+        success: function (data, status) {
+          if (data == "Đã tồn tại") {
+            Swal.fire({
+              title: "Đã tồn tại",
+              text: "Màu sắc sản phẩm đã tồn tại",
+              position: 'top',
+              showConfirmButton: true,
+              confirmButtonColor: "#3459e6",
+              icon: "error",
+            });
+          } else if (data == "Duy nhất") {
+            $.post("<?= ROOT ?>index.php?url=AdminColor/update", { update_colorName: update_colorName, hidden_data: hidden_data }, function (data, status) {
+              $('#updateColor_Modal').modal('hide');
+              Swal.fire({
+                position: "top",
+                icon: "success",
+                title: "Cập nhật thành công",
+                text: "Cập nhật thành công màu sắc sản phẩm",
+                confirmButtonColor: "#3459e6",
+              });
+              fetch_data();
+              $('#color_name').val('');
+              $('#color_modal').modal('hide');
+              $("#colorName_Error").text("Vui lòng nhập tên màu sắc");
+            });
+          }
+        }
+      })
     }
   }
 

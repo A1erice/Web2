@@ -1,12 +1,9 @@
-<?php require_once "./app/views/include/AdminHeader.php" ?>
+<?php $this->view("include/AdminHeader", $data) ?>
 <div class="container-xxl position-relative bg-white d-flex p-0">
-  <?php require_once "./app/views/include/AdminSidebar.php" ?>
+  <?php $this->view("include/AdminSideBar", $data) ?>
   <!-- Content Start -->
   <div class="content">
-    <?php require_once "./app/views/include/AdminNavbar.php" ?>
-
-
-
+    <?php $this->view("include/AdminNavbar", $data) ?>
     <!-- Role list start -->
     <div class="container-fluid pt-4 px-4">
       <div class="bg-light text-center rounded p-4">
@@ -147,4 +144,4 @@
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
-<?php require_once "./app/views/include/AdminFooter.php" ?>
+<?php $this->view("include/AdminFooter", $data) ?>

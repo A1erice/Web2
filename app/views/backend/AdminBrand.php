@@ -9,7 +9,12 @@
     <div class="container-fluid pt-4 px-4">
       <div class="bg-light rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h6 class="mb-0">Thương Hiệu</h6>
+          <h5 class="fw-bold">Danh sách thương hiệu</h5>
+
+          <form class="d-none d-md-flex w-50">
+            <input id="search_brand" class="form-control border-0" type="search" placeholder="Tìm Kiếm">
+          </form>
+
           <a class="btn btn-primary" href="" data-bs-toggle="modal" data-bs-target="#brand_modal">
             <i class="fa-solid fa-circle-plus"></i> Thêm Thương Hiệu
           </a>
@@ -28,6 +33,7 @@
                   <div class="mb-3">
                     <label for="" class="form-label">Thương Hiệu</label>
                     <input id="brand_name" type="text" class="form-control" id="" placeholder="" name="brand_name">
+                    <span class="error_message" id="brandName_Error"></span>
                   </div>
                 </form>
               </div>
@@ -40,7 +46,7 @@
         </div>
 
         <!-- Update modal -->
-        <div class="modal fade" id="update_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        <div class="modal fade" id="updateBrand_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
           aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -54,6 +60,7 @@
                     <label for="" class="form-label">Thương Hiệu</label>
                     <input id="update_brandName" type="text" class="form-control" placeholder="" name="brand_name">
                     <input type="hidden" id="hidden_data">
+                    <span class="error_message" type="text" id="updateBrandName_Error">
                   </div>
                 </form>
               </div>
@@ -65,19 +72,9 @@
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table text-start align-middle table-bordered table-hover mb-0">
-            <thead>
-              <tr class="text-dark">
-                <th scope="col">ID</th>
-                <th scope="col">Tên Thương Hiệu</th>
-                <th scope="col">Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody id="displayDataTable">
 
-            </tbody>
-          </table>
+        <div id="displayBrandData">
+
         </div>
       </div>
     </div>
@@ -89,63 +86,134 @@
 
 
 <script>
-  $(document).ready(function () {
-    displayData();
-  })
 
   // hiển thị danh sách thương hiệu
-  function displayData() {
-    var displayData = "true";
+  function fetch_data(page) {
     $.ajax({
       url: "<?= ROOT ?>index.php?url=AdminBrand/getAll",
       type: 'post',
       data: {
-        displaySend: displayData
+        page: page
       },
       success: function (data, status) {
-        $('#displayDataTable').html(data);
+        $('#displayBrandData').html(data);
       }
     });
   }
+  fetch_data();
+
+  function changePageFetch(page) {
+    fetch_data(page);
+  }
+
+  function changePageSearch(keyword, page) {
+    search_data(keyword, page);
+  }
+
+  function search_data(keyword, page) {
+    $.ajax({
+      url: "<?= ROOT ?>index.php?url=AdminBrand/search",
+      method: "POST",
+      data: {
+        keyword: keyword,
+        page: page
+      },
+      success: function (data) {
+        $("#displayBrandData").html(data);
+      }
+    })
+  }
+
+
+  $('#search_brand').on("keyup", function () {
+    var searchText = $(this).val();
+    if (searchText.trim() == "") {
+      fetch_data();
+    } else {
+      var currentPage = 1;
+      search_data(searchText, currentPage);
+    }
+  })
 
   // thêm thương hiệu mới vào database
   function insert_brand() {
     var brand_name = $('#brand_name').val();
     if (brand_name.trim() == "") {
-      alert("Vui lòng nhập tên thương hiệu");
+      $('#brandName_Error').text("Vui lòng nhập tên thương hiệu");
     } else {
       $.ajax({
-        url: "<?= ROOT ?>index.php?url=AdminBrand/insert",
+        url: "<?= ROOT ?>index.php?url=AdminBrand/checkDuplicate",
         type: 'post',
         data: {
           brand_name: brand_name
         },
         success: function (data, status) {
-          alert("Thêm thành công");
-          displayData();
-          $('#brand_name').val('');
-          $('#brand_modal').modal('hide');
+          if (data == "Đã tồn tại") {
+            Swal.fire({
+              title: "Đã tồn tại",
+              text: "Thương hiệu sản phẩm đã tồn tại",
+              position: 'top',
+              showConfirmButton: true,
+              confirmButtonColor: "#3459e6",
+              icon: "error",
+            });
+          } else if (data == "Duy nhất") {
+            $.ajax({
+              url: "<?= ROOT ?>index.php?url=AdminBrand/insert",
+              type: 'post',
+              data: {
+                brand_name: brand_name
+              },
+              success: function (data, status) {
+                Swal.fire({
+                  title: "Thêm thành công!",
+                  text: "Thêm thành công thương hiệu sản phẩm",
+                  position: 'top',
+                  showConfirmButton: true,
+                  confirmButtonColor: "#3459e6",
+                  icon: "success",
+                }); fetch_data();
+                $('#brand_name').val('');
+                $('#brandName_error').text("");
+                $('#brand_modal').modal('hide');
+              }
+            });
+          }
         }
       });
+
     }
   }
 
   //xóa thương hiệu
   function delete_brand(id) {
-    var confirmDelete = confirm("Bạn có chắc chắn muốn xóa thương hiệu ?");
-    if (confirmDelete) {
-      $.ajax({
-        url: "<?= ROOT ?>index.php?url=AdminBrand/delete",
-        type: 'post',
-        data: {
-          deleteSend: id
-        },
-        success: function (data, status) {
-          alert('Xóa thành công');
-          displayData();
-        }
-      });
-    }
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa thương hiệu?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3459e6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Chắc chắn!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "<?= ROOT ?>index.php?url=AdminBrand/delete",
+          type: 'post',
+          data: {
+            deleteSend: id
+          },
+          success: function (data, status) {
+            Swal.fire({
+              title: "Xóa thành công!",
+              text: "Xóa thành công thương hiệu sản phẩm",
+              icon: "success",
+              confirmButtonColor: "#3459e6"
+            }); fetch_data();
+          }
+        });
+
+      }
+    });
   }
 
   function get_detail(id) {
@@ -155,7 +223,7 @@
       $('#update_brandName').val(brand_id.name);
 
     });
-    $('#update_modal').modal("show");
+    $('#updateBrand_Modal').modal("show");
 
   }
 
@@ -163,15 +231,41 @@
     var update_brandName = $('#update_brandName').val();
     var hidden_data = $('#hidden_data').val();
     if (update_brandName.trim() == "") {
-      alert("Vui lòng nhập tên thương hiệu");
+      $('#updateBrandName_Error').text("Vui lòng nhập tên thương hiệu");
     } else {
-      $.post("<?= ROOT ?>index.php?url=AdminBrand/update", { update_brandName: update_brandName, hidden_data: hidden_data }, function (data, status) {
-        $('#update_modal').modal('hide');
-        displayData();
+      $.ajax({
+        url: "<?= ROOT ?>index.php?url=AdminBrand/checkDuplicate",
+        type: 'post',
+        data: {
+          brand_name: update_brandName
+        },
+        success: function (data, status) {
+          if (data == "Đã tồn tại") {
+            Swal.fire({
+              title: "Đã tồn tại",
+              text: "Thương hiệu sản phẩm đã tồn tại",
+              position: 'top',
+              showConfirmButton: true,
+              confirmButtonColor: "#3459e6",
+              icon: "error",
+            });
+          } else if (data == "Duy nhất") {
+            $.post("<?= ROOT ?>index.php?url=AdminBrand/update", { update_brandName: update_brandName, hidden_data: hidden_data }, function (data, status) {
+              $('#updateBrandName_Error').text("");
+              $('#updateBrand_Modal').modal('hide');
+              Swal.fire({
+                position: "top",
+                icon: "success",
+                title: "Cập nhật thành công",
+                text: "Cập nhật thành công thương hiệu sản phẩm",
+                confirmButtonColor: "#3459e6",
+              }); fetch_data();
+            });
+          }
+        }
       });
     }
   }
-
 
 </script>
 
