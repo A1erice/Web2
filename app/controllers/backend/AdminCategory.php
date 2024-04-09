@@ -15,6 +15,7 @@ class AdminCategory extends Controller
     }
   }
 
+  // lấy toàn bộ thể loại (có phân trang)
   function getAll()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -23,6 +24,20 @@ class AdminCategory extends Controller
     }
   }
 
+  // lấy toàn bộ thể loại không phân trang
+  function getAllCategories($category_id)
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $category = $this->model('backend/AdminCategoryModel');
+      if (isset($_POST['category_id'])) {
+        $category->getAllCategories($_POST['category_id']);
+      } else {
+        $category->getAllCategories(0);
+      }
+    }
+  }
+
+  // tìm kiếm (có phân trang)
   function search()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {

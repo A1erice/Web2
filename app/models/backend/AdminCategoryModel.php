@@ -135,6 +135,30 @@ class AdminCategoryModel extends Database
 
   }
 
+  // lấy toàn bộ bản ghi, không phân trang
+  function getAllCategories($id)
+  {
+    $display = "";
+    $query = "SELECT * FROM category ORDER BY id ";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $categories = $stmt->fetchAll(PDO::FETCH_OBJ);
+    if ($id == 0) {
+      foreach ($categories as $category) {
+        $display .= "<option value='{$category->id}'>{$category->name}</option>";
+      }
+    } else {
+      foreach ($categories as $category) {
+        if ($category->id == $id) {
+          $display .= "<option selected value='{$category->id}'>{$category->name}</option>";
+        } else {
+          $display .= "<option value='{$category->id}'>{$category->name}</option>";
+        }
+      }
+    }
+    echo $display;
+  }
+
   // tìm kiếm các bản ghi có chứa từ khóa liên quan, có phân trang
   function search($keyword)
   {

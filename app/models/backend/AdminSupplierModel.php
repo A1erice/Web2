@@ -1,45 +1,7 @@
 <?php
-class AdminBrandModel extends Database
+class AdminSupplierModel extends Database
 {
-
-  // kiểm tra trùng lặp
-  function checkDuplicate($POST)
-  {
-    if (isset($POST['brand_name'])) {
-      $brand_name = $POST['brand_name'];
-      $query = 'SELECT * FROM brand WHERE name = ?';
-      $stmt = $this->conn->prepare($query);
-      $stmt->execute([$brand_name]);
-      $rowCount = $stmt->rowCount();
-      if ($rowCount > 0) {
-        echo "Đã tồn tại";
-      } else {
-        echo "Duy nhất";
-      }
-    } else {
-      echo "Lỗi";
-    }
-  }
-  // thêm mới 1 bản ghi
-  function insert($POST)
-  {
-    if (isset($POST['brand_name'])) {
-      $brand_name = $POST['brand_name'];
-      $query = 'INSERT INTO `brand` (name, status) VALUES (?, ?)';
-      $stmt = $this->conn->prepare($query);
-      $stmt->execute([$brand_name, 1]);
-      $rowCount = $stmt->rowCount();
-      if ($rowCount > 0) {
-        echo "Insert successfully";
-      } else {
-        echo "Fail";
-      }
-    } else {
-      echo "Fail";
-    }
-  }
-
-  // lấy toàn bộ bản ghi thuộc bảng thương hiệu (có phân trang)
+  // lấy toàn bộ bản ghi thuộc bảng nhà cung cấp (có phân trang)
   function getAll()
   {
     // số bản ghi trong 1 trang
@@ -55,17 +17,20 @@ class AdminBrandModel extends Database
     }
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
-    $query = "SELECT * FROM brand ORDER BY id LIMIT {$start_from}, {$limit}";
+    $query = "SELECT * FROM supplier ORDER BY id LIMIT {$start_from}, {$limit}";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
-    $brands = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $suppliers = $stmt->fetchAll(PDO::FETCH_OBJ);
     $display = "
     <div class='table-responsive mb-3'>
     <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
       <thead>
         <tr class='text-dark'>
           <th scope='col'>ID</th>
-          <th scope='col'>Tên Thương Hiệu</th>
+          <th scope='col'>Tên nhà cung cấp</th>
+          <th scope='col'>Số điện thoại</th>
+          <th scope='col'>Email</th>
+          <th scope='col'>Địa chỉ</th>
           <th scope='col'>Thao Tác</th>
         </tr>
       </thead>
@@ -73,14 +38,17 @@ class AdminBrandModel extends Database
     ";
     $count = $this->getSum();
     if ($count > 0) {
-      foreach ($brands as $brand) {
+      foreach ($suppliers as $supplier) {
         $display .=
-          "<tr>
-            <td>{$brand->id}</td>
-            <td>{$brand->name}</td>
+          "<tr class='form-switch'>
+            <td>{$supplier->id}</td>
+            <td>{$supplier->name}</td>
+            <td>{$supplier->phone}</td>
+            <td>{$supplier->email}</td>
+            <td>{$supplier->address}</td>
             <td>
-              <button class='btn btn-sm btn-warning' onclick='get_detail({$brand->id})'><i class='fa-solid fa-pen-to-square'></i></button>
-              <button class='btn btn-sm btn-danger' onclick='delete_brand({$brand->id})'><i class='fa-solid fa-trash'></i></button>
+              <button class='btn btn-sm btn-warning' onclick='get_detail({$supplier->id})'><i class='fa-solid fa-pen-to-square'></i></button>
+              <button class='btn btn-sm btn-danger' onclick='delete_supplier({$supplier->id})'><i class='fa-solid fa-trash'></i></button>
             </td>
           </tr>";
       }
@@ -167,39 +135,6 @@ class AdminBrandModel extends Database
       </div>
         ";
     }
-
-
-    echo $display;
-
-  }
-
-  function getAllBrands($id)
-  {
-    $display = "";
-    $query = "SELECT * FROM brand ORDER BY id ";
-    $stmt = $this->conn->prepare($query);
-    $stmt->execute();
-    $brands = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-    if ($id == 0) {
-      foreach ($brands as $brand) {
-        $display .= "
-        <option value='{$brand->id}'>{$brand->name}</option>
-      ";
-      }
-    } else {
-      foreach ($brands as $brand) {
-        if ($brand->id == $id) {
-          $display .= "
-          <option selected value='{$brand->id}'>{$brand->name}</option>
-        ";
-        } else {
-          $display .= "
-          <option value='{$brand->id}'>{$brand->name}</option>
-        ";
-        }
-      }
-    }
     echo $display;
   }
 
@@ -207,7 +142,7 @@ class AdminBrandModel extends Database
   // lấy ra tổng số tất cả bản ghi
   function getSum()
   {
-    $query = "SELECT COUNT(*) AS total FROM brand";
+    $query = "SELECT COUNT(*) AS total FROM supplier";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_OBJ);
@@ -219,7 +154,7 @@ class AdminBrandModel extends Database
   }
 
 
-  // Tìm kiếm toàn bộ bản ghi thuộc bảng thương hiệu có từ khóa liên quan (có phân trang)
+  // Tìm kiếm toàn bộ bản ghi thuộc bảng kích cỡ có từ khóa liên quan (có phân trang)
   function search($keyword)
   {
 
@@ -237,12 +172,12 @@ class AdminBrandModel extends Database
     // bắt đầu
     $start_from = ($page - 1) * $limit;
 
-    $query = "SELECT * FROM brand WHERE name LIKE :keyword ORDER BY id LIMIT $start_from, $limit";
+    $query = "SELECT * FROM supplier WHERE name LIKE :keyword ORDER BY id LIMIT $start_from, $limit";
     $stmt = $this->conn->prepare($query);
     $stmt->execute([
       ':keyword' => '%' . $keyword . '%',
     ]);
-    $brands = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $suppliers = $stmt->fetchAll(PDO::FETCH_OBJ);
 
 
     $display = "
@@ -250,32 +185,38 @@ class AdminBrandModel extends Database
     <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
       <thead>
         <tr class='text-dark'>
-          <th scope='col'>ID</th>
-          <th scope='col'>Tên Thương Hiệu</th>
-          <th scope='col'>Thao Tác</th>
+        <th scope='col'>ID</th>
+        <th scope='col'>Tên nhà cung cấp</th>
+        <th scope='col'>Số điện thoại</th>
+        <th scope='col'>Email</th>
+        <th scope='col'>Địa chỉ</th>
+        <th scope='col'>Thao Tác</th>
         </tr>
       </thead>
       <tbody>";
 
     $count = $this->getSumByKeyword($keyword);
     if ($count > 0) {
-      foreach ($brands as $brand) {
+      foreach ($suppliers as $supplier) {
         $display .=
           "<tr>
-            <td>{$brand->id}</td>
-            <td>{$brand->name}</td>
+            <td>{$supplier->id}</td>
+            <td>{$supplier->name}</td>
+            <td>{$supplier->phone}</td>
+            <td>{$supplier->email}</td>
+            <td>{$supplier->address}</td>
             <td>
-              <button class='btn btn-sm btn-warning' onclick='get_detail({$brand->id})'><i class='fa-solid fa-pen-to-square'></i></button>
-              <button class='btn btn-sm btn-danger' onclick='delete_category({$brand->id})'><i class='fa-solid fa-trash'></i></button>
+              <button class='btn btn-sm btn-warning' onclick='get_detail({$supplier->id})'><i class='fa-solid fa-pen-to-square'></i></button>
+              <button class='btn btn-sm btn-danger' onclick='delete_supplier({$supplier->id})'><i class='fa-solid fa-trash'></i></button>
             </td>
           </tr>";
       }
     } else {
-      $display .= '
+      $display .= "
         <tr>
-          <td>There is no data found</td>
+          <td colspan = 6 class='text-center'>Không tìm thấy dữ liệu</td>
         </tr>
-      ';
+      ";
     }
 
     $display .= '
@@ -355,7 +296,7 @@ class AdminBrandModel extends Database
   // lấy ra tổng số tất cả bản ghi có từ khóa liên quan
   function getSumByKeyWord($keyword)
   {
-    $query = "SELECT COUNT(*) AS total FROM brand where name LIKE :keyword";
+    $query = "SELECT COUNT(*) AS total FROM supplier where name LIKE :keyword";
     $stmt = $this->conn->prepare($query);
     $stmt->execute([
       ':keyword' => '%' . $keyword . '%',
@@ -368,11 +309,76 @@ class AdminBrandModel extends Database
     }
   }
 
+  function getAllSuppliers($id)
+  {
+    $display = "";
+    $query = "SELECT * FROM supplier ORDER BY id";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $suppliers = $stmt->fetchAll(PDO::FETCH_OBJ);
+    if ($id == 0) {
+      foreach ($suppliers as $supplier) {
+        $display .= "
+        <option value='{$supplier->id}'>{$supplier->name}</option>
+      ";
+      }
+    } else {
+      foreach ($suppliers as $supplier) {
+        if ($supplier->id == $id) {
+          $display .= "
+          <option selected value='{$supplier->id}'>{$supplier->name}</option>
+        ";
+        } else {
+          $display .= "
+          <option value='{$supplier->id}'>{$supplier->name}</option>
+        ";
+        }
+      }
+    }
+    echo $display;
+  }
+  function insert($POST)
+  {
+    if (isset($POST['supplier_name'])) {
+      $supplier_name = $POST['supplier_name'];
+      $supplier_phone = $POST['supplier_phone'];
+      $supplier_email = $POST['supplier_email'];
+      $supplier_address = $POST['supplier_address'];
+      $query = 'INSERT INTO `supplier` (name, phone, email, address, status) VALUES (?, ?, ?, ?, ?)';
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$supplier_name, $supplier_phone, $supplier_email, $supplier_address, 1]);
+      $rowCount = $stmt->rowCount();
+      if ($rowCount > 0) {
+        echo "Thêm thành công";
+      } else {
+        echo "Thất bại";
+      }
+    } else {
+      echo "Lỗi";
+    }
+  }
 
-  // xóa 1 bản ghi
+  function checkDuplicate($POST)
+  {
+    if (isset($POST['supplier_name'])) {
+      $supplier_name = $POST['supplier_name'];
+      $query = 'SELECT * FROM supplier WHERE name = ? AND status = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$supplier_name, 1]);
+      $rowCount = $stmt->rowCount();
+      if ($rowCount > 0) {
+        echo "Đã tồn tại";
+      } else {
+        echo "Duy nhất";
+      }
+    } else {
+      echo "Lỗi";
+    }
+  }
+
   function delete($id)
   {
-    $query = 'DELETE FROM brand WHERE id = ?';
+    $query = 'DELETE FROM supplier WHERE id = ?';
     $stmt = $this->conn->prepare($query);
     $stmt->execute([$id]);
     $rowCount = $stmt->rowCount();
@@ -381,40 +387,48 @@ class AdminBrandModel extends Database
     } else {
       echo "Thất bại";
     }
+
   }
 
-
-
-  // lấy 1 bản ghi thông qua id
   function getByID($id)
   {
-    $query = 'SELECT * FROM brand WHERE id = ?';
+    $query = 'SELECT * FROM supplier WHERE id = ?';
     $stmt = $this->conn->prepare($query);
     $stmt->execute([$id]);
-    $response = array();
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-    $response['id'] = $result[0]->id;
-    $response['name'] = $result[0]->name;
-    echo json_encode($response);
+
+    if (!empty($result)) {
+      $response['id'] = $result[0]->id;
+      $response['name'] = $result[0]->name;
+      $response['phone'] = $result[0]->phone;
+      $response['email'] = $result[0]->email;
+      $response['address'] = $result[0]->address;
+      $response['status'] = $result[0]->status;
+      echo json_encode($response);
+    } else {
+      echo "Không tìm thấy dữ liệu.";
+    }
   }
 
-  // cập nhật bản ghi
   function update($POST)
   {
-    if (isset($POST['update_brandName'])) {
-      $brand_id = $POST['hidden_data'];
-      $brand_name = $POST['update_brandName'];
-      $query = 'UPDATE brand set name = ? WHERE id = ?';
+    if (isset($POST['update_supplierName'])) {
+      $supplier_id = $POST['hidden_data'];
+      $supplier_name = $POST['update_supplierName'];
+      $supplier_phone = $POST['update_supplierPhone'];
+      $supplier_email = $POST['update_supplierEmail'];
+      $supplier_address = $POST['update_supplierAddress'];
+      $query = 'UPDATE supplier set name = ?, phone = ?, email = ?, address = ? WHERE id = ?';
       $stmt = $this->conn->prepare($query);
-      $stmt->execute([$brand_name, $brand_id]);
+      $stmt->execute([$supplier_name, $supplier_phone, $supplier_email, $supplier_address, $supplier_id]);
       $rowCount = $stmt->rowCount();
       if ($rowCount > 0) {
-        echo "Update successfully";
+        echo "Sửa thành công";
       } else {
-        echo "Fail";
+        echo "Sửa thất bại";
       }
     } else {
-      echo "Fail";
+      echo "Thất bại";
     }
   }
 }

@@ -40,5 +40,16 @@ class AdminUser extends Controller
       $user->getAll();
     }
   }
+
+
+  function insert()
+  {
+    $user = $this->model("backend/AdminUserModel");
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $user->insert($_POST);
+    }
+  }
+
+
 }
 ?>

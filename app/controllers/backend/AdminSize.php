@@ -25,11 +25,13 @@ class AdminSize extends Controller
       $size->getAll();
     }
   }
-  function getAll_AddProduct()
+
+  // lấy ra toàn bộ kích cỡ không phân trang
+  function getAllSize()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $size = $this->model("backend/AdminSizeModel");
-      $size->getAll_AddProduct();
+      $size->getAllSize();
     }
   }
 

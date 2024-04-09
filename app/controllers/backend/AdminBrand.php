@@ -4,7 +4,7 @@ class AdminBrand extends Controller
 {
   // trang chính quản lý thương hiệu
   function index()
-  {  
+  {
     $user = $this->model("backend/AdminUserModel");
     $user_data = $user->check_login();
     if (!is_null($user_data)) {
@@ -16,7 +16,7 @@ class AdminBrand extends Controller
       $this->view("backend/AdminLogin", $data);
     }
   }
- 
+
   // thêm mới 1 thương hiệu
   function insert()
   {
@@ -41,6 +41,18 @@ class AdminBrand extends Controller
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $brand = $this->model("backend/AdminBrandModel");
       $brand->getAll();
+    }
+  }
+
+  function getAllBrands()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $brand = $this->model('backend/AdminBrandModel');
+      if (isset($_POST['brand_id'])) {
+        $brand->getAllBrands($_POST['brand_id']);
+      } else {
+        $brand->getAllBrands(0);
+      }
     }
   }
 

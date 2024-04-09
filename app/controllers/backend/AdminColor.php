@@ -27,13 +27,15 @@ class AdminColor extends Controller
     }
   }
 
-  function getAll_AddProduct()
+  // lấy ra toàn bộ màu sắc không phân trang
+  function getAllColor()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $color = $this->model("backend/AdminColorModel");
-      $color->getAll_AddProduct();
+      $color->getAllColor();
     }
   }
+
   // tìm kiếm các bản ghi dựa trên từ khóa liên quan
   function search()
   {

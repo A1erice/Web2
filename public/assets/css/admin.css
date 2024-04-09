@@ -19,6 +19,11 @@
   font-size: 0.7rem;
 }
 
+.previewImage_table {
+  height: 60px;
+  width: 60px;
+}
+
 /*** Spinner ***/
 #spinner {
   opacity: 0;

@@ -15,7 +15,7 @@
           </form>
           <a class="btn btn-primary" href="" data-bs-toggle="modal" data-bs-target="#size_modal">
             <i class="fa-solid fa-circle-plus"></i> Thêm Kích Cỡ
-          </a> 
+          </a>
         </div>
         <!-- Modal -->
         <div class="modal fade" id="size_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -86,7 +86,7 @@
   // hiển thị danh sách kích cỡ
   function fetch_data(page) {
     $.ajax({
-      url: "<?= ROOT ?>index.php?url=AdminSize/getAll",
+      url: "<?= ROOT ?>AdminSize/getAll",
       type: 'post',
       data: {
         page: page

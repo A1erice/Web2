@@ -20,13 +20,17 @@
           aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Thêm nhóm quyền</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
               <div class="modal-body">
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                  <label for="floatingInput">Tên Nhóm Quyền</label>
+                <div class="mb-3 text-start">
+                  <label class="mb-2" for="">Tên Nhóm Quyền</label>
+                  <input id="role_name" type="text" class="form-control" placeholder="VD: Quản Lý">
+                  <span class="error_message" id="roleName_Error"></span>
                 </div>
                 <div class="col-sm-12 col-xl-12 table-responsive">
-
                   <table class="table text-start align-middle table-bordered table-hover">
                     <thead>
                       <tr>
@@ -39,68 +43,16 @@
                         <th scope="col">Export</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">Sản Phẩm</th>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Đơn Hàng</th>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Thống Kê</th>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Phân Quyền</th>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Thuộc Tính</th>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Người Dùng</th>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                        <td><input type="checkbox" name="" id=""></td>
-                      </tr>
+                    <tbody id="table_modules">
+
                     </tbody>
                   </table>
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Thêm</button>
+                <button onclick="getRoleDetail()" type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Thoát</button>
+                <button onclick="insert()" type="button" class="btn btn-primary">Thêm</button>
               </div>
             </div>
           </div>
@@ -144,4 +96,72 @@
   <!-- Back to Top -->
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
+<script>
+  // hiển thị danh sách thương hiệu
+  function fetch_data(page) {
+    $.ajax({
+      url: "<?= ROOT ?>index.php?url=AdminModule",
+      type: 'post',
+      data: {
+        page: page
+      },
+      success: function (data, status) {
+        $('#table_modules').html(data);
+      }
+    });
+  }
+  fetch_data();
+
+  function getRoleDetail() {
+
+    var checkboxes = document.querySelectorAll('.action_check');
+    var checkedActions = [];
+
+    for (var i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i].checked) {
+        checkedActions.push(checkboxes[i].value); // Get the value of the checked checkbox
+      }
+    }
+
+    console.log('Checked Actions:', checkedActions);
+  }
+
+  function insert() {
+    var role_name = $('#role_name').val();
+    if (role_name.trim() == '') {
+      $('#roleName_Error').text("Vui lòng nhập tên nhóm quyền");
+    } else {
+      $('#roleName_Error').text("");
+      $.ajax({
+        url: "<?= ROOT ?>index.php?url=AdminRole/checkDuplicate",
+        type: 'post',
+        data: {
+          role_name: role_name
+        },
+        success: function (data, status) {
+          if (data == "Đã tồn tại") {
+            alert("Đã tồn tại");
+          } else if (data == "Duy nhất") {
+            $('#roleName_Error').text("");
+            $.ajax({
+              url: "<?= ROOT ?>index.php?url=AdminRole/insert",
+              type: 'post',
+              data: {
+                role_name: role_name
+              },
+              success: function (data, status) {
+                if (data == "Thêm thành công") {
+                  alert("Thêm thành công");
+
+                } else {
+                  alert("Thêm thất bại");
+                }
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+</script>
 <?php $this->view("include/AdminFooter", $data) ?>

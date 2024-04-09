@@ -92,6 +92,7 @@ class AdminUserModel extends Database
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
     if (is_array($result) && count($result) > 0) {
       $_SESSION['user_id'] = $result[0]->id;
+      $_SESSION['user_img'] = $result[0]->img;
       echo "Đăng nhập thành công";
     } else {
       echo "Tài khoản không tồn tại";
@@ -109,46 +110,69 @@ class AdminUserModel extends Database
   }
 
 
+
   function getAll()
   {
+    // số bản ghi trong 1 trang
+    $limit = 4;
+    // số trang hiện tại
+    $page = 0;
+    // dữ liệu hiển thị lên view
     $display = "";
+    if (isset($_POST['page'])) {
+      $page = $_POST['page'];
+    } else {
+      $page = 1;
+    }
+    // bắt đầu từ 
+    $start_from = ($page - 1) * $limit;
     $query = "SELECT u.*, r.name AS role_name
     FROM user u
-    JOIN role r ON u.role_id = r.id;";
+    JOIN role r ON u.role_id = r.id LIMIT {$start_from}, {$limit}";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_OBJ);
-    $display .= "
-    <div class='table-responsive mb-4'>
-          <table class='table text-start align-middle table-bordered table-hover mb-0'>
-            <thead>
-              <tr>
-                <th scope='col'>ID</th>
-                <th scope='col'>Email</th>
-                <th scope='col'>SĐT</th>
-                <th scope='col'>Tên Đăng Nhập</th>
-                <th scope='col'>Quyền</th>
-                <th scope='col'>Ngày lập</th>
-                <th scope='col'>Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody>
+    $display = "
+    <div class='table-responsive mb-3'>
+    <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
+      <thead>
+        <tr class='text-dark'>
+          <th scope='col'>ID</th>
+          <th scope='col'>Email</th>
+          <th scope='col'>Số điện thoại</th>
+          <th scope='col'>Tên Đăng Nhập</th>
+          <th scope='col'>Nhóm Quyền</th>
+          <th scope='col'>Ngày Lập</th>
+          <th scope='col'>Hình Ảnh</th>
+          <th scope='col'>Thao Tác</th>
+        </tr>
+      </thead>
+      <tbody>
     ";
-
-    foreach ($users as $user) {
+    $count = $this->getSum();
+    if ($count > 0) {
+      foreach ($users as $user) {
+        $display .=
+          "<tr class='form-switch'>
+            <td>{$user->id}</td>
+            <td>{$user->email}</td>
+            <td>{$user->phone}</td>
+            <td>{$user->username}</td>
+            <td>{$user->role_name}</td>
+            <td>{$user->date}</td>
+            <td><img class='previewImage_table' src='{$user->img}'></td>
+            <td class='d-flex justify-content-center align-center gap-1'>
+              <button class='btn btn-sm btn-warning' onclick='get_detail({$user->id})'><i class='fa-solid fa-pen-to-square'></i></button>
+              <button class='btn btn-sm btn-danger' onclick='delete_user({$user->id})'><i class='fa-solid fa-trash'></i></button>
+              <button class='btn btn-sm btn-primary' onclick=''><i class='fa-solid fa-eye'></i></button>
+            </td>
+          </tr>";
+      }
+    } else {
       $display .= "
-      <tr>
-        <td>{$user->id}</td>
-        <td>{$user->email}</td>
-        <td>{$user->phone}</td>
-        <td>{$user->username}</td>
-        <td>{$user->role_name}</td>
-        <td>{$user->date}</td>
-        <td>
-        <button class='btn btn-sm btn-warning' onclick=''><i class='fa-solid fa-pen-to-square'></i></button>
-        <button class='btn btn-sm btn-danger' onclick=''><i class='fa-solid fa-trash'></i></button>
-        </td>
-      </tr>
+        <tr>
+          <td> Không có dữ liệu </td>
+        </tr>
       ";
     }
 
@@ -157,7 +181,91 @@ class AdminUserModel extends Database
       </table>
     </div>
     ";
+
+
+    // tổng số bản ghi 
+    $total_rows = $this->getSum();
+    // tổng số trang
+    $total_pages = ceil($total_rows / $limit);
+
+    // hiển thị số trang 
+    $display .= "
+    <div class='col-12 pb-1'>
+      <nav aria-label='Page navigation'>
+      <ul class='pagination justify-content-center mb-3'>";
+    if ($page > 1) {
+      $prev_active = "";
+      $prev = $page - 1;
+      $display .= "
+      <li class='page-item {$prev_active}'>
+        <a onclick='changePageFetch($prev)' id = '{$prev}' class='page-link' href='#' aria-label='Previous'>
+          <span aria-hidden='true'>&laquo;</span>
+          <span class='sr-only'>Previous</span>
+        </a>
+      </li>";
+    } else {
+      $prev_active = "disabled";
+      $display .= "
+      <li class='page-item {$prev_active}'>
+        <a id = '0' class='page-link' href='#' aria-label='Previous'>
+          <span aria-hidden='true'>&laquo;</span>
+          <span class='sr-only'>Previous</span>
+        </a>
+      </li>";
+    }
+
+    for ($i = 1; $i <= $total_pages; $i++) {
+      $active_class = "";
+      if ($i == $page) {
+        $active_class = "active";
+
+      }
+      $display .= "<li class='page-item {$active_class} '><a onclick='changePageFetch($i)' id = '$i' class='page-link' href='#'>$i</a></li>";
+    }
+
+    $next_active = "";
+    if ($page == $total_pages) {
+      $next_active = "disabled";
+      $display .= "
+          <li class='page-item'>
+          <a ' id='' class='page-link {$next_active}' href='#' aria-label='Next'>
+            <span aria-hidden='true'>&raquo;</span>
+            <span class='sr-only'>Next</span>
+          </a>
+        </li>
+      </ul>
+      </nav>
+      </div>
+        ";
+    } else {
+      $next = $page + 1;
+      $display .= "
+            <li class='page-item'>
+              <a onclick='changePageFetch($next)' id='{$next}' class='page-link {$next_active}' href='#' aria-label='Next'>
+                <span aria-hidden='true'>&raquo;</span>
+                <span class='sr-only'>Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+        ";
+    }
     echo $display;
+  }
+
+  // lấy ra tổng số tất cả bản ghi
+  function getSum()
+  {
+    $query = "SELECT COUNT(*) AS total FROM user";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    if ($result) {
+      return $result->total;
+    } else {
+      return 0;
+    }
   }
 
   function get_numpage()
@@ -179,13 +287,17 @@ class AdminUserModel extends Database
     $password = $POST['password'];
     $date = date("Y-m-d H:i:s");
     $password = hash('sha1', $password);
-    $query = "INSERT INTO `user` (`id`, `role_id`, `email`, `username`, `password`, `phone`, `date`) 
-    VALUES (NULL, 1, ?, ?, ?, ?, ?);";
+    $role = $POST['role'];
+    $img = $POST['image_register'];
+    $img = ASSETS . "/img/" . $img;
+    $query = "INSERT INTO `user` (`id`, `role_id`, `email`, `username`, `password`, `phone`, `date`, `img`) 
+    VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);";
     $stmt = $this->conn->prepare($query);
-    $result = $stmt->execute([$email, $username, $password, $phone, $date]);
+    $result = $stmt->execute([$role, $email, $username, $password, $phone, $date, $img]);
     if ($result) {
-      header("Location: " . ROOT . "adminhome");
-      die;
+      echo "Thành công";
+    } else {
+      echo "Thất bại";
     }
   }
 

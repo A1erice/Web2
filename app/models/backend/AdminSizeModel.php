@@ -132,36 +132,22 @@ class AdminSizeModel extends Database
     echo $display;
   }
 
-  function getAll_AddProduct()
+
+  function getAllSize()
   {
-    // dữ liệu hiển thị lên view
     $display = "";
-    // bắt đầu từ 
-    $query = "SELECT * FROM size";
+    $query = "SELECT * FROM size ORDER BY id";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     $sizes = $stmt->fetchAll(PDO::FETCH_OBJ);
-    $display = "
-    <div class='col-12 mb-3'>
-    ";
-    $count = $this->getSum();
-    if ($count > 0) {
-      foreach ($sizes as $size) {
-        $display .=
-          "<input class='ms-3' type='checkbox' name='' id=''>
-            <label for=''>{$size->name}</label>";
-      }
-    } else {
+    foreach ($sizes as $size) {
       $display .= "
-        <tr>
-          <td> Không có dữ liệu </td>
-        </tr>
+      <option value='{$size->id}'>{$size->name}</option>
       ";
     }
-
-    $display .= "</div>";
     echo $display;
   }
+
 
   // lấy ra tổng số tất cả bản ghi
   function getSum()
