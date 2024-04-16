@@ -10,7 +10,21 @@ class Shop extends Controller
       $data['user_data'] = $user_data;
     }
     $data['page_title'] = "Shop";
-    $this->view("frontend/shop", $data);
+    $this->view("frontend/Shop", $data);
   }
-
+  function getAll()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $product = $this->model("frontend/UserProductModel");
+      $product->getAll();
+    }
+  }
+  function getDetail($id)
+  {
+    $productModel = $this->model("frontend/Shop");
+    $productData = $productModel->getByID($id);
+    $data['page_title'] = "Admin - Product Form";
+    $data['product'] = $productData;
+    $this->view("frontend/UserProductModel", $data);
+  }
 }
