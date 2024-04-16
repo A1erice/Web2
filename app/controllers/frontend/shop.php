@@ -10,15 +10,8 @@ class Shop extends Controller
       $data['user_data'] = $user_data;
     }
     $data['page_title'] = "Shop";
-    $this->view("frontend/shop", $data);
+    $this->view("frontend/Shop", $data);
   }
-
-  function getAll()
-  {
-    $product = $this->model("frontend/product_detail");
-    $product->getAllProductDetail();
-  }
-
   function productDetail($id)
   {
     $user = $this->model("frontend/user");
@@ -32,9 +25,11 @@ class Shop extends Controller
     }
     $this->view("frontend/product_detail", $data);
   }
-
-
+  function getAll()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $product = $this->model("frontend/UserProductModel");
+      $product->getAll();
+    }
+  }
 }
-
-
-
