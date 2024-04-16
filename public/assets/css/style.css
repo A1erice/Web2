@@ -6,10 +6,6 @@
 
 
 */
-.bg-primary {
-  background-color: #6096B4 !important;
-}
-
 :root {
   --bs-body-font-family: "Nunito Sans", sans-serif;
 }
@@ -81,12 +77,4 @@
 .profile-container {
   box-shadow: 0 0 rgba(0, 0, 0, 0), 0 0 rgba(0, 0, 0, 0),
     0 0 16px rgba(0, 0, 0, 0.1);
-}
-.add-cart {
-  color: #6096B4;
-  transition: background-color 0.5s ease;
-}
-.add-cart:hover {
-  background-color:#6096B4;
-  color: white;
 }
