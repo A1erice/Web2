@@ -10,7 +10,7 @@
     </div>
 
     <div class="col-lg-7 pb-5">
-      <h3 class="font-weight-semi-bold"><?= $data['product'][0]->name ?></h3>
+      <h3 class="font-weight-semi-bold"><?= $data['product']->name ?></h3>
       <div class="d-flex mb-3">
         <div class="text-primary mr-2">
           <small class="fas fa-star"></small>
@@ -116,8 +116,44 @@
   </div>
 </div>
 <!-- Shop Detail End -->
-
 <script>
+  function getAllCategories(id) {
+    $.ajax({
+      url: "<?= ROOT ?>AdminCategory/getAllCategories",
+      type: "post",
+      data: { category_id: id },
+      success: function (data, status) {
+        $('#categories').html(data);
+      }
+    });
+  }
+
+  function getAllBrands(id) {
+    $.ajax({
+      url: "<?= ROOT ?>AdminBrand/getAllBrands",
+      type: "post",
+      data: { brand_id: id },
+      success: function (data, status) {
+        $('#brands').html(data);
+      }
+    });
+  }
+
+  function getAllSuppliers(id) {
+    $.ajax({
+      url: "<?= ROOT ?>AdminSupplier/getAllSuppliers",
+      type: "post",
+      data: { supplier_id: id },
+      success: function (data, status) {
+        $('#suppliers').html(data);
+      }
+    });
+  }
+
+  getAllCategories(<?= $data['product']->category_id ?>);
+  getAllBrands(<?= $data['product']->brand_id ?>);
+  getAllSuppliers(<?= $data['product']->supplier_id ?>);
+  
   function addToCart(id) {
     if (id == 0) {
       alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");

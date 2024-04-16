@@ -19,13 +19,15 @@ class UserProductModel extends Database
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
 
-    $query = "SELECT p.name as product_name, 
-      MIN(price) as price, 
-      MIN(image) as image
+    $query = "SELECT p.id as product_id,
+      p.name as product_name, 
+      MIN(pd.price) as price, 
+      MIN(pd.image) as image
       FROM product_detail pd
       INNER JOIN product p ON pd.product_id = p.id
-      GROUP BY p.name
-      ORDER BY p.id LIMIT {$start_from}, {$limit}";
+      GROUP BY p.id, p.name
+      ORDER BY p.id
+      LIMIT {$start_from}, {$limit}";
 
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
@@ -40,7 +42,7 @@ class UserProductModel extends Database
               <div class='card-header product-img position-relative overflow-hidden bg-transparent border p-0'>
                 <img class='img-fluid w-100' src='{$product->image}' alt=''>
               </div>
-              <a href='#' class='text-dark p-0 text-decoration-none' onclick='changeIcon()'>
+              <a href='" . ROOT . "Shop/getDetail/{$product->product_id}' class='text-dark p-0 text-decoration-none'>
                 <div class='card-body border-left border-right text-center p-0 pt-4 pb-3 add-cart'>
                   <h6 class='text-truncate mb-3 fw-bold'>{$product->product_name}</h6>
                   <div class='d-flex justify-content-center'>
@@ -332,12 +334,4 @@ class UserProductModel extends Database
     }
   }
 
-  function getByID($id)
-  {
-    $query = "SELECT * FROM product WHERE id = ?";
-    $stmt = $this->conn->prepare($query);
-    $stmt->execute([$id]);
-    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-    return $result[0];
-  }
 }

@@ -21,10 +21,11 @@ class Shop extends Controller
   }
   function getDetail($id)
   {
-    $productModel = $this->model("frontend/Shop");
+    $productModel = $this->model("frontend/UserProductModel");
     $productData = $productModel->getByID($id);
     $data['page_title'] = "Admin - Product Form";
     $data['product'] = $productData;
-    $this->view("frontend/UserProductModel", $data);
+    $this->view("frontend/product_detail", $data);
   }
+  
 }
