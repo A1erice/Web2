@@ -10,7 +10,7 @@ class Shop extends Controller
       $data['user_data'] = $user_data;
     }
     $data['page_title'] = "Shop";
-    $this->view("frontend/shop", $data);
+    $this->view("frontend/Shop", $data);
   }
 
 }

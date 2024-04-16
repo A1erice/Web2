@@ -257,6 +257,7 @@
   }
 
 </script>
+<script src="<?php echo ASSETS ?>js/main.js"></script>
 
 </body>
 
