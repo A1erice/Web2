@@ -13,7 +13,10 @@
 :root {
   --bs-body-font-family: "Nunito Sans", sans-serif;
 }
-
+.carousel-control-next,
+.carousel-control-prev /*, .carousel-indicators */ {
+    filter: invert(100%);
+}
 /* CAROUSEL / SLIDER */
 .carousel-item {
   height: 32rem;

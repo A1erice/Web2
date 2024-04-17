@@ -1,7 +1,6 @@
 <?php
 class UserProductModel extends Database
 {
-
   // lấy toàn bộ bản ghi thuộc bảng sản phẩm (có phân trang)
   function getAll()
   {
@@ -42,7 +41,7 @@ class UserProductModel extends Database
               <div class='card-header product-img position-relative overflow-hidden bg-transparent border p-0'>
                 <img class='img-fluid w-100' src='{$product->image}' alt=''>
               </div>
-              <a href='" . ROOT . "Shop/getDetail/{$product->product_id}' class='text-dark p-0 text-decoration-none'>
+              <a href='" . ROOT . "shop/getDetail/{$product->product_id}' class='text-dark p-0 text-decoration-none'>
                 <div class='card-body border-left border-right text-center p-0 pt-4 pb-3 add-cart'>
                   <h6 class='text-truncate mb-3 fw-bold'>{$product->product_name}</h6>
                   <div class='d-flex justify-content-center'>

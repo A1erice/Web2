@@ -1,5 +1,5 @@
 <?php
-class product_detail extends Database
+class UserProductDetailModel extends Database
 {
 
   function getAllProductDetail()
@@ -52,18 +52,67 @@ class product_detail extends Database
     $display .= "</div>";
     echo $display;
   }
-
-  function getProductDetailByID($id)
+  function getProductByID($id)
   {
-    $query = "SELECT pd.id, p.name, p.description, pd.price, c.name AS color_name, s.name AS size_name, pd.image
-    FROM product_detail pd
-    INNER JOIN product p ON pd.product_id = p.id
-    INNER JOIN color c ON pd.color_id = c.id
-    INNER JOIN size s ON pd.size_id = s.id
-    WHERE pd.id = ?";
+    $query = "SELECT p.id, p.name, p.description, b.name AS brand_name, c.name AS category_name
+      FROM product AS p
+      JOIN brand AS b ON p.brand_id = b.id
+      JOIN category AS c ON p.category_id = c.id
+      WHERE p.id = ?";
     $stmt = $this->conn->prepare($query);
     $stmt->execute([$id]);
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
     return $result;
   }
+  function getProductDetailByID($id)
+  {
+    $query = "SELECT pd.id, pd.price, c.name AS color_name, s.name AS size_name, pd.image
+    FROM product_detail pd
+    JOIN product p ON pd.product_id = p.id
+    JOIN color c ON pd.color_id = c.id
+    JOIN size s ON pd.size_id = s.id
+    WHERE pd.product_id = ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$id]);
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    return $result;
+  }
+  function getColorListByID($id)
+  {
+    $query = "SELECT DISTINCT c.id as color_id, c.name as color_name
+    FROM product_detail AS pd
+    JOIN color AS c ON pd.color_id = c.id
+    WHERE pd.product_id = ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$id]);
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    return $result;
+  }
+  function getSizeListByID($id)
+  {
+    $query = "SELECT DISTINCT s.id as size_id, s.name as size_name
+    FROM product_detail AS pd
+    JOIN size AS s ON pd.size_id = s.id
+    WHERE pd.product_id = ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$id]);
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    return $result;
+  }
+  function checkColorAndSize() 
+  {
+    $color = $_POST['color'];
+    $id = $_POST['id'];
+    $query = "SELECT DISTINCT s.id AS size_id, s.name AS size_name
+                FROM product_detail AS pd
+                JOIN size AS s ON pd.size_id = s.id
+                WHERE pd.product_id = ? AND pd.color_id = ?";
+  
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$id, $color]); // Bind parameters here
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    var_dump($result);
+    return $result;
+  }
+  
 }

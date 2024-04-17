@@ -65,13 +65,13 @@
                 <a class="nav-link  active" aria-current="page" href="home">Home</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="shop">Shop</a>
+                <a class="nav-link " href="<?=ROOT.'shop'?>">Shop</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="about">About</a>
+                <a class="nav-link " href="<?=ROOT.'about'?>">About</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="contact">Contact</a>
+                <a class="nav-link " href="<?=ROOT.'contact'?>">Contact</a>
               </li>
             </ul>
             <!-- Login / Sign up -->

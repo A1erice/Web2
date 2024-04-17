@@ -5,12 +5,59 @@
   <div class="row px-xl-5">
     <div class="col-lg-5 pb-5">
       <div class='w-100'>
-        <img class='w-100' src="<?= $data['product'][0]->image ?>" alt="">
+        <div id="carouselExampleCaptions" class="carousel slide">
+          <div class="carousel-inner">
+            <?php
+              if (!empty($data['product_detail'])) {
+                $isFirstItem = true; // Flag to track the first item
+                foreach ($data['product_detail'] as $product_detail) {
+                  // Now, ensure at least one item has "active" class
+                  if ($isFirstItem) {
+                    $html = <<<HTML
+                    <div class="carousel-item active">
+                      <img class='w-100' src="$product_detail->image" alt="">
+                      <div class="carousel-caption d-none d-md-block text-primary">
+                        <h5>$product_detail->price</h5>
+                        <p>Color: $product_detail->color_name Size: $product_detail->size_name</p>
+                      </div>
+                    </div>
+                    HTML;
+                    echo $html;
+                  } else {
+                    $html = <<<HTML
+                    <div class="carousel-item">
+                      <img class='w-100' src="$product_detail->image" alt="">
+                      <div class="carousel-caption d-none d-md-block text-primary">
+                        <h5>$product_detail->price</h5>
+                        <p>Color: $product_detail->color_name Size: $product_detail->size_name</p>
+                      </div>
+                    </div>
+                    HTML;
+                    echo $html;
+                  }
+                  $isFirstItem = false; // Mark subsequent items as not first
+                }
+              } else {
+                echo "No sizes available for this product.";
+              }
+            ?>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
       </div>
     </div>
 
     <div class="col-lg-7 pb-5">
+      <h6 class="font-weight-semi-bold"><?= $data['product'][0]->category_name ?></h6>
       <h3 class="font-weight-semi-bold"><?= $data['product'][0]->name ?></h3>
+      <h6 class="font-weight-semi-bold"><?= $data['product'][0]->brand_name ?></h6>
       <div class="d-flex mb-3">
         <div class="text-primary mr-2">
           <small class="fas fa-star"></small>
@@ -21,55 +68,49 @@
         </div>
         <small class="pt-1">(50 Reviews)</small>
       </div>
-      <h3 class="font-weight-semi-bold mb-4"><?= $data['product'][0]->price ?>đ</h3>
+      <h3 class="font-weight-semi-bold mb-4"><?= $data['product_detail'][1]->price ?>đ</h3>
       <div class="d-flex mb-3">
         <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-        <form class="mx-2 d-flex gap-3">
-          <div class="">
-            <input type="radio" class="custom-control-input" id="size-1" name="size">
-            <label class="" for="size-1">XS</label>
-          </div>
-          <div class="">
-            <input type="radio" class="custom-control-input" id="size-2" name="size">
-            <label class="" for="size-2">S</label>
-          </div>
-          <div class="">
-            <input type="radio" class="custom-control-input" id="size-3" name="size">
-            <label class="" for="size-3">M</label>
-          </div>
-          <div class="">
-            <input type="radio" class="custom-control-input" id="size-4" name="size">
-            <label class="" for="size-4">L</label>
-          </div>
-          <div class="">
-            <input type="radio" class="custom-control-input" id="size-5" name="size">
-            <label class="" for="size-5">XL</label>
-          </div>
+        <form class="mx-2 d-flex gap-3 size-options">
+          <?php
+          if (!empty($data['size'])) { 
+            foreach ($data['size'] as $size) {
+              $sizeId = $size->size_id;
+              $sizeName = $size->size_name;
+              $html = <<<HTML
+              <div class="">
+                <input type="radio" class="custom-control-input" id="size-$sizeId" name="size" value="$sizeId">
+                <label class="" for="size-$sizeId">$sizeName</label>
+              </div>
+              HTML;
+              echo $html;
+            }
+          } else {
+            echo "No sizes available for this product.";
+          }
+          ?>
         </form>
       </div>
       <div class="d-flex mb-3">
         <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
         <form class='mx-2 d-flex gap-3'>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" class="custom-control-input" id="color-1" name="color">
-            <label class="custom-control-label" for="color-1">Black</label>
-          </div>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" class="custom-control-input" id="color-2" name="color">
-            <label class="custom-control-label" for="color-2">White</label>
-          </div>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" class="custom-control-input" id="color-3" name="color">
-            <label class="custom-control-label" for="color-3">Red</label>
-          </div>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" class="custom-control-input" id="color-4" name="color">
-            <label class="custom-control-label" for="color-4">Blue</label>
-          </div>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" class="custom-control-input" id="color-5" name="color">
-            <label class="custom-control-label" for="color-5">Green</label>
-          </div>
+          <?php
+          if (!empty($data['color'])) { 
+            foreach ($data['color'] as $color) {
+              $colorId = $color->color_id;
+              $colorName = $color->color_name;
+              $html = <<<HTML
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="color-$colorId" name="color" value="$colorId">
+                <label class="custom-control-label" for="color-$colorId">$colorName</label>
+              </div>
+              HTML;
+              echo $html;
+            }
+          } else {
+            echo "No colors available for this product.";
+          }
+          ?>
         </form>
       </div>
 
@@ -125,5 +166,48 @@
       alert("Thêm thành công");
     }
   }
-</script>
+  $(document).ready(function() {
+    $('input[type="radio"][name="color"]').change(function() {
+      
+      var color = $(this).val();
+      var id = <?= $data['product'][0]->id; ?>; // Replace with actual product ID from PHP
+      checkColorAndSize(id, color);
+    });
+  });
+  //Code kiểm tra size tồn tại chưa work được
+  function checkColorAndSize(id, color) {
+    $.ajax({
+      url: "<?= ROOT ?>shop/checkColorAndSize",
+      method: "POST",
+      data: {
+        id: id,
+        color: color
+      },
+      success: function (data) {
+        console.log(data); // Add this line
+        // Clear existing size options
+        $('.size-options').empty(); // Replace with the selector for your size container
+        if (data) {
+          // Loop through retrieved sizes
+          $.each(data, function(index, size) {
+            var sizeId = size.size_id;
+            var sizeName = size.size_name;
+            // Create HTML for size radio button
+            var html = `
+              <div class="">
+                <input type="radio" class="custom-control-input" id="size-${sizeId}" name="size" value="${sizeId}">
+                <label class="" for="size-${sizeId}">${sizeName}</label>
+              </div>
+            `;
+            // Append the HTML to the size container
+            $('.size-options').append(html);
+          });
+        } else {
+        // Handle no sizes available for this color (optional)
+        $('.size-options').html('No sizes available for this color.');
+        }
+      }
+    });
+  }
+  </script>
 <?php $this->view("include/footer") ?>

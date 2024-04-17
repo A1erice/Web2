@@ -156,7 +156,7 @@
   // hiển thị danh sách sản phẩm có phân trang
   function fetch_data(page) {
     $.ajax({
-      url: "<?= ROOT ?>Shop/getAll",
+      url: "<?= ROOT ?>shop/getAll",
       method: "POST",
       data: {
         page: page
@@ -181,7 +181,7 @@
   // tìm kiếm sản phẩm
   function search_data(keyword, page) {
     $.ajax({
-      url: "<?= ROOT ?>Shop/search",
+      url: "<?= ROOT ?>shop/search",
       method: "POST",
       data: {
         keyword: keyword,
