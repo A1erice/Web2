@@ -23,10 +23,11 @@
             <input class="form-control" type="date">
           </div>
           <div class="form-group col-lg-4">
-            <label class="form-label" for="">Phân loại</label>
-            <select class="form-control" name="" id="">
-              <Option>Đã duyệt</Option>
-              <Option>Chưa duyệt</Option>
+            <label class="form-label" for="orderStatus">Phân loại</label>
+            <select class="form-select" name="orderStatus" id="orderStatus">
+              <option value="all">Tất cả</option>
+              <option value="approved">Đã duyệt</option>
+              <option value="unapproved">Chưa duyệt</option>
             </select>
           </div>
         </div>
@@ -48,10 +49,31 @@
 
 
 <script>
+  var keyword;
 
   $(document).ready(function () {
+    $('#orderStatus').change(handleOrderStatusChange);
     fetch_data();
   });
+  
+  function handleOrderStatusChange() {
+    var selectedOption = $(this).val();
+    switch(selectedOption) {
+      case 'all':
+        keyword = 'all'; 
+        break;
+      case 'approved':
+        keyword = '1';
+        break;
+      case 'unapproved':
+        keyword = '0';
+        break;
+      default:
+        break;
+    }
+    fetch_data(1, keyword);
+  }
+
   function changeOrderStatus(id) {
     $.ajax({
       url: "<?= ROOT ?>AdminOrder/changeOrderStatus",
@@ -62,6 +84,7 @@
       }
   });
   }
+  
   // hiển thị danh sách hoá đơn
   function fetch_data(page, keyword) {
     $.ajax({
@@ -76,13 +99,10 @@
       }
     });
   }
-
   // hàm khi nhấn vào số trang để đối trang
   function changePageFetch(page, keyword) {
     fetch_data(page, keyword);
   }
-
-
 </script>
 
 <!-- Content End -->
