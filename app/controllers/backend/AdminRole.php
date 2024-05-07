@@ -62,5 +62,14 @@ class AdminRole extends Controller
       $role->deleteRole($_POST);
     }
   }
+
+  function getDetail()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $role = $this->model("backend/AdminRoleModel");
+      $role_id = $_POST['role_id'];
+      $role->get_detail($role_id);
+    }
+  }
 }
 ?>

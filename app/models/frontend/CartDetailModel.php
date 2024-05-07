@@ -37,4 +37,16 @@ class CartDetailModel extends Database
       echo "Thất bại";
     }
   }
+  function deleteByCartId($cart_id)
+  {
+    $query = 'DELETE FROM cart_detail WHERE cart_id = ?';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$cart_id]);
+    $rowCount = $stmt->rowCount();
+    if ($rowCount > 0) {
+      echo "Thành công";
+    } else {
+      echo "Thất bại";
+    }
+  }
 }

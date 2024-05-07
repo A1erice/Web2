@@ -64,25 +64,7 @@
 
         <div id="role_list" class="table-responsive ">
           <table class="table text-start align-middle table-bordered table-hover mb-0">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Tên Nhóm Quyền</th>
-                <th scope="col">Thao Tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>NQ001</td>
-                <td>Admin</td>
-                <td>
-                  <a class="btn btn-sm btn-warning" href=""><i class="fa-solid fa-pen-to-square"></i></a>
-                  <a class="btn btn-sm btn-danger" href=""><i class="fa-solid fa-trash"></i></a>
-                  <a class="btn btn-sm btn-primary" href=""><i class="fa-solid fa-circle-info"></i></a>
-                </td>
-              </tr>
 
-            </tbody>
           </table>
         </div>
       </div>
@@ -112,7 +94,7 @@
   // hiển thị danh sách các module
   function fetch_module(page) {
     $.ajax({
-      url: "<?= ROOT ?>index.php?url=AdminModule",
+      url: "<?= ROOT ?>AdminModule",
       type: 'post',
       data: {
         page: page
@@ -153,6 +135,21 @@
       fetch_data(currentPage, searchText);
     }
   })
+
+  function get_detail(id) {
+    $.ajax({
+      url: "<?= ROOT ?>AdminRole/getDetail",
+      type: 'post',
+      data: {
+        role_id: id
+      },
+      success: function (data, status) {
+        console.log(data);
+      }
+    });
+
+    alert("Chi tiết của nhóm quyền " + id);
+  }
 
 
 
@@ -203,7 +200,7 @@
               }
             });
             $.ajax({
-              url: "<?= ROOT ?>index.php?url=AdminRole/insert",
+              url: "<?= ROOT ?>AdminRole/insert",
               type: 'post',
               data: {
                 role_name: role_name,
