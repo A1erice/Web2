@@ -10,11 +10,11 @@
       <!-- Price Start -->
       <div class="border-bottom mb-4 pb-4">
         <h5 class="font-weight-semi-bold mb-4">Lọc theo giá tiền</h5>
-        <form>
+        <form class="row">
           <div class="col-lg-6 custom-control custom-checkbox d-flex align-items-center gap-2 justify-content-between mb-3">
             <input type="text" class="form-control" checked id="price-all" placeholder="Từ giá">
           </div>
-          <div class="custom-control custom-checkbox d-flex align-items-center gap-2 justify-content-between mb-3">
+          <div class="col-lg-6 custom-control custom-checkbox d-flex align-items-center gap-2 justify-content-between mb-3">
             <input type="text" class="form-control" checked id="price-all" placeholder="Đến giá">
           </div>
         </form>

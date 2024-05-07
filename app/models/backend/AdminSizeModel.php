@@ -53,14 +53,11 @@ class AdminSizeModel extends Database
         </tr>
       ";
     }
-
     $display .= "
         </tbody>
       </table>
     </div>
     ";
-
-
     // tổng số bản ghi 
     $total_rows = $this->getSum();
     // tổng số trang

@@ -139,23 +139,52 @@ class AdminUserModel extends Database
     $start_from = ($page - 1) * $limit;
     if (isset($_POST['keyword'])) {
       $keyword = trim($_POST['keyword']); // Sanitize user input
+      if(isset($_POST['column'])){
+        $col = trim($_POST['column']);
+        $sort = trim($_POST['typeSort']);
+        $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
+        FROM user u
+        INNER JOIN role r ON u.role_id = r.id
+        WHERE (u.username LIKE :keyword OR u.email LIKE :keyword OR u.phone LIKE :keyword)
+        ORDER BY u.{$col} {$sort}
+        LIMIT {$start_from}, {$limit}";
 
-      $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
-      FROM user u
-      INNER JOIN role r ON u.role_id = r.id
-      WHERE (u.username LIKE :keyword OR u.email LIKE :keyword OR u.phone LIKE :keyword)
-      ORDER BY u.id LIMIT {$start_from}, {$limit}";
-      $stmt = $this->conn->prepare($query);
-      $stmt->execute([
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
         ':keyword' => '%' . $keyword . '%', // Add wildcards for partial matches
-      ]);
+        ]);
+      } else {
+        $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
+        FROM user u
+        INNER JOIN role r ON u.role_id = r.id
+        WHERE (u.username LIKE :keyword OR u.email LIKE :keyword OR u.phone LIKE :keyword)
+        ORDER BY u.id LIMIT {$start_from}, {$limit}";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([
+        ':keyword' => '%' . $keyword . '%', // Add wildcards for partial matches
+        ]);
+      }
+      
     } else {
-      $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
-      FROM user u
-      INNER JOIN role r ON u.role_id = r.id
-      ORDER BY u.id LIMIT {$start_from}, {$limit}";
-      $stmt = $this->conn->prepare($query);
-      $stmt->execute();
+      if(isset($_POST['column'])){
+        $col = trim($_POST['column']);
+        $sort = trim($_POST['typeSort']);
+        $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
+        FROM user u
+        INNER JOIN role r ON u.role_id = r.id
+        ORDER BY u.{$col} {$sort}
+        LIMIT {$start_from}, {$limit}";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+      } else {
+        $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
+        FROM user u
+        INNER JOIN role r ON u.role_id = r.id
+        ORDER BY u.id LIMIT {$start_from}, {$limit}";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+      }
     }
 
     $users = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -164,13 +193,13 @@ class AdminUserModel extends Database
           <table class='table text-start align-middle table-bordered table-hover mb-0'>
             <thead>
               <tr>
-                <th scope='col'>ID</th>
-                <th scope='col'>Email</th>
-                <th scope='col'>SĐT</th>
-                <th scope='col'>Tên Đăng Nhập</th>
-                <th scope='col'>Quyền</th>
+                <th scope='col' onclick='ColSort(\"id\")'>ID</th>
+                <th scope='col' onclick='ColSort(\"email\")'>Email</th>
+                <th scope='col' onclick='ColSort(\"phone\")'>SĐT</th>
+                <th scope='col' onclick='ColSort(\"username\")'>Tên Đăng Nhập</th>
+                <th scope='col' onclick='ColSort(\"role_id\")'>Quyền</th>
                 <th scope='col'>Hình Ảnh</th>
-                <th scope='col'>Ngày lập</th>
+                <th scope='col' onclick='ColSort(\"date\")'>Ngày lập</th>
                 <th scope='col'>Thao Tác</th>
               </tr>
             </thead>

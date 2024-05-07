@@ -184,6 +184,7 @@
 
         <div id="displayUserData">
         </div>
+        <label id="sort" hidden>ab</label>
       </div>
     </div>
 
@@ -228,7 +229,7 @@
 
   // xử lý sự kiện khi nhập từ khóa tìm kiếm
   $('#search_user').on("keyup", function () {
-    var searchText = $(this).val();
+    var searchText = $('#search_user').val();
     if (searchText.trim() == "") {
       fetch_data();
     } else {
@@ -467,6 +468,32 @@
           }
         });
 
+      }
+    });
+  }
+
+  function ColSort(colName){
+    var keyword = $('#search_user').val();
+    var page = 1;
+    var typeSort = $('#sort').val();
+    if (typeSort === 'ASC') {
+      typeSort = 'DESC';
+      $('#sort').val('DESC');
+    } else {
+      typeSort = 'ASC';
+      $('#sort').val('ASC');
+    }
+    $.ajax({
+      url: "<?= ROOT ?>AdminUser/getAll",
+      type: 'post',
+      data: {
+        page: page,
+        keyword: keyword,
+        column: colName,
+        typeSort: typeSort
+      },
+      success: function (data, status) {
+        $('#displayUserData').html(data);
       }
     });
   }
