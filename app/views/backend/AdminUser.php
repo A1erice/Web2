@@ -184,6 +184,7 @@
 
         <div id="displayUserData">
         </div>
+        <label id="sort" hidden>ab</label>
       </div>
     </div>
 
@@ -474,13 +475,22 @@
   function ColSort(colName){
     var keyword = $('#search_user').val();
     var page = 1;
+    var typeSort = $('#sort').val();
+    if (typeSort === 'ASC') {
+      typeSort = 'DESC';
+      $('#sort').val('DESC');
+    } else {
+      typeSort = 'ASC';
+      $('#sort').val('ASC');
+    }
     $.ajax({
       url: "<?= ROOT ?>AdminUser/getAll",
       type: 'post',
       data: {
         page: page,
         keyword: keyword,
-        column: colName
+        column: colName,
+        typeSort: typeSort
       },
       success: function (data, status) {
         $('#displayUserData').html(data);

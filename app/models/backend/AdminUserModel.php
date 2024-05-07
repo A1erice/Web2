@@ -141,11 +141,12 @@ class AdminUserModel extends Database
       $keyword = trim($_POST['keyword']); // Sanitize user input
       if(isset($_POST['column'])){
         $col = trim($_POST['column']);
+        $sort = trim($_POST['typeSort']);
         $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
         FROM user u
         INNER JOIN role r ON u.role_id = r.id
         WHERE (u.username LIKE :keyword OR u.email LIKE :keyword OR u.phone LIKE :keyword)
-        ORDER BY u.{$col} ASC
+        ORDER BY u.{$col} {$sort}
         LIMIT {$start_from}, {$limit}";
 
         $stmt = $this->conn->prepare($query);
@@ -167,10 +168,11 @@ class AdminUserModel extends Database
     } else {
       if(isset($_POST['column'])){
         $col = trim($_POST['column']);
+        $sort = trim($_POST['typeSort']);
         $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
         FROM user u
         INNER JOIN role r ON u.role_id = r.id
-        ORDER BY u.{$col} ASC
+        ORDER BY u.{$col} {$sort}
         LIMIT {$start_from}, {$limit}";
 
         $stmt = $this->conn->prepare($query);
