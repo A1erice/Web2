@@ -35,6 +35,15 @@ class Checkout extends Controller
         $subtotal = $price * $quantity;
         $order_detail->insert($order_id->id, $product_detail_id, $quantity, $subtotal);
       }
+
+      // Lấy mã giỏ hàng của khách hàng hiện tại
+      $cart = $this->model("frontend/CartModel");
+      $cart_id = $cart->getCartIDByUserID($_POST);
+      // Xoá chi tiết giỏ hàng dựa vào mã giỏ hàng ở trên
+      $cart_detail = $this->model("frontend/CartDetailModel");
+      $cart_detail->deleteByCartId($cart_id);
+      // Xoá giỏ hàng
+      $cart->delete($cart_id);
     }
   }
 }

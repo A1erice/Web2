@@ -46,6 +46,18 @@ class CartModel extends Database
       return 0;
     }
   }
+  function delete($id)
+  {
+    $query = 'DELETE FROM cart WHERE id = ?';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$id]);
+    $rowCount = $stmt->rowCount();
+    if ($rowCount > 0) {
+      echo "Thành công";
+    } else {
+      echo "Thất bại";
+    }
+  }
   function getCartByUserID($POST)
   {
     $display = "<table class='table table-bordered text-center mb-0'>";
