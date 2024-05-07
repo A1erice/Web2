@@ -19,11 +19,11 @@
         <div class="row mb-2">
           <div class="form-group col-lg-3">
             <label class="form-label" for="">Từ ngày</label>
-            <input class="form-control" type="date">
+            <input id="bgDate" class="form-control" type="date">
           </div>
           <div class="form-group col-lg-3">
             <label class="form-label" for="">Đến ngày</label>
-            <input class="form-control" type="date">
+            <input id="endDate" class="form-control" type="date">
           </div>
           <div class="form-group col-lg-3">
             <label class="form-label" for="">Nhân viên</label>
@@ -41,6 +41,8 @@
         <div id="invoices" class="category_list">
 
         </div>
+
+        <label id='sort' hidden></label>
 
 
 
@@ -82,15 +84,66 @@
   }
 
   // tìm kiếm nhóm quyền
-  $('#search_role').on("keyup", function () {
-    var searchText = $(this).val();
-    if (searchText.trim() == "") {
-      fetch_data();
-    } else {
-      var currentPage = 1;
-      fetch_data(currentPage, searchText);
-    }
+  $('#endDate, #bgDate, #users, #suppliers').on("change", function () {
+    SearchData();
   });
+
+  function SearchData(col){
+    var endDate = $('#endDate').val();
+    var bgDate = $('#bgDate').val();
+    var nv =  $('#users').find('option:selected').text();
+    var ncc = $('#suppliers').find('option:selected').text();
+    var sortType = $('#sort').val();
+    if(ncc == "Chọn nhà cung cấp"){
+      ncc = "";
+    }
+    if(nv=="Chọn nhân viên"){
+      nv ="";
+    }
+    var currentPage = 1;
+
+    if(bgDate != "" && endDate != ""){
+      if(bgDate > endDate){
+        Swal.fire({
+          title: "Warning!",
+          text: "Ngày bắt đầu không được lớn hơn ngày kết thúc.",
+          icon: "warning",
+          confirmButtonColor: "#3459e6",
+        });
+        return;
+      }
+    }
+    
+    
+    $.ajax({
+      url: "<?= ROOT ?>AdminProductImport/getAllInvoices",
+      type: 'post',
+      data: {
+        page: currentPage,
+        endDate: endDate,
+        bgDate: bgDate,
+        nv: nv,
+        ncc: ncc,
+        col: col,
+        sort: sortType
+      },
+      success: function (data, status) {
+        $('#invoices').html(data);
+      }
+    });
+  }
+
+  function SortCol(ColName){
+    var typeSort = $('#sort').val();
+    if (typeSort === 'ASC') {
+      typeSort = 'DESC';
+      $('#sort').val('DESC');
+    } else {
+      typeSort = 'ASC';
+      $('#sort').val('ASC');
+    }
+    SearchData(ColName);
+  }
 
   function getAllSuppliers() {
     $.ajax({

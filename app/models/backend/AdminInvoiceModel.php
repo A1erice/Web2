@@ -37,6 +37,73 @@ class AdminInvoiceModel extends Database
     }
   }
 
+  function getData($start_from, $limit, $bgDate, $endDate, $nhanvien, $ncc, $col, $sortType) {
+    $query = "";
+    $where = "";
+    $text = "null";
+    // Lấy toàn bộ
+    $query .= "SELECT
+        i.id,
+        i.create_date,
+        u.email AS employee,
+        s.name AS supplier,
+        i.total
+    FROM invoice AS i
+    JOIN user AS u ON i.user_id = u.id
+    JOIN supplier AS s ON i.supplier_id = s.id ";
+
+    // Xây dựng phần điều kiện WHERE
+    if ($bgDate != "" || $endDate != "") {
+        if ($bgDate != "" && $endDate != "") {
+            $where .= " i.create_date BETWEEN DATE_SUB('{$bgDate}', INTERVAL 1 DAY) AND DATE_ADD('$endDate', INTERVAL 1 DAY) ";
+        } else {
+            if ($bgDate != "") {
+                $where .= " i.create_date >= '{$bgDate}' ";
+            } else {
+                $where .= " i.create_date <= '{$endDate}' ";
+            }
+        }
+    }
+
+    if ($nhanvien != "") {
+        if ($where != "") {
+            $where .= " AND ";
+        }
+        $where .= " u.email LIKE '%{$nhanvien}%' ";
+    }
+
+    if ($ncc != "") {
+        if ($where != "") {
+            $where .= " AND ";
+        }
+        $where .= " s.name LIKE '%{$ncc}%' ";
+    }
+
+    // Đưa các câu lệnh WHERE vào query nếu có
+    if ($where != "") {
+        $query .= " WHERE " . $where;
+    }
+
+    // Sort cột
+    if ($col != "") {
+        $query .= " ORDER BY {$col} {$sortType} ";
+    } else {
+        $query .= " ORDER BY i.id ";
+    }
+
+    // Thêm LIMIT cho câu truy vấn
+    $query .= " LIMIT {$start_from}, {$limit} ";
+
+   
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+
+    $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $rowCount = $stmt->rowCount();
+
+    return ['invoices' => $invoices, 'rowCount' => $rowCount,'text' => $text];
+    
+  }
 
   // lấy toàn bộ bản ghi thuộc bảng nhóm quyền (có phân trang)
   function getAllInvoices()
@@ -59,55 +126,60 @@ class AdminInvoiceModel extends Database
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
 
-    $keyword = "";
-    if (isset($_POST['keyword'])) {
-      // $keyword = $_POST['keyword'];
-      // $query = "SELECT * FROM invoice WHERE name LIKE :keyword ORDER BY id LIMIT $start_from, $limit";
-      // $stmt = $this->conn->prepare($query);
-      // $stmt->execute([
-      //   ':keyword' => '%' . $keyword . '%',
-      // ]);
-    } else {
-      $query = "SELECT
-      i.id,
-      i.create_date,
-      u.email AS employee,
-      s.name AS supplier,
-      i.total
-        FROM invoice AS i
-        JOIN user AS u ON i.user_id = u.id
-        JOIN supplier AS s ON i.supplier_id = s.id
-        ORDER BY i.id LIMIT
-        {$start_from}, {$limit}";
-      $stmt = $this->conn->prepare($query);
-      $stmt->execute();
+    $bgDate = "";
+    if(isset($_POST['bgDate'])){
+      $bgDate = trim($_POST['bgDate']);
     }
-    $invoices = $stmt->fetchAll(PDO::FETCH_OBJ);
-    $display = "
+    $endDate = "";
+    if(isset($_POST['endDate'])){
+      $endDate = trim($_POST['endDate']);
+    }
+    $nhanvien = "";
+    if(isset($_POST['nv'])){
+      $nhanvien = trim($_POST['nv']);
+    }
+    $ncc = "";
+    if(isset($_POST['ncc'])){
+      $ncc = trim($_POST['ncc']);
+    }
+    $col = "";
+    if(isset($_POST['col'])){
+      $col = trim($_POST['col']);
+    }
+    $sortType = "";
+    if(isset($_POST['sort'])){
+      $sortType = trim($_POST['sort']);
+    }
+
+    
+    $data = $this->getData($start_from,$limit,$bgDate,$endDate,$nhanvien,$ncc,$col,$sortType);
+    $invoices = $data['invoices'];
+    $count = $data['rowCount'];
+    // $display .= "{$data['text']}"; //check lỗi
+    $display .= "
       <div class='table-responsive mb-3'>
       <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
         <thead>
           <tr class='text-dark'>
-            <th scope='col'>ID</th>
-            <th scope='col'>Ngày tạo</th>
-            <th scope='col'>Nhân viên</th>
-            <th scope='col'>Nhà cung cấp</th>
-            <th scope='col'>Tổng tiền</th>
+            <th scope='col' onclick='SortCol(\"i.id\")'>ID</th>
+            <th scope='col' onclick='SortCol(\"i.create_date\")'>Ngày tạo</th>
+            <th scope='col' onclick='SortCol(\"employee\")'>Nhân viên</th>
+            <th scope='col' onclick='SortCol(\"supplier\")'>Nhà cung cấp</th>
+            <th scope='col' onclick='SortCol(\"i.total\")'>Tổng tiền</th>
             <th scope='col'>Thao tác</th>
           </tr>
         </thead>
         <tbody>
       ";
-    $count = $this->getSum($keyword);
     if ($count > 0) {
       foreach ($invoices as $invoice) {
         $display .=
           "<tr>
-              <td>{$invoice->id}</td>
-              <td>{$invoice->create_date}</td>
-              <td>{$invoice->employee}</td>
-              <td>{$invoice->supplier}</td>
-              <td>{$invoice->total}</td>
+              <td>{$invoice['id']}</td>
+              <td>{$invoice['create_date']}</td>
+              <td>{$invoice['employee']}</td>
+              <td>{$invoice['supplier']}</td>
+              <td>{$invoice['total']}</td>
               <td>
                 <button class='btn btn-sm btn-primary' onclick=''><i class='fa-solid fa-eye'></i></button>
               </td>
@@ -129,7 +201,7 @@ class AdminInvoiceModel extends Database
 
 
     // tổng số bản ghi 
-    $total_rows = $this->getSum($keyword);
+    $total_rows = $count;
     // tổng số trang
     $total_pages = ceil($total_rows / $limit);
 

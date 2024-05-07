@@ -147,6 +147,7 @@ class AdminProductModel extends Database
 
   function getAllProduct()
   {
+    $display = "";
     $query = "SELECT p.id, c.name as category_name, b.name as brand_name, s.name as supplier_name, p.name
     FROM product p
     INNER JOIN category c ON p.category_id = c.id
