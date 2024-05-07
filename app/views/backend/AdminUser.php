@@ -228,7 +228,7 @@
 
   // xử lý sự kiện khi nhập từ khóa tìm kiếm
   $('#search_user').on("keyup", function () {
-    var searchText = $(this).val();
+    var searchText = $('#search_user').val();
     if (searchText.trim() == "") {
       fetch_data();
     } else {
@@ -467,6 +467,23 @@
           }
         });
 
+      }
+    });
+  }
+
+  function ColSort(colName){
+    var keyword = $('#search_user').val();
+    var page = 1;
+    $.ajax({
+      url: "<?= ROOT ?>AdminUser/getAll",
+      type: 'post',
+      data: {
+        page: page,
+        keyword: keyword,
+        column: colName
+      },
+      success: function (data, status) {
+        $('#displayUserData').html(data);
       }
     });
   }
