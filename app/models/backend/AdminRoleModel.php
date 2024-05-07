@@ -14,7 +14,6 @@ class AdminRoleModel extends Database
       echo "Thất bại";
 
     }
-
   }
 
   function checkDuplicate($POST)
@@ -109,8 +108,7 @@ class AdminRoleModel extends Database
               <td>
                 <button class='btn btn-sm btn-warning' onclick='get_detail({$role->id})'><i class='fa-solid fa-pen-to-square'></i></button>
                 <button class='btn btn-sm btn-danger' onclick='deleteRole({$role->id})'><i class='fa-solid fa-trash'></i></button>
-                <button class='btn btn-sm btn-primary' onclick='deleteRole({$role->id})'><i class='fa-solid fa-eye'></i></button>
-                <button class='btn btn-sm btn-info' onclick='deleteRole({$role->id})'><i class='fa-solid fa-power-off'></i></button>
+                <button class='btn btn-sm btn-primary' onclick=''><i class='fa-solid fa-eye'></i></button>
               </td>
             </tr>";
         } else if ($role->status == 0) {
@@ -122,10 +120,7 @@ class AdminRoleModel extends Database
               <td>
                 <button class='btn btn-sm btn-warning' onclick='get_detail({$role->id})'><i class='fa-solid fa-pen-to-square'></i></button>
                 <button class='btn btn-sm btn-danger' onclick='deleteRole({$role->id})'><i class='fa-solid fa-trash'></i></button>
-                <button class='btn btn-sm btn-primary' onclick='deleteRole({$role->id})'><i class='fa-solid fa-eye'></i></button>
-                <button class='btn btn-sm btn-light' onclick='deleteRole({$role->id})'> 
-                    <i class='fa-solid fa-power-off'></i>
-                </button>
+                <button class='btn btn-sm btn-primary' onclick='check_role({$role->id})'><i class='fa-solid fa-eye'></i></button>
               </td>
             </tr>";
         }
@@ -258,7 +253,6 @@ class AdminRoleModel extends Database
     } catch (PDOException $e) {
       echo "Không thể xóa nhóm quyền";
     }
-
   }
 
   function getLatestRole()
@@ -273,5 +267,38 @@ class AdminRoleModel extends Database
       return null; // No roles found
     }
   }
+
+
+  function get_detail($roleID)
+  {
+    // 1. Prepare SQL query (improved):
+    $query = "SELECT r.id, r.name, rd.module_id, rd.action
+              FROM role r
+              INNER JOIN role_detail rd ON r.id = rd.role_id
+              WHERE r.id = ?";
+
+    $stmt = $this->conn->prepare($query);
+
+    $stmt->execute([':roleID' => $roleID]);
+
+    $results = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    // 5. Check for results and build response:
+    if (!empty($results)) {
+      $response = [];
+      foreach ($results as $result) {
+        $response[] = [
+          'id' => $result->id,
+          'name' => $result->name,
+          'module_id' => $result->module_id,
+          'action' => $result->action,
+        ];
+      }
+      echo json_encode($response);
+    } else {
+      echo "Không tìm thấy dữ liệu.";  // Informative message in Vietnamese
+    }
+  }
+
 
 }
