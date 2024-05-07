@@ -34,12 +34,12 @@ class User extends Database
 
   function login($POST)
   {
-    if (isset ($POST['email']) && isset ($POST['password'])) {
+    if (isset($POST['email']) && isset($POST['password'])) {
       $email = $POST['email'];
       $password = $POST['password'];
 
       $password = hash('sha1', $password);
-      $query = "select * from user where email = ? AND password = ? AND role_id = 5";
+      $query = "select * from user where email = ? AND password = ?";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$email, $password]);
       $result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -54,7 +54,7 @@ class User extends Database
 
   function check_login()
   {
-    if (isset ($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_id'])) {
       $query = "select * from user where id = ?";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$_SESSION['user_id']]);
@@ -67,7 +67,7 @@ class User extends Database
   }
   function get_user($id)
   {
-    if (isset ($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_id'])) {
       $query = "select * from user where id = ?";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$_SESSION['user_id']]);
@@ -81,7 +81,7 @@ class User extends Database
 
   function logout()
   {
-    if (isset ($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_id'])) {
       unset($_SESSION['user_id']);
     }
   }

@@ -15,11 +15,27 @@ class AdminRole extends Controller
     }
   }
 
+  function getAllRoleToSelect()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $role = $this->model("backend/AdminRoleModel");
+      $role->getAllRoleToSelect();
+    }
+  }
+
   function insert()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $role = $this->model("backend/AdminRoleModel");
       $role->insert($_POST);
+      $latestRole = $role->getLatestRole();
+      $selectedPermissions = $_POST['selectedPermissions'];
+      $roleDetail = $this->model("backend/AdminRoleDetailModel");
+      foreach ($selectedPermissions as $permission) {
+        $moduleID = $permission['moduleID'];
+        $functionName = $permission['functionName'];
+        $roleDetail->insert($latestRole->id, $moduleID, $functionName);
+      }
     }
   }
 
@@ -31,12 +47,19 @@ class AdminRole extends Controller
     }
   }
 
-  function getAllRoles()
+  function getAllRole()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $role = $this->model("backend/AdminRoleModel");
-      $role->getAllRoles();
-      
+      $role->getAllRole();
+    }
+  }
+
+  function deleteRole()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $role = $this->model("backend/AdminRoleModel");
+      $role->deleteRole($_POST);
     }
   }
 }

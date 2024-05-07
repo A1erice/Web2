@@ -1,217 +1,181 @@
 <?php $this->view("include/header", $data) ?>
 <!-- MAIN CONTENT -->
 <main class="main container-fluid p-0">
-  <!-- slider/carousel -->
-  <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-        aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active" data-interval="1000">
-        <div class="overlay-image" style="background-image: url('<?php echo ASSETS ?>img/banner1.avif')">
-        </div>
-        <div class="container">
-          <h2>It's Never Too Late</h2>
-          <p class="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit officia numquam quam molestias.
-          </p>
-          <a href="#" class="btn btn-primary">Shop now</a>
-        </div>
-      </div>
 
-      <div class="carousel-item" data-interval="500">
-        <div class="overlay-image" style="background-image: url('<?php echo ASSETS ?>img/banner2.avif')">
-        </div>
-        <div class="container">
-          <h2>New Collection Sneakers</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit officia numquam quam molestias.
-          </p>
-          <a href="#" class="btn btn-primary">Shop now</a>
-        </div>
-      </div>
-
-      <div class="carousel-item" data-interval="500">
-        <div class="overlay-image" style="background-image: url('<?php echo ASSETS ?>img/banner3.avif')">
-        </div>
-        <div class="container">
-          <h2>Find Out Now</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit officia numquam quam molestias.
-          </p>
-          <a href="#" class="btn btn-primary">Shop now</a>
-        </div>
-      </div>
-
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-
-    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+  <!-- banner -->
+  <div class="w-100 h-100">
+    <img class="w-100" src="<?= ASSETS ?>img/banner_1.avif" alt="">
   </div>
-  <!-- end slide carousel -->
+  <!-- hết banner -->
 
-
-
-  <!-- FEATURE PRODUCT SECTION -->
-  <div class="product-section container-fluid p-5 bg-body-secondary">
-    <h3 class="text-primary text-center mb-5">BEST SELLERS</h3>
-
-    <div class="col-lg-12 col-md-12">
-      <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/1.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/2.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/3.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-3"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/4.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/4.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/4.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-
-    </div>
-
+  <!-- ảnh giới thiệu -->
+  <div class="d-flex flex-md-column flex-sm-column flex-lg-row  justify-content-center m-3 gap-2 mb-5">
+    <img class="col-lg-6 col-md-12 col-sm-12 object-fit-cover" src="<?= ASSETS ?>img/subbanner3.avif" alt="">
+    <img class="col-lg-6 col-md-12 col-sm-12 object-fit-cover" src="<?= ASSETS ?>img/subbanner4.avif" alt="">
   </div>
-  <!-- END FEATURE PRODUCT SECTION -->
+  <!-- hết ảnh giới thiệu-->
 
-
-  <!-- NEWLESTER -->
-  <div class="newlester-section d-md-flex flex-md-row-reverse gap-5 align-item-center container p-5">
-    <div class="about-us_img w-100">
-      <img class="img w-100" src="<?php echo ASSETS ?>img/newletter.avif" alt="">
-    </div>
-    <div class="about-us_content p-5 w-100 text-center">
-      <h3 class="text-primary fw-bold">Subcriber to our Newsletter</h3>
-      <p>
-        Signup for our weekly newsletter to get the latest news, updates and amazing offers deliverd directly in your
-        inbox
-      </p>
-      <div class="">
-        <label for="exampleFormControlInput1" class="form-label text-left">Email address</label>
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+  <!-- Hàng mới về -->
+  <div class="container mb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 text-center">
+        <div class="section-title">
+          <h2 class='text-primary fw-bold mb-4'>HÀNG MỚI VỀ</h2>
+        </div>
       </div>
+    </div>
+    <div class="row">
+      <!-- single product -->
+      <div class="col-lg-3 col-md-6">
+        <div class="single-product border">
+          <div class="product-img w-100">
+            <img class="w-100 h-100 object-fit-cover" src="<?= ASSETS ?>img/air-jordan-1-low-g-golf-shoes-8bKbqs.png"
+              alt="">
+          </div>
+          <div class="product-details p-2 w-100">
+            <p class='text-primary m-0 p-0'>ADIDAS</p>
+            <h6 class='fw-bold m-0 p-0'>ADIDAS NEW HAMMER</h6>
+            <p class='text-seccondary m-0 p-0'>Giày nam</p>
+            <div class="price">
+              <h6 class="text-danger fw-bold">1.500.000đ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="single-product border">
+          <div class="product-img w-100">
+            <img class="w-100 h-100 object-fit-cover" src="<?= ASSETS ?>img/air-jordan-1-mid-shoes-7cdjgS.jpeg" alt="">
+          </div>
+          <div class="product-details p-2 w-100">
+            <p class='text-primary m-0 p-0'>ADIDAS</p>
+            <h6 class='fw-bold m-0 p-0'>ADIDAS NEW HAMMER</h6>
+            <p class='text-seccondary m-0 p-0'>Giày nam</p>
+            <div class="price">
+              <h6 class="text-danger fw-bold">1.500.000đ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="single-product border">
+          <div class="product-img w-100">
+            <img class="w-100 h-100 object-fit-cover" src="<?= ASSETS ?>img/air-force-1-07-shoes-WrLlWX.png" alt="">
+          </div>
+          <div class="product-details p-2 w-100">
+            <p class='text-primary m-0 p-0'>ADIDAS</p>
+            <h6 class='fw-bold m-0 p-0'>ADIDAS NEW HAMMER</h6>
+            <p class='text-seccondary m-0 p-0'>Giày nam</p>
+            <div class="price">
+              <h6 class="text-danger fw-bold">1.500.000đ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="single-product border">
+          <div class="product-img w-100">
+            <img class="w-100 h-100 object-fit-cover" src="<?= ASSETS ?>img/air-force-1-07-shoes-b0f549.png" alt="">
+          </div>
+          <div class=" product-details p-2 w-100">
+            <p class='text-primary m-0 p-0'>ADIDAS</p>
+            <h6 class='fw-bold m-0 p-0'>ADIDAS NEW HAMMER</h6>
+            <p class='text-seccondary m-0 p-0'>Giày nam</p>
+            <div class="price">
+              <h6 class="text-danger fw-bold">1.500.000đ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-  <!-- END NEWSLETTER -->
+  <!-- Hàng mới về -->
+
+
+  <!-- Hàng bán chạy -->
+  <div class="container mb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 text-center">
+        <div class="section-title">
+          <h2 class='text-primary fw-bold mb-4'>HÀNG BÁN CHẠY</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <!-- single product -->
+      <div class="col-lg-3 col-md-6">
+        <div class="single-product border">
+          <div class="product-img w-100">
+            <img class="w-100 h-100 object-fit-cover" src="<?= ASSETS ?>img/air-jordan-1-low-g-golf-shoes-8bKbqs.png"
+              alt="">
+          </div>
+          <div class="product-details p-2 w-100">
+            <p class='text-primary m-0 p-0'>ADIDAS</p>
+            <h6 class='fw-bold m-0 p-0'>ADIDAS NEW HAMMER</h6>
+            <p class='text-seccondary m-0 p-0'>Giày nam</p>
+            <div class="price">
+              <h6 class="text-danger fw-bold">1.500.000đ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="single-product border">
+          <div class="product-img w-100">
+            <img class="w-100 h-100 object-fit-cover" src="<?= ASSETS ?>img/air-jordan-1-mid-shoes-7cdjgS.jpeg" alt="">
+          </div>
+          <div class="product-details p-2 w-100">
+            <p class='text-primary m-0 p-0'>ADIDAS</p>
+            <h6 class='fw-bold m-0 p-0'>ADIDAS NEW HAMMER</h6>
+            <p class='text-seccondary m-0 p-0'>Giày nam</p>
+            <div class="price">
+              <h6 class="text-danger fw-bold">1.500.000đ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="single-product border">
+          <div class="product-img w-100">
+            <img class="w-100 h-100 object-fit-cover" src="<?= ASSETS ?>img/air-force-1-07-shoes-WrLlWX.png" alt="">
+          </div>
+          <div class="product-details p-2 w-100">
+            <p class='text-primary m-0 p-0'>ADIDAS</p>
+            <h6 class='fw-bold m-0 p-0'>ADIDAS NEW HAMMER</h6>
+            <p class='text-seccondary m-0 p-0'>Giày nam</p>
+            <div class="price">
+              <h6 class="text-danger fw-bold">1.500.000đ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="single-product border">
+          <div class="product-img w-100">
+            <img class="w-100 h-100 object-fit-cover" src="<?= ASSETS ?>img/air-force-1-07-shoes-b0f549.png" alt="">
+          </div>
+          <div class=" product-details p-2 w-100">
+            <p class='text-primary m-0 p-0'>ADIDAS</p>
+            <h6 class='fw-bold m-0 p-0'>ADIDAS NEW HAMMER</h6>
+            <p class='text-seccondary m-0 p-0'>Giày nam</p>
+            <div class="price">
+              <h6 class="text-danger fw-bold">1.500.000đ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Hàng bán chạy -->
+
+
+
+
+
+
+
 
 </main>
 <!-- END MAIN -->

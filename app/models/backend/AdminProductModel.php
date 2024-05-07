@@ -55,7 +55,7 @@ class AdminProductModel extends Database
             <td>
               <a href='" . ROOT . "AdminProduct/getDetail/{$product->id}' class='btn btn-sm btn-warning'><i class='fa-solid fa-pen-to-square'></i></a>
               <button class='btn btn-sm btn-danger' onclick='delete_product({$product->id})'><i class='fa-solid fa-trash'></i></button>
-              <button class='btn btn-sm btn-primary' onclick=''><i class='fa-solid fa-eye'></i></button>
+              <a href='" . ROOT . "AdminProduct/ProductDetail/{$product->id}' class='btn btn-sm btn-primary' onclick=''><i class='fa-solid fa-eye'></i></a>
             </td>
           </tr>";
       }
@@ -156,8 +156,9 @@ class AdminProductModel extends Database
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     $products = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $display .= "<option selected value='All'>All</option>";
     foreach ($products as $product) {
-      $display .= "<option value='{$product->id}'>{$product->name}</option>";
+      $display .= "<option id='{$product->name}'  value='{$product->id}'>{$product->name}</option>";
     }
     echo $display;
   }
@@ -372,6 +373,26 @@ class AdminProductModel extends Database
     $stmt->execute([$id]);
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
     return $result[0];
+  }
+
+  function getAllProductBySupplierName($supplier_name)
+  {
+    $display = "";
+    $display .= "<option id=''  value=''>Chọn sản phẩm</option>";
+    $query = "SELECT p.id, c.name as category_name, b.name as brand_name, s.name as supplier_name, p.name
+    FROM product p
+    INNER JOIN category c ON p.category_id = c.id
+    INNER JOIN brand b ON p.brand_id = b.id
+    INNER JOIN supplier s ON p.supplier_id = s.id
+    WHERE s.name = ?
+    ORDER BY p.id";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$supplier_name]);
+    $products = $stmt->fetchAll(PDO::FETCH_OBJ);
+    foreach ($products as $product) {
+      $display .= "<option id='{$product->name}'  value='{$product->id}'>{$product->name}</option>";
+    }
+    echo $display;
   }
 
   function update($POST)

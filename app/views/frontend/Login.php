@@ -1,29 +1,28 @@
 <?php $this->view("include/header", $data) ?>
-<div class="container-fluid h-100 mb-5">
-  <div class="row mt-5 mb-5">
-    <div class="col-lg-4  col-md-6 col-sm-12 bg-white mx-auto p-4 rounded">
-      <h5 class="text-center pt-3">Login</h5>
-      <form action="" method="post">
-        <div class="input-group mb-3">
-          <span class="input-group-text">
-            <i class="fa-solid fa-envelope"></i>
-          </span>
-          <input id="email" type="email" class="form-control" name="email" value="" placeholder="Email">
+
+<div class="container-fluid h-100">
+  <div class="row mt-2">
+    <div class="col-lg-4 col-md-6 col-sm-12 bg-white mx-auto p-4 rounded">
+      <h5 class="text-center text-primary pt-3 fw-bold mb-4">ĐĂNG NHẬP</h5>
+      <form>
+        <div class="mb-3">
+          <label for="email_login" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email_login">
+          <span type="email" class="error_message" id="emailError_login">
         </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">
-            <i class="fa-solid fa-lock"></i>
-          </span>
-          <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+        <div class="mb-3">
+          <label for="password_login" class="form-label">Mật Khẩu</label>
+          <input type="password" class="form-control" id="password_login">
+          <span type="email" class="error_message" id="passwordError_login">
         </div>
-        <div class="d-grid gap-3">
-          <button id="login_btn" class="btn btn-primary" type="button" onclick="">Login Now</button>
-          <p class="text-center text-muted">
-            Register Now By Clicking ? <a href="register">Signup Here</a>
-          </p>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <label class="form-check-label" for="exampleCheck1">Hiển thị mật khẩu</label>
         </div>
+        <button id="login_btn" type="button" class="btn btn-primary w-100">Đăng Nhập</button>
       </form>
     </div>
+
   </div>
 </div>
 
@@ -31,48 +30,68 @@
 
   $(document).ready(function () {
     $('#login_btn').click(function () {
-      var email = $('#email').val();
-      var password = $('#password').val();
-      if (email.trim() == '') {
-        Swal.fire({
-          icon: "error",
-          title: "",
-          text: "Vui lòng nhập địa chỉ email",
-          footer: ''
-        });
+      // Lấy dữ liệu từ form đăng nhập
+      var email = $('#email_login').val();
+      var password = $('#password_login').val();
 
-      } else if (password.trim() == '') {
-        Swal.fire({
-          icon: "error",
-          title: "",
-          text: "Vui lòng nhập mật khẩu",
-          footer: ''
-        });
+      // Hàm kiểm tra email hợp lệ
+      function isValidEmail(email) {
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
       }
-      else {
+
+      // Kiểm tra đầu vào form đăng nhập
+      var hasError = false;
+      if (email.trim() === '') {
+        $('#emailError_login').text('Địa chỉ email không được để trống');
+        hasError = true;
+      } else if (!isValidEmail(email)) {
+        $('#emailError_login').text('Địa chỉ email không hợp lệ');
+        hasError = true;
+      } else {
+        $('#emailError_login').text('');
+      }
+
+      if (password.trim() === '') {
+        $('#passwordError_login').text('Mật khẩu không được để trống');
+        hasError = true;
+      } else {
+        $('#passwordError_login').text('');
+      }
+
+      // Nếu không có lỗi, gửi dữ liệu đăng nhập qua AJAX
+      if (!hasError) {
         $.ajax({
-          url: "<?= ROOT ?>index.php?url=login/login",
-          method: "POST",
-          data: { email: email, password: password },
-          success: function (data, status) {
-            if (data == '0') {
+          url: '<?= ROOT ?>login/login',
+          type: 'post',
+          data: {
+            email: email,
+            password: password
+          },
+          success: function (data) {
+            if (data == 'Đăng nhập thành công') {
+              Swal.fire({
+                title: "Đăng nhập thành công!",
+                position: 'center',
+                showConfirmButton: true,
+                confirmButtonColor: "#3459e6",
+                icon: "success",
+              }).then((result) => {
+                window.location.href = "<?= ROOT ?>";
+              });
+            } else if (data == 'Tài khoản không tồn tại') {
               Swal.fire({
                 icon: "error",
                 title: "",
-                text: "Tài khoản không tồn tại",
+                text: data,
+                position: "center",
+                confirmButtonColor: "#d33",
                 footer: ''
               });
-            } else {
-              Swal.fire({
-                icon: "success",
-                title: "",
-                text: "Đăng nhập thành công",
-                footer: ''
-              });
-              window.location.href = "<?= ROOT ?>home";
             }
-          }
-        })
+          },
+
+        });
       }
     });
   });

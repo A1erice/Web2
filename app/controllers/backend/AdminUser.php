@@ -41,15 +41,66 @@ class AdminUser extends Controller
     }
   }
 
-
-  function insert()
+  function getByID()
   {
     $user = $this->model("backend/AdminUserModel");
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      $user->insert($_POST);
+    if (isset($_POST['id'])) {
+      $user_id = $_POST['id'];
+      $user->getByID($user_id);
     }
   }
 
+  function checkDuplicate()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $user = $this->model("backend/AdminUserModel");
+      $user->checkDuplicate($_POST);
+    }
+  }
 
+  function update()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $user = $this->model("backend/AdminUserModel");
+      $user->update($_POST);
+    }
+  }
+
+  function insert()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $user = $this->model("backend/AdminUserModel");
+      $user->insert($_POST);
+    }
+  }
+  function getAllUserForOption()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $user = $this->model("backend/AdminUserModel");
+      if (isset($_POST['user_id'])) {
+        $user->getAllUserForOption($_POST['user_id']);
+      } else {
+        $user->getAllUserForOption(0);
+      }
+    }
+  }
+
+  function delete()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $id = $_POST['deleteSend'];
+      $user = $this->model("backend/AdminUserModel");
+      $user->delete($id);
+    }
+  }
+
+  function search()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $keyword = $_POST['keyword'];
+      $user = $this->model("backend/AdminUserModel");
+      $user->search($keyword);
+    }
+  }
 }
 ?>

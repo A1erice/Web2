@@ -6,21 +6,18 @@
 
 
 */
-.bg-primary {
-  background-color: #6096B4 !important;
+:root {
+  /* --bs-body-font-family: "Nunito Sans", sans-serif; */
+}
+.error_message {
+  color: red;
+  font-size: 0.7rem;
 }
 
-:root {
-  --bs-body-font-family: "Nunito Sans", sans-serif;
-}
-.carousel-control-next,
-.carousel-control-prev /*, .carousel-indicators */ {
-    filter: invert(100%);
-}
 /* CAROUSEL / SLIDER */
 .carousel-item {
-  height: 32rem;
-  background-color: black;
+  height: 35rem;
+  /* background-color: black; */
   color: white;
   position: relative;
   background-position: center;
@@ -54,19 +51,11 @@
   background-color: brown;
 }
 
-.product {
-  border-radius: 5%;
+.product-img {
+  width: 250px;
+  height: 250px;
 }
-.product_name {
-  text-decoration: none;
-  cursor: pointer;
-}
-.product_name:hover {
-  opacity: 0.8;
-}
-.product_name:active {
-  opacity: 0.6;
-}
+
 .profile-container {
   background-color: red;
 }
@@ -85,11 +74,8 @@
   box-shadow: 0 0 rgba(0, 0, 0, 0), 0 0 rgba(0, 0, 0, 0),
     0 0 16px rgba(0, 0, 0, 0.1);
 }
-.add-cart {
-  color: #6096B4;
-  transition: background-color 0.5s ease;
-}
-.add-cart:hover {
-  background-color:#6096B4;
-  color: white;
+
+.product-item {
+  height: 320px;
+  width: 250px;
 }

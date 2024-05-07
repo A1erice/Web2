@@ -6,6 +6,7 @@ class AdminHome extends Controller
   {
     $user = $this->model("backend/AdminUserModel");
     $user_data = $user->check_login();
+    $data['modules'] = $user->check_role($user_data->role_id);
     if (!is_null($user_data)) {
       $data['page_title'] = "Admin - Home";
       $data['user_data'] = $user_data;
@@ -14,7 +15,5 @@ class AdminHome extends Controller
       $data['page_title'] = "Admin - Login";
       $this->view("backend/AdminLogin", $data);
     }
-
-
   }
 }

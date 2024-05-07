@@ -27,7 +27,7 @@ class AdminSupplierModel extends Database
       <thead>
         <tr class='text-dark'>
           <th scope='col'>ID</th>
-          <th scope='col'>Tên nhà cung cấp</th>
+          <th scope='col'>Nhà cung cấp</th>
           <th scope='col'>Số điện thoại</th>
           <th scope='col'>Email</th>
           <th scope='col'>Địa chỉ</th>
@@ -312,6 +312,7 @@ class AdminSupplierModel extends Database
   function getAllSuppliers($id)
   {
     $display = "";
+    $display .= "<option value=''>Chọn nhà cung cấp</option>";
     $query = "SELECT * FROM supplier ORDER BY id";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
@@ -376,16 +377,22 @@ class AdminSupplierModel extends Database
     }
   }
 
-  function delete($id)
+  function delete($POST)
   {
-    $query = 'DELETE FROM supplier WHERE id = ?';
-    $stmt = $this->conn->prepare($query);
-    $stmt->execute([$id]);
-    $rowCount = $stmt->rowCount();
-    if ($rowCount > 0) {
-      echo "Thành công";
-    } else {
-      echo "Thất bại";
+    $id = $POST['id'];
+    try {
+      $query = 'DELETE FROM supplier WHERE id = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$id]);
+      $rowCount = $stmt->rowCount();
+
+      if ($rowCount > 0) {
+        echo "Xóa thành công";
+      } else {
+        echo "Xóa thất bại";
+      }
+    } catch (PDOException $e) {
+      echo "Không thể xóa nhà cung cấp";
     }
 
   }

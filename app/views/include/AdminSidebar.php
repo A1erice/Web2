@@ -23,6 +23,16 @@
     </div>
     <div class="navbar-nav w-100">
       <a href="<?php echo ROOT ?>AdminHome" class="nav-item nav-link"><i class="fa fa-chart-pie"></i>Thống Kê</a>
+      <?php
+      if (!empty($data['modules'])) {
+        foreach ($data['modules'] as $module) {
+          echo "<a href='<?php echo ROOT ?>AdminOrder' class='nav-item nav-link'>{$module->module_name}</a>";
+        }
+      } else {
+        echo "No modules found for this role.";
+      }
+
+      ?>
       <a href="<?php echo ROOT ?>AdminOrder" class="nav-item nav-link"><i class="fa fa-file-invoice-dollar"></i>Đơn
         Hàng</a>
       <a href="<?php echo ROOT ?>AdminSupplier" class="nav-item nav-link"><i class="fa-solid fa-boxes-packing"></i>Nhà
@@ -33,13 +43,14 @@
           Phẩm</a>
         <div class="dropdown-menu bg-transparent border-0">
           <a href="<?php echo ROOT ?>AdminProduct" class="dropdown-item">Sản Phẩm</a>
-          <a href="<?php echo ROOT ?>AdminProductDetail" class="dropdown-item">Chi Tiết Sản Phẩm</a>
           <a href="<?php echo ROOT ?>AdminCategory" class="dropdown-item">Thể Loại</a>
           <a href="<?php echo ROOT ?>AdminBrand" class="dropdown-item">Thương Hiệu</a>
           <a href="<?php echo ROOT ?>AdminColor" class="dropdown-item">Màu Sắc</a>
           <a href="<?php echo ROOT ?>AdminSize" class="dropdown-item">Kích Cỡ</a>
         </div>
       </div>
+      <a href="<?= ROOT ?>AdminProductImport" class="nav-item nav-link"><i class="fa-solid fa-boxes-stacked"></i>Nhập
+        Hàng</a>
       <a href="AdminRole" class="nav-item nav-link"><i class="fa-solid fa-shield-halved"></i>Phân Quyền</a>
       <a href="AdminUser" class="nav-item nav-link"><i class="fa-solid fa-user-group"></i>Người Dùng</a>
 

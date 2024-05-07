@@ -315,22 +315,25 @@
             id: id
           },
           success: function (data, status) {
-            if (data == "Thành công") {
+            if (data === 'Xóa thành công') {
               Swal.fire({
-                title: "Xóa thành công!",
-                text: "Xóa nhà cung cấp thành công",
+                title: data,
                 icon: "success",
-                confirmButtonColor: "#3459e6",
-              }); fetch_data();
-            } else if (data == "Thất bại") {
+                confirmButtonColor: "#3459e6"
+              });
+              fetch_data(); // Refresh the role list
+            } else if (data === 'Xóa thất bại') {
               Swal.fire({
-                title: "Lỗi!",
-                text: "Xóa nhà cung cấp thất bại",
+                title: data,
                 icon: "error",
-                confirmButtonColor: "#3459e6",
-              }); fetch_data();
+                confirmButtonColor: "#d33"
+              });
             } else {
-              alert("Không có gì xảy ra");
+              Swal.fire({
+                title: data,
+                icon: "error",
+                confirmButtonColor: "#d33"
+              });
             }
           }
         });

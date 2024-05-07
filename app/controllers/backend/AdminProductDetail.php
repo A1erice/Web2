@@ -8,6 +8,7 @@ class AdminProductDetail extends Controller
     if (!is_null($user_data)) {
       $data['page_title'] = "Admin - Product Detail";
       $data['user_data'] = $user_data;
+
       $this->view("backend/AdminProductDetail", $data);
     } else {
       $data['page_title'] = "Admin - Login";
@@ -23,11 +24,56 @@ class AdminProductDetail extends Controller
     }
   }
 
-  function getAllProductDetail()
+  function update()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $product_detail = $this->model("backend/AdminProductDetailModel");
-      $product_detail->getAllProductDetail();
+      $product_detail->update($_POST);
     }
   }
+
+  function delete()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $product_detail = $this->model("backend/AdminProductDetailModel");
+      $product_detail->delete($_POST['id']);
+    }
+  }
+
+  function getAllProductDetail()
+  {
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $product_detail = $this->model("backend/AdminProductDetailModel");
+      $product_detail->getAllProductDetailByProductID($_POST['product_id']);
+    }
+  }
+
+  function getAllProductDetailImport()
+  {
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $product_detail = $this->model("backend/AdminProductDetailModel");
+      $product_detail->getAllProductDetailByProductIDImport($_POST['product_id']);
+    }
+  }
+
+  function checkDuplicate()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $product_detail = $this->model("backend/AdminProductDetailModel");
+      $product_detail->checkDuplicate($_POST);
+    }
+  }
+
+  function getProductDetailByID()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $product_detail = $this->model("backend/AdminProductDetailModel");
+      $id = $_POST['id'];
+      $product_detail->getProductDetailByID($id);
+    }
+  }
+
+
 }

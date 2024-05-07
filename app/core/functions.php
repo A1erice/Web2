@@ -6,15 +6,21 @@ function show($data)
   print_r($data);
   echo "</pre>";
 }
+function currency_format($number, $suffix = 'đ')
+{
+  if (!empty($number)) {
+    return number_format($number, 0, ',', '.') . "{$suffix}";
+  }
+}
 
 function check_error()
 {
-  if (isset ($_SESSION['error']) && $_SESSION['error'] != "") {
+  if (isset($_SESSION['error']) && $_SESSION['error'] != "") {
     echo "<div class='alert alert-danger' role='alert'>";
     echo $_SESSION['error'];
     echo "</div>";
     unset($_SESSION['error']);
-  } else if (isset ($_SESSION['error']) && $_SESSION['error'] == "") {
+  } else if (isset($_SESSION['error']) && $_SESSION['error'] == "") {
     echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
     echo "<strong>Đăng Ký Thành Công";
     echo "  <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'>";
@@ -23,4 +29,6 @@ function check_error()
     echo "</div>";
     unset($_SESSION['error']);
   }
+
+
 }

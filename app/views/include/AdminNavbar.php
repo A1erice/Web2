@@ -9,12 +9,9 @@
   <div class="navbar-nav align-items-center ms-auto">
     <div class="nav-item dropdown">
       <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-        <?php if (isset($data['user_data']))
-          echo "<img class='rounded-circle me-lg-2' src='{$data['user_data']->img}' alt='' style='width: 40px; height: 40px;'>";
-        ?>
 
         <?php if (isset($data['user_data']))
-          echo "<span class='d-none d-lg-inline-flex'>" . $data['user_data']->username . "</span>";
+          echo "<span class='d-flex align-items-center gap-2 d-lg-inline-flex'> <i class='fa-solid fa-user'></i>" . $data['user_data']->username . "</span>";
         ?>
       </a>
       <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
