@@ -37,6 +37,61 @@
           </div>
         </div>
 
+        <!-- Chi tiết phiếu nhập modal -->
+        <div id="invoice_detail_modal" class="modal modal-lg" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Chi tiết phiếu nhập</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class=" col-lg-6">
+                    <label for="" class="mb-2">Nhân Viên</label>
+                    <input id="user_id" class="form-control form-control-sm mb-2" type="text" disabled
+                      value="<?= $_SESSION['user_id'] ?>">
+                  </div>
+                  <div class=" col-lg-6">
+                    <label for="" class="mb-2">Nhà Cung Cấp</label>
+                    <input id="user_id" class="form-control form-control-sm mb-2" type="text" disabled
+                      value="<?= $_SESSION['user_id'] ?>">
+                  </div>
+                  <div class='table-responsive mt-2'>
+                    <table id="productImportTable"
+                      class="table text-start align-middle table-bordered table-hover mb-0'">
+                      <thead>
+                        <tr>
+                          <th>Mã sản phẩm</th>
+                          <th>Tên sản phẩm</th>
+                          <th>Màu sắc</th>
+                          <th>Kích cỡ</th>
+                          <th>Giá tiền</th>
+                          <th>Số lượng</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      Tổng tiền
+                      <span id="total" class="text-danger fw-bold"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- danh sách phiêu nhập -->
         <div id="invoices" class="category_list">
 
@@ -64,6 +119,10 @@
     fetch_data();
   })
 
+  function getInvoiceDetail(id) {
+    $('#invoice_detail_modal').modal("show");
+  }
+
   // hiển thị danh sách phiếu nhập
   function fetch_data(page, keyword) {
     $.ajax({
@@ -89,23 +148,23 @@
     SearchData();
   });
 
-  function SearchData(){
+  function SearchData() {
     var col = $('#colSort').val();
     var endDate = $('#endDate').val();
     var bgDate = $('#bgDate').val();
-    var nv =  $('#users').find('option:selected').text();
+    var nv = $('#users').find('option:selected').text();
     var ncc = $('#suppliers').find('option:selected').text();
     var sortType = $('#sort').val();
-    if(ncc == "Chọn nhà cung cấp"){
+    if (ncc == "Chọn nhà cung cấp") {
       ncc = "";
     }
-    if(nv=="Chọn nhân viên"){
-      nv ="";
+    if (nv == "Chọn nhân viên") {
+      nv = "";
     }
     var currentPage = 1;
 
-    if(bgDate != "" && endDate != ""){
-      if(bgDate > endDate){
+    if (bgDate != "" && endDate != "") {
+      if (bgDate > endDate) {
         Swal.fire({
           title: "Warning!",
           text: "Ngày bắt đầu không được lớn hơn ngày kết thúc.",
@@ -115,8 +174,8 @@
         return;
       }
     }
-    
-    
+
+
     $.ajax({
       url: "<?= ROOT ?>AdminProductImport/getAllInvoices",
       type: 'post',
@@ -135,7 +194,7 @@
     });
   }
 
-  function SortCol(ColName){
+  function SortCol(ColName) {
     $('#colSort').val(ColName);
     var typeSort = $('#sort').val();
     if (typeSort === 'ASC') {
