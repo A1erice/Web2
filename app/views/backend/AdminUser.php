@@ -184,7 +184,8 @@
 
         <div id="displayUserData">
         </div>
-        <label id="sort" hidden>ab</label>
+        <label id="sort" hidden></label>
+        <label id="colSort" hidden></label>
       </div>
     </div>
 
@@ -214,12 +215,16 @@
 
   // hiển thị danh sách người dùng có phân trang
   function fetch_data(page, keyword) {
+    var colName = $('#colSort').val();
+    var typeSort = $('#sort').val();
     $.ajax({
       url: "<?= ROOT ?>AdminUser/getAll",
       type: 'post',
       data: {
         page: page,
-        keyword: keyword
+        keyword: keyword,
+        column: colName,
+        typeSort: typeSort
       },
       success: function (data, status) {
         $('#displayUserData').html(data);
@@ -473,8 +478,8 @@
   }
 
   function ColSort(colName){
-    var keyword = $('#search_user').val();
-    var page = 1;
+    $('#colSort').val(colName);
+    var searchText = $('#search_user').val();
     var typeSort = $('#sort').val();
     if (typeSort === 'ASC') {
       typeSort = 'DESC';
@@ -483,19 +488,7 @@
       typeSort = 'ASC';
       $('#sort').val('ASC');
     }
-    $.ajax({
-      url: "<?= ROOT ?>AdminUser/getAll",
-      type: 'post',
-      data: {
-        page: page,
-        keyword: keyword,
-        column: colName,
-        typeSort: typeSort
-      },
-      success: function (data, status) {
-        $('#displayUserData').html(data);
-      }
-    });
+    fetch_data(1,searchText);
   }
 
 </script>

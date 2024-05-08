@@ -136,11 +136,19 @@ class AdminUserModel extends Database
       $page = 1;
     }
 
-    $start_from = ($page - 1) * $limit;
+    $col = "";
+    if(isset($_POST['column'])){
+      $col = trim($_POST['column']);
+    }
+
+    $keyword = "";
     if (isset($_POST['keyword'])) {
-      $keyword = trim($_POST['keyword']); // Sanitize user input
-      if(isset($_POST['column'])){
-        $col = trim($_POST['column']);
+      $keyword = trim($_POST['keyword']);
+    }
+
+    $start_from = ($page - 1) * $limit;
+    if ($keyword != "") {
+      if($col != ""){
         $sort = trim($_POST['typeSort']);
         $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
         FROM user u
@@ -166,8 +174,7 @@ class AdminUserModel extends Database
       }
       
     } else {
-      if(isset($_POST['column'])){
-        $col = trim($_POST['column']);
+      if($col != ""){
         $sort = trim($_POST['typeSort']);
         $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
         FROM user u

@@ -43,6 +43,7 @@
         </div>
 
         <label id='sort' hidden></label>
+        <label id='colSort' hidden></label>
 
 
 
@@ -88,7 +89,8 @@
     SearchData();
   });
 
-  function SearchData(col){
+  function SearchData(){
+    var col = $('#colSort').val();
     var endDate = $('#endDate').val();
     var bgDate = $('#bgDate').val();
     var nv =  $('#users').find('option:selected').text();
@@ -134,6 +136,7 @@
   }
 
   function SortCol(ColName){
+    $('#colSort').val(ColName);
     var typeSort = $('#sort').val();
     if (typeSort === 'ASC') {
       typeSort = 'DESC';
@@ -142,7 +145,7 @@
       typeSort = 'ASC';
       $('#sort').val('ASC');
     }
-    SearchData(ColName);
+    SearchData();
   }
 
   function getAllSuppliers() {
