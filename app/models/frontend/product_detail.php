@@ -2,6 +2,145 @@
 class product_detail extends Database
 {
 
+  function getData($offset,$limit,$searchText,$minPrice,$maxPrice,$category,$brand,$color,$size){
+    $query = "";
+    $error = "";
+
+    //Lấy toàn bộ dữ liệu 
+    $query .= "SELECT p.*, pd.color_id, MIN(pd.id) AS product_detail_id, MIN(pd.price) AS min_price, MIN(pd.image) AS min_image,
+    c.name AS category_name, b.name AS brand_name
+    FROM product p
+    INNER JOIN product_detail pd ON p.id = pd.product_id
+    INNER JOIN category c ON p.category_id = c.id
+    INNER JOIN brand b ON p.brand_id = b.id";
+
+    //Xử lý truy vấn where: từ khóa tìm kiếm, giá
+    $where = "";
+    //xử lý từ khóa tìm kiếm.
+    if($searchText != ""){
+      $where .= " p.name LIKE '%$searchText%' ";
+    }
+    //xử lý giá.
+    if($minPrice != "" || $maxPrice != ""){
+      if($where != ""){
+        $where .= " AND ";
+      }
+      if($minPrice != "" && $maxPrice != ""){
+        $where .= " pd.price >= $minPrice AND pd.price <= $maxPrice ";
+      } else {
+        if($minPrice != ""){
+          $where .= " pd.price >= $minPrice";
+        } else {
+          $where .= " pd.price <= $maxPrice";
+        }
+      }
+    }
+
+    //xử lý thể loại
+    if ($category != "") {
+      if($where != ""){
+        $where .= " AND ";
+      }
+      $parts = explode(",", $category);
+      $conditions = []; // Mảng để chứa các điều kiện
+  
+      foreach ($parts as $part) {
+          $conditions[] = "c.name = '$part'";
+      }
+  
+      if (!empty($conditions)) {
+  
+          // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
+          $where .= "(" . implode(" OR ", $conditions) . ")";
+      }
+    }
+
+    //xử lý thương hiệu
+    if ($brand != "") {
+      if($where != ""){
+        $where .= " AND ";
+      }
+      $parts = explode(",", $brand);
+      $conditions = []; // Mảng để chứa các điều kiện
+  
+      foreach ($parts as $part) {
+          $conditions[] = "b.name = '$part'";
+      }
+  
+      if (!empty($conditions)) {
+  
+          // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
+          $where .= "(" . implode(" OR ", $conditions) . ")";
+      }
+    }
+
+    //xử lý màu
+    if ($color != "") {
+      if($where != ""){
+        $where .= " AND ";
+      }
+      $parts = explode(",", $color);
+      $conditions = []; // Mảng để chứa các điều kiện
+  
+      foreach ($parts as $part) {
+          $conditions[] = " pd.color_id = (SELECT id FROM color WHERE name = '$part') ";
+      }
+  
+      if (!empty($conditions)) {
+  
+          // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
+          $where .= "(" . implode(" OR ", $conditions) . ")";
+      }
+    }
+
+    //xử lý size
+    if ($size != "") {
+      if($where != ""){
+        $where .= " AND ";
+      }
+      $parts = explode(",", $size);
+      $conditions = []; // Mảng để chứa các điều kiện
+  
+      foreach ($parts as $part) {
+          $conditions[] = " pd.size_id = (SELECT id FROM size WHERE name = '$part') ";
+      }
+  
+      if (!empty($conditions)) {
+  
+          // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
+          $where .= "(" . implode(" OR ", $conditions) . ")";
+      }
+    }
+
+    //kết hợp where và query
+    if($where != ""){
+      $query .= " WHERE ".$where;
+    }
+
+    $query .= " GROUP BY p.id, pd.color_id ";//
+    $query .= " LIMIT $limit OFFSET $offset ";
+
+    $this->conn->exec("SET CHARACTER SET utf8mb4");
+    $stmt = $this->conn->prepare($query);
+    try {
+      $stmt->execute();
+  } catch (PDOException $e) {
+      echo 'Error: ' . $e->getMessage(); // In thông tin lỗi chi tiết
+      // Ghi log lỗi vào file
+      error_log('PDOException: ' . $e->getMessage(), 0);
+  }
+    $products = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $rowCount = $stmt->rowCount();
+
+    // $error .= $query;
+
+    return [
+      'products' => $products,
+      'count' => $rowCount,
+      'error' => $error
+    ];
+  }
+
   // lấy ra đại diện các sản phẩm theo màu sắc cho khách hàng lựa chọn
   function getProductForShop()
   {
@@ -16,22 +155,46 @@ class product_detail extends Database
     } else {
       $page = 1;
     }
+
+    $keyword = "";
+    $minPrice = "";
+    $maxPrice = "";
+    $category = "";
+    $brand = "";
+    $color = "";
+    $size = "";
+
+    if (isset($_POST['minPrice']) && isset($_POST['maxPrice']) && isset($_POST['category']) && isset($_POST['brand']) && isset($_POST['color']) && isset($_POST['size'])) {
+      // Gán giá trị cho các biến nếu có
+      $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
+      $minPrice = $_POST['minPrice'];
+      $maxPrice = $_POST['maxPrice'];
+      $category = urldecode($_POST['category']);
+      $brand = urldecode($_POST['brand']);
+      $color = urldecode($_POST['color']);
+      $size = $_POST['size'];
+  }
+
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
     $limit = 12;
     $offset = ($page - 1) * $limit; // Calculate offset based on current page
-    $query = "SELECT p.*, pd.color_id, MIN(pd.id) AS product_detail_id, MIN(pd.price) AS min_price, MIN(pd.image) AS min_image,
-            c.name AS category_name, b.name AS brand_name
-            FROM product p
-            INNER JOIN product_detail pd ON p.id = pd.product_id
-            INNER JOIN category c ON p.category_id = c.id
-            INNER JOIN brand b ON p.brand_id = b.id
-            GROUP BY p.id, pd.color_id
-            LIMIT $limit OFFSET $offset";
-    $stmt = $this->conn->prepare($query);
-    $stmt->execute();
+    $data = $this->getData($offset,$limit,$keyword,$minPrice,$maxPrice,$category,$brand,$color,$size);
+    // $query = "SELECT p.*, pd.color_id, MIN(pd.id) AS product_detail_id, MIN(pd.price) AS min_price, MIN(pd.image) AS min_image,
+    //         c.name AS category_name, b.name AS brand_name
+    //         FROM product p
+    //         INNER JOIN product_detail pd ON p.id = pd.product_id
+    //         INNER JOIN category c ON p.category_id = c.id
+    //         INNER JOIN brand b ON p.brand_id = b.id
+    //         GROUP BY p.id, pd.color_id
+    //         LIMIT $limit OFFSET $offset";
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->execute();
     $display = "<div class='row pb-3'>";
-    $products = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $display .= $data['error'];
+    // $products = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    $products = $data['products'];
 
     foreach ($products as $product) {
       $price = currency_format($product->min_price);
