@@ -17,9 +17,19 @@ class AdminOrderModel extends Database
     } else {
       $page = 1;
     }
+    if (isset($_POST['keyword'])) {
+      $keyword = $_POST['keyword'];
+    } else {
+      $keyword = 'all';
+    }
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
-    $query = "SELECT * FROM `order` ORDER BY id desc LIMIT {$start_from}, {$limit}";
+    if ($keyword != 'all')
+    {
+      $query = "SELECT * FROM `order` WHERE order_status = {$keyword} ORDER BY id desc LIMIT {$start_from}, {$limit}";
+    } else {
+      $query = "SELECT * FROM `order` ORDER BY id desc LIMIT {$start_from}, {$limit}";
+    }
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     $orders = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -39,7 +49,7 @@ class AdminOrderModel extends Database
       </thead>
       <tbody>
     ";
-    $count = $this->getSum();
+    $count = $this->getSum($keyword);
     if ($count > 0) {
       foreach ($orders as $order) {
         if($order->order_status == 0) {
@@ -87,7 +97,7 @@ class AdminOrderModel extends Database
 
 
     // tổng số bản ghi 
-    $total_rows = $this->getSum();
+    $total_rows = $this->getSum($keyword);
     // tổng số trang
     $total_pages = ceil($total_rows / $limit);
 
@@ -101,7 +111,7 @@ class AdminOrderModel extends Database
       $prev = $page - 1;
       $display .= "
       <li class='page-item {$prev_active}'>
-        <a onclick='changePageFetch($prev)' id = '{$prev}' class='page-link' href='#' aria-label='Previous'>
+        <a onclick='changePageFetch($prev, \"{$keyword}\")' id = '{$prev}' class='page-link' href='#' aria-label='Previous'>
           <span aria-hidden='true'>&laquo;</span>
           <span class='sr-only'>Previous</span>
         </a>
@@ -123,7 +133,7 @@ class AdminOrderModel extends Database
         $active_class = "active";
 
       }
-      $display .= "<li class='page-item {$active_class} '><a onclick='changePageFetch($i)' id = '$i' class='page-link' href='#'>$i</a></li>";
+      $display .= "<li class='page-item {$active_class} '><a onclick='changePageFetch($i, \"{$keyword}\")' id = '$i' class='page-link' href='#'>$i</a></li>";
     }
 
     $next_active = "";
@@ -144,7 +154,7 @@ class AdminOrderModel extends Database
       $next = $page + 1;
       $display .= "
           <li class='page-item'>
-          <a onclick='changePageFetch($next)' id='{$next}' class='page-link {$next_active}' href='#' aria-label='Next'>
+          <a onclick='changePageFetch($next, \"{$keyword}\")' id='{$next}' class='page-link {$next_active}' href='#' aria-label='Next'>
             <span aria-hidden='true'>&raquo;</span>
             <span class='sr-only'>Next</span>
           </a>
@@ -174,9 +184,14 @@ class AdminOrderModel extends Database
 
 
   // lấy ra tổng số tất cả bản ghi
-  function getSum()
+  function getSum($keyword)
   {
-    $query = "SELECT COUNT(*) AS total FROM `order`";
+    if ($keyword == 'all')
+    {
+      $query = "SELECT COUNT(*) AS total FROM `order`";
+    } else {
+      $query = "SELECT COUNT(*) AS total FROM `order` WHERE order_status = {$keyword} ";
+    }
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_OBJ);
@@ -185,6 +200,7 @@ class AdminOrderModel extends Database
     } else {
       return 0;
     }
+    
   }
   
   function updateOrderStatus($id)
