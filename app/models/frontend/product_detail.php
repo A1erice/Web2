@@ -18,7 +18,7 @@ class product_detail extends Database
     }
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
-    $limit = 9;
+    $limit = 12;
     $offset = ($page - 1) * $limit; // Calculate offset based on current page
     $query = "SELECT p.*, pd.color_id, MIN(pd.id) AS product_detail_id, MIN(pd.price) AS min_price, MIN(pd.image) AS min_image,
             c.name AS category_name, b.name AS brand_name
