@@ -37,7 +37,8 @@ class AdminInvoiceModel extends Database
     }
   }
 
-  function getData($start_from, $limit, $bgDate, $endDate, $nhanvien, $ncc, $col, $sortType) {
+  function getData($start_from, $limit, $bgDate, $endDate, $nhanvien, $ncc, $col, $sortType)
+  {
     $query = "";
     $where = "";
     $text = "null";
@@ -54,55 +55,55 @@ class AdminInvoiceModel extends Database
 
     // Xây dựng phần điều kiện WHERE
     if ($bgDate != "" || $endDate != "") {
-        if ($bgDate != "" && $endDate != "") {
-            $where .= " i.create_date BETWEEN DATE_SUB('{$bgDate}', INTERVAL 1 DAY) AND DATE_ADD('$endDate', INTERVAL 1 DAY) ";
+      if ($bgDate != "" && $endDate != "") {
+        $where .= " i.create_date BETWEEN DATE_SUB('{$bgDate}', INTERVAL 1 DAY) AND DATE_ADD('$endDate', INTERVAL 1 DAY) ";
+      } else {
+        if ($bgDate != "") {
+          $where .= " i.create_date >= '{$bgDate}' ";
         } else {
-            if ($bgDate != "") {
-                $where .= " i.create_date >= '{$bgDate}' ";
-            } else {
-                $where .= " i.create_date <= '{$endDate}' ";
-            }
+          $where .= " i.create_date <= '{$endDate}' ";
         }
+      }
     }
 
     if ($nhanvien != "") {
-        if ($where != "") {
-            $where .= " AND ";
-        }
-        $where .= " u.email LIKE '%{$nhanvien}%' ";
+      if ($where != "") {
+        $where .= " AND ";
+      }
+      $where .= " u.email LIKE '%{$nhanvien}%' ";
     }
 
     if ($ncc != "") {
-        if ($where != "") {
-            $where .= " AND ";
-        }
-        $where .= " s.name LIKE '%{$ncc}%' ";
+      if ($where != "") {
+        $where .= " AND ";
+      }
+      $where .= " s.name LIKE '%{$ncc}%' ";
     }
 
     // Đưa các câu lệnh WHERE vào query nếu có
     if ($where != "") {
-        $query .= " WHERE " . $where;
+      $query .= " WHERE " . $where;
     }
 
     // Sort cột
     if ($col != "") {
-        $query .= " ORDER BY {$col} {$sortType} ";
+      $query .= " ORDER BY {$col} {$sortType} ";
     } else {
-        $query .= " ORDER BY i.id ";
+      $query .= " ORDER BY i.id ";
     }
 
     // Thêm LIMIT cho câu truy vấn
     $query .= " LIMIT {$start_from}, {$limit} ";
 
-   
+
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
 
     $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $rowCount = $stmt->rowCount();
 
-    return ['invoices' => $invoices, 'rowCount' => $rowCount,'text' => $text];
-    
+    return ['invoices' => $invoices, 'rowCount' => $rowCount, 'text' => $text];
+
   }
 
   // lấy toàn bộ bản ghi thuộc bảng nhóm quyền (có phân trang)
@@ -127,32 +128,32 @@ class AdminInvoiceModel extends Database
     $start_from = ($page - 1) * $limit;
 
     $bgDate = "";
-    if(isset($_POST['bgDate'])){
+    if (isset($_POST['bgDate'])) {
       $bgDate = trim($_POST['bgDate']);
     }
     $endDate = "";
-    if(isset($_POST['endDate'])){
+    if (isset($_POST['endDate'])) {
       $endDate = trim($_POST['endDate']);
     }
     $nhanvien = "";
-    if(isset($_POST['nv'])){
+    if (isset($_POST['nv'])) {
       $nhanvien = trim($_POST['nv']);
     }
     $ncc = "";
-    if(isset($_POST['ncc'])){
+    if (isset($_POST['ncc'])) {
       $ncc = trim($_POST['ncc']);
     }
     $col = "";
-    if(isset($_POST['col'])){
+    if (isset($_POST['col'])) {
       $col = trim($_POST['col']);
     }
     $sortType = "";
-    if(isset($_POST['sort'])){
+    if (isset($_POST['sort'])) {
       $sortType = trim($_POST['sort']);
     }
 
-    
-    $data = $this->getData($start_from,$limit,$bgDate,$endDate,$nhanvien,$ncc,$col,$sortType);
+
+    $data = $this->getData($start_from, $limit, $bgDate, $endDate, $nhanvien, $ncc, $col, $sortType);
     $invoices = $data['invoices'];
     $count = $data['rowCount'];
     // $display .= "{$data['text']}"; //check lỗi
@@ -181,7 +182,7 @@ class AdminInvoiceModel extends Database
               <td>{$invoice['supplier']}</td>
               <td>{$invoice['total']}</td>
               <td>
-                <button class='btn btn-sm btn-primary' onclick=''><i class='fa-solid fa-eye'></i></button>
+                <button class='btn btn-sm btn-primary' onclick='getInvoiceDetail({$invoice['id']})'><i class='fa-solid fa-eye'></i></button>
               </td>
             </tr>";
       }
