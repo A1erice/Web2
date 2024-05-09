@@ -38,55 +38,48 @@
         </div>
 
         <!-- Chi tiết phiếu nhập modal -->
-        <div id="invoice_detail_modal" class="modal modal-lg" tabindex="-1">
-          <div class="modal-dialog">
+        <div class="modal fade" id="invoice_detail_modal" data-bs-backdrop="static" data-bs-keyboard="false"
+          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable modal-lg">
             <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Chi tiết phiếu nhập</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white">Chi tiết phiếu nhập</h5>
               </div>
-              <div class="modal-body">
-                <div class="row">
-                  <div class=" col-lg-6">
-                    <label for="" class="mb-2">Nhân Viên</label>
-                    <input id="user_id" class="form-control form-control-sm mb-2" type="text" disabled
-                      value="<?= $_SESSION['user_id'] ?>">
-                  </div>
-                  <div class=" col-lg-6">
-                    <label for="" class="mb-2">Nhà Cung Cấp</label>
-                    <input id="user_id" class="form-control form-control-sm mb-2" type="text" disabled
-                      value="<?= $_SESSION['user_id'] ?>">
-                  </div>
-                  <div class='table-responsive mt-2'>
-                    <table id="productImportTable"
-                      class="table text-start align-middle table-bordered table-hover mb-0'">
-                      <thead>
-                        <tr>
-                          <th>Mã sản phẩm</th>
-                          <th>Tên sản phẩm</th>
-                          <th>Màu sắc</th>
-                          <th>Kích cỡ</th>
-                          <th>Giá tiền</th>
-                          <th>Số lượng</th>
-                          <th>Thao tác</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                      Tổng tiền
-                      <span id="total" class="text-danger fw-bold"></span>
-                    </div>
-                  </div>
+              <div class="modal-body row">
+                <div class="mb-3 text-start col-lg-4">
+                  <label class="mb-2" for="">Mã Phiếu Nhập</label>
+                  <input id="" type="text" class="form-control" placeholder="" disabled>
                 </div>
+                <div class="mb-3 text-start col-lg-4">
+                  <label class="mb-2" for="">Mã Nhà Cung Cấp</label>
+                  <input id="" type="text" class="form-control" placeholder="" disabled>
+                </div>
+                <div class="mb-3 text-start col-lg-4">
+                  <label class="mb-2" for="">Ngày Nhập</label>
+                  <input id="" type="text" class="form-control" placeholder="" disabled>
+                </div>
+                <div class="col-sm-12 col-xl-12 table-responsive">
+                  <table class="table table-striped">
+
+                    <head>
+                      <tr>
+                        <th>Mã Chi Tiết Sản Phẩm</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Màu Sắc</th>
+                        <th>Kích Cỡ</th>
+                        <th>Số Lượng</th>
+                        <th>Thành tiền</th>
+                      </tr>
+                    </head>
+                  </table>
+                </div>
+                <p class="col-sm-12">
+                  Tổng Tiền: <span class="text-danger">3.000.000đ</span>
+                </p>
+
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
               </div>
             </div>
           </div>
@@ -120,6 +113,16 @@
   })
 
   function getInvoiceDetail(id) {
+    $.ajax({
+      url: "<?= ROOT ?>AdminProductImport/getInvoiceFormByID",
+      type: 'post',
+      data: {
+        id: id,
+      },
+      success: function (data, status) {
+        $('#invoice_detail_modal').html(data);
+      }
+    });
     $('#invoice_detail_modal').modal("show");
   }
 

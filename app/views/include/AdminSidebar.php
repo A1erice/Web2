@@ -23,16 +23,7 @@
     </div>
     <div class="navbar-nav w-100">
       <a href="<?php echo ROOT ?>AdminHome" class="nav-item nav-link"><i class="fa fa-chart-pie"></i>Thống Kê</a>
-      <?php
-      if (!empty($data['modules'])) {
-        foreach ($data['modules'] as $module) {
-          echo "<a href='<?php echo ROOT ?>AdminOrder' class='nav-item nav-link'>{$module->module_name}</a>";
-        }
-      } else {
-        echo "No modules found for this role.";
-      }
 
-      ?>
       <a href="<?php echo ROOT ?>AdminOrder" class="nav-item nav-link"><i class="fa fa-file-invoice-dollar"></i>Đơn
         Hàng</a>
       <a href="<?php echo ROOT ?>AdminSupplier" class="nav-item nav-link"><i class="fa-solid fa-boxes-packing"></i>Nhà

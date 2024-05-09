@@ -13,7 +13,8 @@
           <form class="d-none d-md-flex w-50">
             <input id="search_role" class="form-control border-0" type="search" placeholder="Tìm Kiếm">
           </form>
-          <a class="btn btn-primary" href="" data-bs-toggle="modal" data-bs-target="#role_modal">
+          <a onclick="resetTableModule()" class="btn btn-primary" href="" data-bs-toggle="modal"
+            data-bs-target="#role_modal">
             <i class="fa-solid fa-circle-plus"></i> Thêm nhóm quyền
           </a>
         </div>
@@ -137,6 +138,7 @@
   })
 
   function get_detail(id) {
+    resetTableModule();
     $.ajax({
       url: "<?= ROOT ?>AdminRole/getDetail",
       type: 'post',
@@ -144,11 +146,68 @@
         role_id: id
       },
       success: function (data, status) {
-        console.log(data);
+        if (data.trim() === 'Không tìm thấy dữ liệu') {
+          console.log("Không tìm thấy chức năng của nhóm quyền");
+        } else {
+          const jsonData = JSON.parse(data);
+          $('#role_name').val(jsonData[0].name);
+
+          if (jsonData.length > 0) {
+            console.log(jsonData);
+            jsonData.forEach(function (role) {
+              loopAllModule(role.module_id, role.action);
+            });
+            $('#role_modal').modal("show");
+          } else {
+            // Handle case where jsonData is empty (optional)
+            console.log("No permissions found for this role.");
+          }
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Handle errors during AJAX request (optional)
+        console.error("Error fetching role details:", textStatus, errorThrown);
       }
     });
 
     alert("Chi tiết của nhóm quyền " + id);
+  }
+
+  // làm mới bảng chi tiết quyền
+  function resetTableModule() {
+    $('#role_name').val("");
+    $("#table_modules input[type='checkbox']").each(function () {
+      $(this).prop("checked", false); // Set checkbox checked
+    });
+  }
+
+
+
+  function loopAllModule(moduleID, functionName) {
+    $("#table_modules input[type='checkbox']").each(function () {
+      // Get checkbox name and split it into parts
+      var permissionValue = $(this).attr("name");
+      var parts = permissionValue.split("-");
+
+      // Extract moduleID and functionName with case-insensitive comparison
+      var checkboxModuleID = parts[0].toLowerCase().trim();
+      var checkboxFunctionName = parts[2].toLowerCase().trim();
+
+      console.log("Module : " + checkboxModuleID.toLowerCase().trim());
+      console.log("FunctionName: " + checkboxFunctionName.toLowerCase().trim());
+
+      console.log("Module truyền vào : " + moduleID.toLowerCase().trim());
+      console.log("FunctionName truyền vào: " + functionName.toLowerCase().trim());
+
+
+      // Check for matching moduleID and functionName (case-insensitive)
+      if (checkboxModuleID === moduleID.toLowerCase().trim() && checkboxFunctionName === functionName.toLowerCase().trim()) {
+        $(this).prop("checked", true); // Set checkbox checked
+        console.log("Trùng");
+      } else {
+        console.log("Không trùng");
+      }
+    });
   }
 
 
@@ -181,21 +240,19 @@
                 // lấy ra chi tiết quyền chi tiết quyền được lưu trong name của từng input
                 // có dạng như sau (mã module - tên module - tên chức năng)
                 var permissionValue = $(this).attr("name");
-
-                // Split the function value using "-" as the delimiter
+                // cắt chuỗi sau thành mảng 3 phần tử chưa moduleId moduleName và functionnamee
                 var parts = permissionValue.split("-");
 
                 // Extract ID and function name (assuming indexes 0 and 2)
                 var moduleID = parts[0];
                 var functionName = parts[2];
-
-                // Create an object to store extracted data
+                // tạo đối tượng  chi tiết quyền 
                 var permission = {
                   moduleID: moduleID,
                   functionName: functionName
                 };
 
-                // Add the permission object to the selectedPermissions array
+                // lưu chi tiết quyền vào mảng danh sách chi tiết quyền
                 selectedPermissions.push(permission);
               }
             });
@@ -207,14 +264,13 @@
                 selectedPermissions: selectedPermissions
               },
               success: function (data, status) {
-                alert(data);
-                // if (data == "Thêm thành công") {
-                //   alert("Thêm thành công");
-                //   fetch_data(); // Refresh the role list
-
-                // } else {
-                //   alert("Thêm thất bại");
-                // }
+                Swal.fire({
+                  title: data,
+                  icon: "success",
+                  confirmButtonColor: "#3459e6"
+                });
+                $('#role_modal').modal("hide");
+                fetch_data();
               }
             });
           }

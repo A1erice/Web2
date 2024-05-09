@@ -279,7 +279,7 @@ class AdminRoleModel extends Database
 
     $stmt = $this->conn->prepare($query);
 
-    $stmt->execute([':roleID' => $roleID]);
+    $stmt->execute([$roleID]);
 
     $results = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -296,7 +296,7 @@ class AdminRoleModel extends Database
       }
       echo json_encode($response);
     } else {
-      echo "Không tìm thấy dữ liệu.";  // Informative message in Vietnamese
+      echo "Không tìm thấy dữ liệu";  // Informative message in Vietnamese
     }
   }
 

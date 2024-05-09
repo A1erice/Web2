@@ -63,4 +63,12 @@ class AdminProductImport extends Controller
       $invoice->getAllInvoices();
     }
   }
+
+  function getInvoiceFormByID()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $invoice = $this->model("backend/AdminInvoiceModel");
+      $invoice->getInvoiceFormByID($_POST);
+    }
+  }
 }
