@@ -118,19 +118,23 @@ class product_detail extends Database
     }
 
     $query .= " GROUP BY p.id, pd.color_id ";//
+
+    // lấy tổng số lượng
+    $stmt = $this->conn->prepare($query);   
+    $rowCount = $stmt->rowCount(); 
+
     $query .= " LIMIT $limit OFFSET $offset ";
 
     $this->conn->exec("SET CHARACTER SET utf8mb4");
     $stmt = $this->conn->prepare($query);
     try {
-      $stmt->execute();
+    $stmt->execute();
   } catch (PDOException $e) {
       echo 'Error: ' . $e->getMessage(); // In thông tin lỗi chi tiết
       // Ghi log lỗi vào file
       error_log('PDOException: ' . $e->getMessage(), 0);
   }
     $products = $stmt->fetchAll(PDO::FETCH_OBJ);
-    $rowCount = $stmt->rowCount();
 
     // $error .= $query;
 
@@ -180,19 +184,8 @@ class product_detail extends Database
     $limit = 12;
     $offset = ($page - 1) * $limit; // Calculate offset based on current page
     $data = $this->getData($offset,$limit,$keyword,$minPrice,$maxPrice,$category,$brand,$color,$size);
-    // $query = "SELECT p.*, pd.color_id, MIN(pd.id) AS product_detail_id, MIN(pd.price) AS min_price, MIN(pd.image) AS min_image,
-    //         c.name AS category_name, b.name AS brand_name
-    //         FROM product p
-    //         INNER JOIN product_detail pd ON p.id = pd.product_id
-    //         INNER JOIN category c ON p.category_id = c.id
-    //         INNER JOIN brand b ON p.brand_id = b.id
-    //         GROUP BY p.id, pd.color_id
-    //         LIMIT $limit OFFSET $offset";
-    // $stmt = $this->conn->prepare($query);
-    // $stmt->execute();
     $display = "<div class='row pb-3'>";
     $display .= $data['error'];
-    // $products = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     $products = $data['products'];
 

@@ -146,7 +146,7 @@ class AdminInvoiceModel extends Database
   {
     $query = "";
     $where = "";
-    $text = "null";
+    $text = "";
     // Lấy toàn bộ
     $query .= "SELECT
         i.id,
@@ -197,16 +197,26 @@ class AdminInvoiceModel extends Database
       $query .= " ORDER BY i.id ";
     }
 
-    // Thêm LIMIT cho câu truy vấn
-    $query .= " LIMIT {$start_from}, {$limit} ";
-
-
+    // Thực hiện truy vấn SQL hoàn chỉnh
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
 
-    $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $rowCount = $stmt->rowCount();
+    // Lấy toàn bộ kết quả từ truy vấn
+    $allInvoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $rowCount = count($allInvoices);
 
+    // Áp dụng LIMIT cho kết quả
+    $start_index = $start_from;
+    $end_index = min($start_index + $limit, count($allInvoices)); // Tính toán số lượng kết quả tối đa
+    $invoices = array_slice($allInvoices, $start_index, $end_index - $start_index);
+
+    // Số lượng kết quả trả về
+
+    // Tạo text về câu truy vấn
+    // $text = $query;
+
+    // Trả về dữ liệu
     return ['invoices' => $invoices, 'rowCount' => $rowCount, 'text' => $text];
 
   }
@@ -261,7 +271,7 @@ class AdminInvoiceModel extends Database
     $data = $this->getData($start_from, $limit, $bgDate, $endDate, $nhanvien, $ncc, $col, $sortType);
     $invoices = $data['invoices'];
     $count = $data['rowCount'];
-    // $display .= "{$data['text']}"; //check lỗi
+    $display .= "{$data['text']}"; //check lỗi
     $display .= "
       <div class='table-responsive mb-3'>
       <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
@@ -310,6 +320,8 @@ class AdminInvoiceModel extends Database
     $total_rows = $count;
     // tổng số trang
     $total_pages = ceil($total_rows / $limit);
+
+    $display .= " tổng số trang = ".$total_pages;
 
     // hiển thị số trang 
     $display .= "
