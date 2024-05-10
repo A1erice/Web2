@@ -43,8 +43,15 @@
       <a href="<?= ROOT ?>AdminProductImport" class="nav-item nav-link"><i class="fa-solid fa-boxes-stacked"></i>Nhập
         Hàng</a>
       <a href="AdminRole" class="nav-item nav-link"><i class="fa-solid fa-shield-halved"></i>Phân Quyền</a>
-      <a href="AdminUser" class="nav-item nav-link"><i class="fa-solid fa-user-group"></i>Người Dùng</a>
-
+      <div class="nav-item dropdown">
+        <a href="<?php echo ROOT ?>AdminUser" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+          <i class="fa-solid fa-user"></i> Người Dùng
+        </a>
+        <div class="dropdown-menu bg-transparent border-0">
+          <a href="<?php echo ROOT ?>AdminUser" class="dropdown-item">Danh sách người dùng</a>
+          <a href="<?php echo ROOT ?>AdminAddUser" class="dropdown-item">Thêm mới người dùng</a>
+        </div>
+      </div>
     </div>
   </nav>
 </div>

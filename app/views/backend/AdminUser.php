@@ -15,7 +15,7 @@
           </form>
           <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal" href=""
             class="btn btn-primary">
-            <i class="fa-solid fa-circle-plus"></i> Thêm Tài Khoản
+            <i class="fa-solid fa-circle-plus"></i> Thêm Người Dùng
           </a>
         </div>
 
@@ -477,7 +477,7 @@
     });
   }
 
-  function ColSort(colName){
+  function ColSort(colName) {
     $('#colSort').val(colName);
     var searchText = $('#search_user').val();
     var typeSort = $('#sort').val();
@@ -488,7 +488,7 @@
       typeSort = 'ASC';
       $('#sort').val('ASC');
     }
-    fetch_data(1,searchText);
+    fetch_data(1, searchText);
   }
 
 </script>
