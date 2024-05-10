@@ -22,6 +22,111 @@ class AdminInvoiceModel extends Database
     }
   }
 
+  function getInvoiceFormByID($POST)
+  {
+
+    $invoiceID = $POST['id'];
+    $display = "
+    <div class='modal-dialog modal-dialog-scrollable modal-xl'>
+      <div class='modal-content'>
+        <div class='modal-header bg-primary'>
+          <h5 class='modal-title text-white'>Chi tiết phiếu nhập</h5>
+        </div>
+        <div class='modal-body row'>
+          
+          
+    ";
+
+    $query = "   
+        SELECT i.*, s.name AS supplier_name, u.username AS username
+        FROM invoice i
+        INNER JOIN supplier s ON i.supplier_id = s.id
+        INNER JOIN user u ON i.user_id = u.id
+        WHERE i.id = ?;
+    ";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$invoiceID]);
+    $invoice = $stmt->fetch(PDO::FETCH_OBJ);
+    $display .= "
+        <div class='mb-3 text-start col-lg-4'>
+          <label class='mb-2' for=''>Mã Phiếu Nhập</label>
+          <input id='' type='text' class='form-control' value='{$invoice->id}' placeholder='' disabled>
+        </div>
+        <div class='mb-3 text-start col-lg-4'>
+          <label class='mb-2' for=''>Nhà Cung Cấp</label>
+          <input id='' type='text' class='form-control' value='{$invoice->supplier_id} - {$invoice->supplier_name}' placeholder='' disabled>
+        </div>
+        <div class='mb-3 text-start col-lg-4'>
+          <label class='mb-2' for=''>Ngày Nhập</label>
+          <input id='' type='text' class='form-control' value='{$invoice->create_date}' placeholder='' disabled>
+        </div>
+      
+    ";
+
+    $detailQuery = "
+    SELECT p.name AS product_name, c.name AS color_name, s.name AS size_name,
+       id.quantity, id.subtotal, id.productDetail_id, pd.price
+    FROM invoice_detail id
+    INNER JOIN product_detail pd ON id.productDetail_id = pd.id
+    INNER JOIN product p ON pd.product_id = p.id
+    INNER JOIN color c ON pd.color_id = c.id  -- Join with color table
+    INNER JOIN size s ON pd.size_id = s.id  -- Join with size table
+    WHERE id.invoice_id = ?;
+    ";
+    $stmt = $this->conn->prepare($detailQuery);
+    $stmt->execute([$invoiceID]);
+    $invoice_detail = $stmt->fetch(PDO::FETCH_OBJ);
+    $display .= "
+            <div class='col-sm-12 col-xl-12 table-responsive'>
+              <table class='table table-striped'>
+                <head>
+                  <tr>
+                    <th>Mã Chi Tiết</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Màu Sắc</th>
+                    <th>Kích Cỡ</th>
+                    <th>Số Lượng</th>
+                    <th>Giá sản phẩm</th>
+                    <th>Thành tiền</th>
+                  </tr>
+                </head>
+                <tbody>
+    ";
+    if ($stmt->rowCount() > 0) {
+      while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+        $display .= "
+          <tr>
+            <td>{$row->productDetail_id}</td>
+            <td>{$row->product_name}</td>
+            <td>{$row->color_name}</td>  
+            <td>{$row->size_name}</td>   
+            <td>{$row->quantity}</td>
+            <td>" . number_format($row->price) . "</td> 
+            <td>" . number_format($row->subtotal) . "</td>  
+          </tr>
+        ";
+      }
+    } else {
+      $display .= "<tr><td colspan='7'>Không tìm thấy chi tiết sản phẩm</td></tr>";
+    }
+
+    $display .= "
+          </tbody>
+        </table>
+      </div>";
+
+    $display .= "
+      <div class='modal-footer d-flex justify-content-between align-items-center'>
+        <p class=''>
+          Tổng Tiền: <span class='text-danger'>" . currency_format($invoice->total) . "</span>
+        </p>
+        <button type='button' class='btn btn-danger' data-bs-dismiss='modal'>Thoát</button>
+      </div>
+      ";
+    echo $display;
+  }
+
   function getLatestInvoice()
   {
     $query = "SELECT * FROM `invoice` ORDER BY create_date DESC LIMIT 1";
