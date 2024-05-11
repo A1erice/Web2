@@ -12,7 +12,7 @@
       ";
     foreach ($provinces as $province) {
       $display .= "
-      <option value='{$province->province_id}'>{$province->name}</option>
+      <option value='{$province->id}'>{$province->name}</option>
       ";
     }
     echo $display;

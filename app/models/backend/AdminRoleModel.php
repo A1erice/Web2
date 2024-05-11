@@ -34,11 +34,13 @@ class AdminRoleModel extends Database
   // lấy các nhóm quyền bỏ vào select để lựa chọn
   function getAllRoleToSelect()
   {
+    $display = "
+    <option id='' value='0'>Chọn nhóm quyền</option>
+    ";
     $query = "SELECT * FROM role ORDER BY id";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     $roles = $stmt->fetchAll(PDO::FETCH_OBJ);
-    $display = "";
     foreach ($roles as $role) {
       $display .= "
       <option id='' value='{$role->id}'>{$role->name}</option>

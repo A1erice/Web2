@@ -4,7 +4,7 @@
   {
     $districtID = $POST['district_id'];
     $display = "";
-    $sql = "SELECT * FROM wards where district_id = ?";
+    $sql = "SELECT * FROM ward where district_id = ?";
     $stmt = $this->conn->prepare($sql);
     $stmt->execute([$districtID]);
     $wards = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -13,7 +13,7 @@
         ";
     foreach ($wards as $ward) {
       $display .= "
-        <option value='{$ward->ward_id}'>{$ward->name}</option>
+        <option value='{$ward->id}'>{$ward->name}</option>
         ";
     }
     echo $display;

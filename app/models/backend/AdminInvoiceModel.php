@@ -76,7 +76,7 @@ class AdminInvoiceModel extends Database
     ";
     $stmt = $this->conn->prepare($detailQuery);
     $stmt->execute([$invoiceID]);
-    $invoice_detail = $stmt->fetch(PDO::FETCH_OBJ);
+    $invoice_detail = $stmt->fetchAll(PDO::FETCH_OBJ);
     $display .= "
             <div class='col-sm-12 col-xl-12 table-responsive'>
               <table class='table table-striped'>
@@ -94,7 +94,7 @@ class AdminInvoiceModel extends Database
                 <tbody>
     ";
     if ($stmt->rowCount() > 0) {
-      while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+      foreach ($invoice_detail as $row) {
         $display .= "
           <tr>
             <td>{$row->productDetail_id}</td>
@@ -203,7 +203,7 @@ class AdminInvoiceModel extends Database
 
     // Lấy toàn bộ kết quả từ truy vấn
     $allInvoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     $rowCount = count($allInvoices);
 
     // Áp dụng LIMIT cho kết quả
@@ -295,7 +295,7 @@ class AdminInvoiceModel extends Database
               <td>{$invoice['create_date']}</td>
               <td>{$invoice['employee']}</td>
               <td>{$invoice['supplier']}</td>
-              <td>{$invoice['total']}</td>
+              <td>" . currency_format($invoice['total']) . "</td>
               <td>
                 <button class='btn btn-sm btn-primary' onclick='getInvoiceDetail({$invoice['id']})'><i class='fa-solid fa-eye'></i></button>
               </td>
@@ -321,7 +321,7 @@ class AdminInvoiceModel extends Database
     // tổng số trang
     $total_pages = ceil($total_rows / $limit);
 
-    $display .= " tổng số trang = ".$total_pages;
+    $display .= " tổng số trang = " . $total_pages;
 
     // hiển thị số trang 
     $display .= "

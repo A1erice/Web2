@@ -93,7 +93,6 @@
             const productDetail = JSON.parse(data);
             const newRow = $("<tr></tr>").appendTo(tableBody);
             newRow.attr("data-product-id", selectedProductDetailId);
-
             $("<td>").text(productDetail.id).appendTo(newRow);
             $("<td>").text(productDetail.product_name).appendTo(newRow);
             $("<td>").text(productDetail.color_name).appendTo(newRow);
@@ -109,8 +108,6 @@
             const deleteCell = $("<td><button class='btn btn-danger delete-btn'><i class='fa-solid fa-trash'></i></button></td>").appendTo(newRow);
             updateContinueButtonVisibility();
             calculateProductSum();
-
-
             // Optional: Bind click event handler for delete button
             deleteCell.find('.delete-btn').click(function () {
               // Handle delete functionality (remove row, update server-side if needed)
@@ -142,14 +139,14 @@
     const saveInvoiceBtn = $("#saveInvoice");
     const cancelInvoiceBtn = $("#cancelInvoice");
     const tableBody = $("#productImportTable tbody");
-    const hasProducts = tableBody.children().length > 0; // Check if there are any rows
+    const hasProducts = tableBody.children().length > 0; // Kiểm tra xem danh sách có rỗng không
 
     if (hasProducts) {
-      saveInvoiceBtn.show(); // Show button if there are products
-      cancelInvoiceBtn.show(); // Show button if there are products
+      saveInvoiceBtn.show(); // hiển thị nút nếu có sản phẩm
+      cancelInvoiceBtn.show(); 
     } else {
-      saveInvoiceBtn.hide(); // Hide button if table is empty
-      cancelInvoiceBtn.hide(); // Hide button if table is empty
+      saveInvoiceBtn.hide(); // ẩn nút lưu nếu như không có sản phẩm
+      cancelInvoiceBtn.hide(); 
     }
   }
 

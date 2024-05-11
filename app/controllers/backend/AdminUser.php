@@ -102,5 +102,13 @@ class AdminUser extends Controller
       $user->search($keyword);
     }
   }
+
+  function saveAddress()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $address = $this->model("backend/AdminAddressModel");
+      $address->insert($_POST);
+    }
+  }
 }
 ?>

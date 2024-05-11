@@ -13,7 +13,7 @@
       ";
     foreach ($districts as $district) {
       $display .= "
-      <option value='{$district->district_id}'>{$district->name}</option>
+      <option value='{$district->id}'>{$district->name}</option>
       ";
     }
     echo $display;

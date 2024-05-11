@@ -137,7 +137,7 @@ class AdminUserModel extends Database
     }
 
     $col = "";
-    if(isset($_POST['column'])){
+    if (isset($_POST['column'])) {
       $col = trim($_POST['column']);
     }
 
@@ -148,7 +148,7 @@ class AdminUserModel extends Database
 
     $start_from = ($page - 1) * $limit;
     if ($keyword != "") {
-      if($col != ""){
+      if ($col != "") {
         $sort = trim($_POST['typeSort']);
         $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
         FROM user u
@@ -159,7 +159,7 @@ class AdminUserModel extends Database
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute([
-        ':keyword' => '%' . $keyword . '%', // Add wildcards for partial matches
+          ':keyword' => '%' . $keyword . '%', // Add wildcards for partial matches
         ]);
       } else {
         $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
@@ -169,12 +169,12 @@ class AdminUserModel extends Database
         ORDER BY u.id LIMIT {$start_from}, {$limit}";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([
-        ':keyword' => '%' . $keyword . '%', // Add wildcards for partial matches
+          ':keyword' => '%' . $keyword . '%', // Add wildcards for partial matches
         ]);
       }
-      
+
     } else {
-      if($col != ""){
+      if ($col != "") {
         $sort = trim($_POST['typeSort']);
         $query = "SELECT u.id, u.email, u.username, u.phone, u.img, u.status, u.date, r.name AS role_name
         FROM user u
@@ -202,11 +202,10 @@ class AdminUserModel extends Database
               <tr>
                 <th scope='col' onclick='ColSort(\"id\")'>ID</th>
                 <th scope='col' onclick='ColSort(\"email\")'>Email</th>
-                <th scope='col' onclick='ColSort(\"phone\")'>SĐT</th>
                 <th scope='col' onclick='ColSort(\"username\")'>Tên Đăng Nhập</th>
-                <th scope='col' onclick='ColSort(\"role_id\")'>Quyền</th>
-                <th scope='col'>Hình Ảnh</th>
+                <th scope='col' onclick='ColSort(\"role_id\")'>Nhóm Quyền</th>
                 <th scope='col' onclick='ColSort(\"date\")'>Ngày lập</th>
+                <th scope='col' onclick=''>Khóa</th>
                 <th scope='col'>Thao Tác</th>
               </tr>
             </thead>
@@ -219,11 +218,14 @@ class AdminUserModel extends Database
         <tr>
           <td>{$user->id}</td>
           <td>{$user->email}</td>
-          <td>{$user->phone}</td>
           <td>{$user->username}</td>
           <td>{$user->role_name}</td>
-          <td><img class='previewImage_table' src='{$user->img}'></td>
           <td>{$user->date}</td>
+          <td>
+            <div class='form-check form-switch'>
+              <input class='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckDefault'>
+            </div>
+          </td>
           <td>
           <button class='btn btn-sm btn-warning' onclick='get_detail({$user->id})'><i class='fa-solid fa-pen-to-square'></i></button>
           <button class='btn btn-sm btn-danger' onclick='delete_user({$user->id})'><i class='fa-solid fa-trash'></i></button>
@@ -338,12 +340,13 @@ class AdminUserModel extends Database
   // thêm mới người dùng
   function insert($POST)
   {
+    $fullname = $POST['fullName'];
     $username = $POST['username'];
     $phone = $POST['phone'];
     $email = $POST['email'];
     $password = $POST['password'];
     $role_id = $POST['role_id'];
-    $user_image = ASSETS . "img/" . $POST['fileName'];
+    $user_image = "img/" . $POST['fileName'];
 
     $date = date("Y-m-d H:i:s");
     $password = hash('sha1', $password);
@@ -356,17 +359,32 @@ class AdminUserModel extends Database
       echo "Email đã có tài khoản khác sử dụng";
     } else {
       $query = 'INSERT INTO `user`
-      (`username`, `phone`, `email`, `password`, `role_id`, `img`, `date`) 
+      (`username`, `phone`, `email`, `password`, `role_id`, `img`, `date`, `fullname`) 
       VALUES 
-      (?,?,?,?,?,?,?)';
+      (?,?,?,?,?,?,?,?)';
       $stmt = $this->conn->prepare($query);
-      $result = $stmt->execute([$username, $phone, $email, $password, $role_id, $user_image, $date]);
-      if ($result) {
-        echo "Thêm thành công";
-      } else {
+      $stmt->execute([$username, $phone, $email, $password, $role_id, $user_image, $date, $fullname]);
+      $user_id = $this->getLatestUser();
+      if ($user_id == -1) {
         echo "Thêm thất bại";
+      } else {
+        echo $user_id;
       }
     }
+  }
+
+  function getLatestUser()
+  {
+    $query = "SELECT * FROM `user` ORDER BY id DESC LIMIT 1";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_OBJ);
+    if ($user) {
+      return $user->id;
+    } else {
+      return -1; // Return null if no user is found
+    }
+
   }
 
 
