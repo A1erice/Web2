@@ -9,7 +9,7 @@ class AdminAddressModel extends Database
     $stmt->execute([$address, $ward_id, $district_id, $province_id]);
     $result = $stmt->fetch(PDO::FETCH_OBJ);
     if ($result) {
-      return $result->address_id;
+      return $result->id;
     } else {
       return -1;
     }
@@ -47,15 +47,35 @@ class AdminAddressModel extends Database
       $query = 'INSERT INTO `user_address` (user_id, address_id) VALUES (?, ?)';
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$user_id, $latestAddress_id]);
-      echo "Lưu địa chỉ thành công";
     } else {
       $user_id = $POST['user_id'];
       $query = 'INSERT INTO `user_address` (user_id, address_id) VALUES (?, ?)';
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$user_id, $address_id]);
-      echo "Lưu địa chỉ thành công 2";
-
     }
+  }
 
+  function update($POST)
+  {
+    $address = $POST['address'];
+    $ward_id = $POST['ward'];
+    $district_id = $POST['district'];
+    $province_id = $POST['province'];
+    $address_id = $this->checkDuplicate($address, $ward_id, $district_id, $province_id);
+    if ($address_id == -1) {
+      $query = 'INSERT INTO `address` (street_name, ward_id, district_id, province_id) VALUES (?, ?, ?, ?)';
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$address, $ward_id, $district_id, $province_id]);
+      $latestAddress_id = $this->getLatestAddress();
+      $user_id = $POST['user_id'];
+      $query = 'UPDATE `user_address` SET address_id = ? where user_id = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$latestAddress_id, $user_id]);
+    } else {
+      $user_id = $POST['user_id'];
+      $query = 'UPDATE `user_address` SET address_id = ? where user_id = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$address_id, $user_id]);
+    }
   }
 }

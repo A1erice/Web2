@@ -145,7 +145,6 @@ class AdminUserModel extends Database
     if (isset($_POST['keyword'])) {
       $keyword = trim($_POST['keyword']);
     }
-
     $start_from = ($page - 1) * $limit;
     if ($keyword != "") {
       if ($col != "") {
@@ -227,7 +226,7 @@ class AdminUserModel extends Database
             </div>
           </td>
           <td>
-          <button class='btn btn-sm btn-warning' onclick='get_detail({$user->id})'><i class='fa-solid fa-pen-to-square'></i></button>
+          <a href='" . ROOT . "AdminAddUser/update/$user->id' class='btn btn-sm btn-warning'><i class='fa-solid fa-pen-to-square'></i></a>
           <button class='btn btn-sm btn-danger' onclick='delete_user({$user->id})'><i class='fa-solid fa-trash'></i></button>
           </td>
         </tr>
@@ -346,7 +345,7 @@ class AdminUserModel extends Database
     $email = $POST['email'];
     $password = $POST['password'];
     $role_id = $POST['role_id'];
-    $user_image = "img/" . $POST['fileName'];
+    $user_image = $POST['fileName'];
 
     $date = date("Y-m-d H:i:s");
     $password = hash('sha1', $password);
@@ -403,20 +402,32 @@ class AdminUserModel extends Database
 
   function getByID($id)
   {
-    $query = 'SELECT * FROM user WHERE id = ?';
+    $query = '
+    SELECT u.*,
+    a.street_name,
+    p.id AS province_id,
+    p.name AS province_name,
+    d.id AS district_id,
+    d.name AS district_name,
+    w.id AS ward_id,
+    w.name AS ward_name
+    FROM user u
+    LEFT JOIN user_address ua ON u.id = ua.user_id
+    LEFT JOIN address a ON ua.address_id = a.id
+    LEFT JOIN province p ON a.province_id = p.id  -- Join province table
+    LEFT JOIN district d ON a.district_id = d.id  -- Join district table
+    LEFT JOIN ward w ON a.ward_id = w.id            -- Join ward table
+    WHERE u.id = ?';
     $stmt = $this->conn->prepare($query);
     $stmt->execute([$id]);
-    $response = array();
-    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-    $response['id'] = $result[0]->id;
-    $response['role_id'] = $result[0]->role_id;
-    $response['email'] = $result[0]->email;
-    $response['username'] = $result[0]->username;
-    $response['password'] = $result[0]->password;
-    $response['phone'] = $result[0]->phone;
-    $response['img'] = $result[0]->img;
-    $response['date'] = $result[0]->date;
-    echo json_encode($response);
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+    // Trả về giá trị thuộc tính cần lấy
+    if ($result) {
+      return $result;
+    } else {
+      return null;
+    }
   }
 
   function checkDuplicate($POST)
@@ -452,50 +463,23 @@ class AdminUserModel extends Database
 
   function update($POST)
   {
-    if (isset($POST['username'])) {
-      $id = $POST['id'];
-      $username = $POST['username'];
-      $phone = $POST['phone'];
-      $email = $POST['email'];
-      $role_id = $POST['role_id'];
-
-      if (isset($POST['fileName'])) {
-        $img = $_POST['fileName'];
-        $img = ASSETS . "img/" . $img;
-        if (isset($_POST['password'])) {
-          $password = $POST['password'];
-          $password = hash('sha1', $password);
-          $query = 'UPDATE user set username = ?, phone = ?, email = ?, role_id = ?, password = ?, img = ?  WHERE id = ?';
-          $stmt = $this->conn->prepare($query);
-          $stmt->execute([$username, $phone, $email, $role_id, $password, $img, $id]);
-        } else {
-          $query = 'UPDATE user set username = ?, phone = ?, email = ?, role_id = ?, img = ?  WHERE id = ?';
-          $stmt = $this->conn->prepare($query);
-          $stmt->execute([$username, $phone, $email, $role_id, $img, $id]);
-        }
-
-      } else {
-        if (isset($_POST['password'])) {
-          $password = $POST['password'];
-          $password = hash('sha1', $password);
-          $query = 'UPDATE user set username = ?, phone = ?, email = ?, role_id = ?, password = ?  WHERE id = ?';
-          $stmt = $this->conn->prepare($query);
-          $stmt->execute([$username, $phone, $email, $role_id, $password, $id]);
-        } else {
-          $query = 'UPDATE user set username = ?, phone = ?, email = ?, role_id = ?  WHERE id = ?';
-          $stmt = $this->conn->prepare($query);
-          $stmt->execute([$username, $phone, $email, $role_id, $id]);
-        }
-      }
-      $rowCount = $stmt->rowCount();
-      if ($rowCount > 0) {
-        echo "Sửa thành công";
-      } else {
-        echo "Sửa thất bại";
-      }
+    $id = $POST['id'];
+    $username = $POST['username'];
+    $phone = $POST['phone'];
+    $email = $POST['email'];
+    $fullname = $POST['fullName'];
+    $role_id = $POST['role_id'];
+    $img = $POST['fileName'];
+    $query = 'UPDATE user set username = ?, phone = ?, email = ?, role_id = ?, img = ?, fullname = ?  WHERE id = ?';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$username, $phone, $email, $role_id, $img, $fullname, $id]);
+    $rowCount = $stmt->rowCount();
+    if ($rowCount > 0) {
+      echo "Sửa thành công";
     } else {
-      echo "Fail";
+      echo "Sửa thất bại";
     }
+
   }
 
   function delete($id)

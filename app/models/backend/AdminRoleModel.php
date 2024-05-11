@@ -32,8 +32,11 @@ class AdminRoleModel extends Database
   }
 
   // lấy các nhóm quyền bỏ vào select để lựa chọn
-  function getAllRoleToSelect()
+  function getAllRoleToSelect($POST)
   {
+    if (isset($POST['role_id'])) {
+      $role_id = $POST['role_id'];
+    }
     $display = "
     <option id='' value='0'>Chọn nhóm quyền</option>
     ";
@@ -42,9 +45,15 @@ class AdminRoleModel extends Database
     $stmt->execute();
     $roles = $stmt->fetchAll(PDO::FETCH_OBJ);
     foreach ($roles as $role) {
-      $display .= "
-      <option id='' value='{$role->id}'>{$role->name}</option>
+      if ($role_id == $role->id) {
+        $display .= "
+          <option selected id='' value='{$role->id}'>{$role->name}</option>
       ";
+      } else {
+        $display .= "
+          <option id='' value='{$role->id}'>{$role->name}</option>
+        ";
+      }
     }
     echo $display;
   }

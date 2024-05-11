@@ -8,4 +8,11 @@ class District extends Controller
       $district->getAllDistrict($_POST);
     }
   }
+  function getAll() {
+    if ($_SERVER['REQUEST_METHOD'] = 'POST') {
+      $district = $this->model("backend/DistrictModel");
+      $district->getAllDistricts($_POST);
+    }
+  }
+
 }

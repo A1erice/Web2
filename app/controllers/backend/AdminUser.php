@@ -110,5 +110,13 @@ class AdminUser extends Controller
       $address->insert($_POST);
     }
   }
+
+  function changeAddress()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $address = $this->model("backend/AdminAddressModel");
+      $address->update($_POST);
+    }
+  }
 }
 ?>

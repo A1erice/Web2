@@ -19,7 +19,7 @@ class AdminRole extends Controller
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $role = $this->model("backend/AdminRoleModel");
-      $role->getAllRoleToSelect();
+      $role->getAllRoleToSelect($_POST);
     }
   }
 
