@@ -1,6 +1,7 @@
 <?php
 class CartModel extends Database
 {
+  // thực hiện thêm mới cart 
   function insert($POST)
   {
     if (isset($POST['user_id'])) {
@@ -8,15 +9,7 @@ class CartModel extends Database
       $query = "INSERT INTO `cart` (user_id) VALUES (?)";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$user_id]);
-      $rowCount = $stmt->rowCount();
-      if ($rowCount > 0) {
-        echo "Thêm thành công";
-      } else {
-        echo "Thêm thất bại";
-      }
-    } else {
-      echo "Fail";
-    }
+    } 
   }
 
   function getCurrentCartID()
@@ -60,7 +53,7 @@ class CartModel extends Database
   }
   function getCartByUserID($POST)
   {
-    $display = "<table class='table table-bordered text-center mb-0'>";
+    $display = "<table class='table table-bordered table-striped text-center mb-0'>";
 
     $user_id = $POST['user_id'];
     $query = '
@@ -82,13 +75,13 @@ class CartModel extends Database
       $display .= "
         <thead class='bg-secondary text-dark'>
           <tr>
-            <th>Sản Phẩm</th>
-            <th>Màu sắc</th>
-            <th>Kích cỡ</th>
-            <th>Số lượng</th>
-            <th>Giá tiền</th>
-            <th>Hình ảnh</th>
-            <th>Thao tác</th>
+            <th class='fw-bold'>Sản Phẩm</th>
+            <th class='fw-bold'>Màu sắc</th>
+            <th class='fw-bold'>Kích cỡ</th>
+            <th class='fw-bold'>Số lượng</th>
+            <th class='fw-bold'>Giá tiền</th>
+            <th class='fw-bold'>Hình ảnh</th>
+            <th class='fw-bold'>Thao tác</th>
           </tr>
         </thead>
         <tbody class='align-middle'>
@@ -120,7 +113,7 @@ class CartModel extends Database
             </div>
           </td>
           <td class='align-middle'>$price</td>
-          <td class='align-middle'><img src='{$row['image']}' alt='' style='width: 50px;'></td>
+          <td class='align-middle'><img src='{$row['image']}' alt='' style='width: 120px; height: 80px; object-fit: cover;'></td>
           <td class='align-middle'><button onclick='deleteCartDetail({$row['id']})' class='btn btn-sm btn-danger'><i class='fa fa-trash'></i></button></td>
         </tr>";
 
@@ -135,7 +128,7 @@ class CartModel extends Database
       ";
       $display .= "</table>";
       $display .= "
-      <div class = 'd-flex align-item-center'>
+      <div class = 'd-flex align-item-center justify-content-end'>
         <a href='" . ROOT . "checkout/{$_SESSION['user_id']}' id='place_order_btn'
         class='btn btn-block btn-primary mt-2 me-2 text-end'>Đặt Hàng</a>
         <a href='" . ROOT . "shop' id='' class='btn btn-block btn-success mt-2'>Tiếp tục mua
@@ -146,9 +139,8 @@ class CartModel extends Database
       echo $display;
     } else {
       echo "
-      <div class= 'p-4' >Giỏ hàng trống</div>
-      <div class = 'd-flex justify-content-center align-items-center'>
-        <a href='" . ROOT . "shop' id='' class='btn btn-block btn-success mb-2'>Tiếp tục mua
+      <div class = 'd-flex align-item-center'>
+        <a href='" . ROOT . "shop' id='' class='btn btn-block btn-success mt-2'>Tiếp tục mua
         sắm</a>
       </div>
       ";

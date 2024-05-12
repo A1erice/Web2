@@ -9,7 +9,8 @@
         <div class="row row-gap-3">
           <div class="col-md-12 form-group">
             <label>Họ và tên</label>
-            <input id="name" class="form-control" type="text" placeholder="">
+            <input id="name" class="form-control" type="text" placeholder="" value="<?= $data['user_data']->fullname ?>"
+              disabled>
             <span id="name_error" class="error_message"></span>
           </div>
           <div class="col-md-12 form-group">
@@ -22,11 +23,34 @@
             <input id="phone" disabled class="form-control" type="text" placeholder="+123 4512 789"
               value="<?= $data['user_data']->phone ?>">
           </div>
+          <div class='col-lg-4'>
+            <div class=''>
+              <label for='provinces'>Tỉnh / Thành phố</label>
+              <select class='form-select' id='province'>
+              </select>
+              <span class='text-danger error_message' id='province_error'></span>
+            </div>
+          </div>
+          <div class='col-lg-4'>
+            <div class=''>
+              <label for='districts'>Quận / Huyện</label>
+              <select class='form-select' id='district'>
+              </select>
+              <span class='text-danger error_message' id='district_error'></span>
+            </div>
+          </div>
+          <div class='col-lg-4'>
+            <div class=''>
+              <label for='wards'>Phường / Xã</label>
+              <select class='form-select' id='ward'>
+              </select>
+              <span class='text-danger error_message' id='ward_error'></span>
+            </div>
+          </div>
           <div class="col-md-12 form-group">
-            <label>Địa chỉ nhận hàng</label>
+            <label>Địa chỉ cụ thể</label>
             <input id='address' class="form-control" type="text" placeholder="">
             <span id="address_error" class="error_message"></span>
-
           </div>
           <div class="col-md-12 form-group">
             <label>Phương thức thanh toán</label>
@@ -94,6 +118,55 @@
 
 <script>
 
+  $(document).ready(function () {
+    $.ajax({
+      url: "<?= ROOT ?>Province",
+      type: "post",
+      data: {},
+      success: function (data, status) {
+        $('#province').html(data);
+      }
+    });
+
+    $('#province').on("change", function () {
+      var province_id = $('#province').val();
+      $.ajax({
+        url: "<?= ROOT ?>District",
+        type: "post",
+        data: { province_id: province_id },
+        success: function (data, status) {
+          $('#district').html(data);
+          $('#ward').empty();  // This clears all existing options in wards select
+        }
+      });
+    });
+
+    $('#districts').on("change", function () {
+      var district_id = $('#districts').val();
+      $.ajax({
+        url: "<?= ROOT ?>Ward",
+        type: "post",
+        data: { district_id: district_id },
+        success: function (data, status) {
+          $('#wards').html(data);
+        }
+      });
+    });
+    $('#district').on("change", function () {
+      var district_id = $('#district').val();
+      $.ajax({
+        url: "<?= ROOT ?>Ward",
+        type: "post",
+        data: { district_id: district_id },
+        success: function (data, status) {
+          $('#ward').html(data);
+        }
+      });
+    });
+  });
+
+
+
   $('#btn_place_order').on("click", function () {
     var isValid = true; // Start with true for initial validation
     var user_id = <?= $_SESSION['user_id'] ?>;
@@ -101,6 +174,9 @@
     var address = $('#address').val();
     var payment_method = $("#payment_method").find("option:selected").text();
     var order_total = <?= $order_total ?>;
+    var district = $('#district').val();
+    var province = $('#province').val();
+    var ward = $('#ward').val();
 
     if (name.trim() == "") {
       $('#name_error').text("Vui lòng nhập họ tên người nhận hàng");
@@ -117,6 +193,27 @@
       isValid = true;
     }
 
+    if (province == 0) {
+      $('#province_error').text("Vui lòng chọn tỉnh / thành phố");
+      isValid = true;
+    } else {
+      $('#province_error').text('');
+    }
+
+    if (district == 0) {
+      $('#district_error').text("Vui lòng chọn quận huyện");
+      isValid = true;
+    } else {
+      $('#district_error').text('');
+
+    }
+    if (ward == 0) {
+      $('#ward_error').text("Vui lòng chọn phường xã");
+      isValid = true;
+    } else {
+      $('#ward_error').text('');
+    }
+
     if (isValid) {
       console.log("User id: " + user_id);
       console.log("Customer name: " + name);
@@ -128,21 +225,40 @@
         cartData: <?php echo json_encode($data['cart_data']); ?>,
       };
       console.log(order_detail);
+      var user_id = <?= $_SESSION['user_id'] ?>;;
       $.ajax({
-        url: "<?= ROOT ?>checkout/place_order",
-        type: "post",
-        data: { user_id: user_id, customer_name: name, address: address, payment_method: payment_method, order_total: order_total, order_detail: JSON.stringify(order_detail) },
+        url: '<?= ROOT ?>AdminUser/saveAddress',
+        type: 'post',
+        data: {
+          address: address,
+          province: province,
+          district: district,
+          ward: ward,
+          user_id: user_id
+        },
         success: function (data, status) {
-          Swal.fire({
-            icon: "success",
-            title: data,
-            confirmButtonColor: "#3459e6",
+          $.ajax({
+            url: "<?= ROOT ?>checkout/place_order",
+            type: "post",
+            data: {
+              user_id: user_id,
+              customer_name: name,
+              address: data,
+              payment_method: payment_method,
+              order_total: order_total,
+              order_detail: JSON.stringify(order_detail)
+            },
+            success: function (data, status) {
+              Swal.fire({
+                icon: "success",
+                title: data,
+                confirmButtonColor: "#3459e6",
+              });
+            }
           });
         }
       });
-
     }
-
   });
 
 </script>

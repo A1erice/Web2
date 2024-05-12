@@ -45,7 +45,7 @@
     <div class="col">
       <div class="tab-content">
         <div class="tab-pane fade show active" id="tab-pane-1">
-          <h4 class="mb-3">Product Description</h4>
+          <h4 class="mb-3 fw-bold">Mô tả sản phẩm</h4>
           <p><?= $data['product_detail'][0]->product_description ?></p>
         </div>
       </div>
@@ -62,13 +62,14 @@
   function addToCart() {
     var sizeChoose = false;
 
+    // kiểm tra khách hàng đã chọn kích cỡ chưa
     if ($('input[name="sizes"]:checked').length === 0) {
       Swal.fire({
-        position: "center",
+        title: "Vui lòng chọn kích cỡ sản phẩm",
+        position: 'center',
+        showConfirmButton: true,
+        confirmButtonColor: "#3459e6",
         icon: "error",
-        title: "Bạn chưa chọn kích cỡ sản phẩm",
-        showConfirmButton: false,
-        timer: 1500
       });
       return;
     } else {
@@ -85,7 +86,6 @@
 
       <?php if (isset($_SESSION['user_id'])) { ?>
         var user_id = <?php echo $_SESSION['user_id']; ?>;
-        alert(user_id + " " + product_id + " " + partsColor[0] + " " + partsSize[0]);
         $.ajax({
           url: "<?= ROOT ?>cart/addToCart",
           type: 'post',
@@ -102,11 +102,10 @@
         });
       <?php } else { ?>
         Swal.fire({
-          title: "Thất bại",
-          text: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng",
+          title: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng",
           position: 'center',
           showConfirmButton: true,
-          confirmButtonColor: "#3459e6",
+          confirmButtonColor: "#d33",
           icon: "error",
         });
       <?php } ?>

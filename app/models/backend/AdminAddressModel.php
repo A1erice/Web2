@@ -15,6 +15,19 @@ class AdminAddressModel extends Database
     }
   }
 
+  function getAddressByUserID($user_id)
+  {
+    $query = 'SELECT * FROM user_address WHERE user_id = ?';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$user_id]);
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    if ($result) {
+      return $result->address_id;
+    } else {
+      return -1;
+    }
+  }
+
   // lấy ra địa chỉ vừa thêm vào
   function getLatestAddress()
   {
@@ -47,11 +60,13 @@ class AdminAddressModel extends Database
       $query = 'INSERT INTO `user_address` (user_id, address_id) VALUES (?, ?)';
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$user_id, $latestAddress_id]);
+      echo $latestAddress_id;
     } else {
       $user_id = $POST['user_id'];
       $query = 'INSERT INTO `user_address` (user_id, address_id) VALUES (?, ?)';
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$user_id, $address_id]);
+      echo $address_id;
     }
   }
 
