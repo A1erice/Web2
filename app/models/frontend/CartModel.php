@@ -135,12 +135,23 @@ class CartModel extends Database
       ";
       $display .= "</table>";
       $display .= "
-      <a href='" . ROOT . "checkout/{$_SESSION['user_id']}' id='place_order_btn'
-      class='btn btn-block btn-primary mt-2 text-end'>Đặt Hàng</a>
+      <div class = 'd-flex align-item-center'>
+        <a href='" . ROOT . "checkout/{$_SESSION['user_id']}' id='place_order_btn'
+        class='btn btn-block btn-primary mt-2 me-2 text-end'>Đặt Hàng</a>
+        <a href='" . ROOT . "shop' id='' class='btn btn-block btn-success mt-2'>Tiếp tục mua
+        sắm</a>
+      </div>
+      
       ";
       echo $display;
     } else {
-      echo "<div class= 'p-4' >Giỏ hàng trống</div>";
+      echo "
+      <div class= 'p-4' >Giỏ hàng trống</div>
+      <div class = 'd-flex justify-content-center align-items-center'>
+        <a href='" . ROOT . "shop' id='' class='btn btn-block btn-success mb-2'>Tiếp tục mua
+        sắm</a>
+      </div>
+      ";
     }
   }
 

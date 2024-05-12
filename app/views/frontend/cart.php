@@ -5,8 +5,6 @@
   <div class="row px-xl-5">
     <div id="cart" class="col-lg-12 table-responsive mb-5">
     </div>
-    <a href="<?= ROOT ?>shop" id="" class="btn btn-block btn-success mb-2">Tiếp tục mua
-      sắm</a>
   </div>
 
 </div>

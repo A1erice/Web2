@@ -196,7 +196,7 @@ class AdminUserModel extends Database
     $users = $stmt->fetchAll(PDO::FETCH_OBJ);
     $display = "
     <div class='table-responsive mb-4'>
-          <table class='table text-start align-middle table-bordered table-hover mb-0'>
+          <table class='table table-striped text-start align-middle table-bordered table-hover mb-0'>
             <thead>
               <tr>
                 <th scope='col' onclick='ColSort(\"id\")'>ID</th>
@@ -213,24 +213,48 @@ class AdminUserModel extends Database
     $count = $this->getSum($keyword);
     if ($count > 0) {
       foreach ($users as $user) {
-        $display .= "
-        <tr>
-          <td>{$user->id}</td>
-          <td>{$user->email}</td>
-          <td>{$user->username}</td>
-          <td>{$user->role_name}</td>
-          <td>{$user->date}</td>
-          <td>
-            <div class='form-check form-switch'>
-              <input class='form-check-input' type='checkbox' role='switch' id='flexSwitchCheckDefault'>
-            </div>
-          </td>
-          <td>
-          <a href='" . ROOT . "AdminAddUser/update/$user->id' class='btn btn-sm btn-warning'><i class='fa-solid fa-pen-to-square'></i></a>
-          <button class='btn btn-sm btn-danger' onclick='delete_user({$user->id})'><i class='fa-solid fa-trash'></i></button>
-          </td>
-        </tr>
+        if ($user->status == 1) {
+          $display .= "
+          <tr>
+            <td>{$user->id}</td>
+            <td>{$user->email}</td>
+            <td>{$user->username}</td>
+            <td>{$user->role_name}</td>
+            <td>{$user->date}</td>
+            <td>
+              <div class='form-check form-switch'>
+                <input  class='form-check-input' type='checkbox' role='switch' value='{$user->id}'>
+              </div>
+            </td>
+            <td>
+            <a href='" . ROOT . "AdminAddUser/update/$user->id' class='btn btn-sm btn-warning'><i class='fa-solid fa-pen-to-square'></i></a>
+            <button class='btn btn-sm btn-danger' onclick='delete_user({$user->id})'><i class='fa-solid fa-trash'></i></button>
+            <a href='" . ROOT . "AdminAddUser/detail/$user->id' class='btn btn-sm btn-primary'><i class='fa-solid fa-eye'></i></a>
+            </td>
+          </tr>
+          ";
+        } else {
+          $display .= "
+          <tr>
+            <td>{$user->id}</td>
+            <td>{$user->email}</td>
+            <td>{$user->username}</td>
+            <td>{$user->role_name}</td>
+            <td>{$user->date}</td>
+            <td>
+              <div class='form-check form-switch'>
+                <input checked class='form-check-input' type='checkbox' role='switch' value='{$user->id}'>
+              </div>
+            </td>
+            <td>
+            <a href='" . ROOT . "AdminAddUser/update/$user->id' class='btn btn-sm btn-warning'><i class='fa-solid fa-pen-to-square'></i></a>
+            <button class='btn btn-sm btn-danger' onclick='delete_user({$user->id})'><i class='fa-solid fa-trash'></i></button>
+            <a href='" . ROOT . "AdminAddUser/update/$user->id' class='btn btn-sm btn-primary'><i class='fa-solid fa-eye'></i></a>
+            </td>
+          </tr>
         ";
+        }
+
       }
     } else {
       $display .= "
@@ -358,9 +382,9 @@ class AdminUserModel extends Database
       echo "Email đã có tài khoản khác sử dụng";
     } else {
       $query = 'INSERT INTO `user`
-      (`username`, `phone`, `email`, `password`, `role_id`, `img`, `date`, `fullname`) 
+      (`username`, `phone`, `email`, `password`, `role_id`, `img`, `date`, `fullname`, status) 
       VALUES 
-      (?,?,?,?,?,?,?,?)';
+      (?,?,?,?,?,?,?,?, 1)';
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$username, $phone, $email, $password, $role_id, $user_image, $date, $fullname]);
       $user_id = $this->getLatestUser();
@@ -479,7 +503,21 @@ class AdminUserModel extends Database
     } else {
       echo "Sửa thất bại";
     }
+  }
 
+  function changeStatus($POST)
+  {
+    $id = $POST['id'];
+    $status = $POST['status'];
+    $query = 'UPDATE user set status = ? WHERE id = ?';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$status, $id]);
+    $rowCount = $stmt->rowCount();
+    if ($rowCount > 0) {
+      echo "Sửa thành công";
+    } else {
+      echo "Sửa thất bại";
+    }
   }
 
   function delete($id)

@@ -6,8 +6,6 @@
     </div>
     <div id="displayOrderData">
 
-
-
     </div>
   </div>
 

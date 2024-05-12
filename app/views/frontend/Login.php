@@ -82,8 +82,7 @@
             } else if (data == 'Tài khoản không tồn tại') {
               Swal.fire({
                 icon: "error",
-                title: "",
-                text: data,
+                title: data,
                 position: "center",
                 confirmButtonColor: "#d33",
                 footer: ''

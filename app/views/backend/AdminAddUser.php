@@ -161,17 +161,21 @@
           </form>
         </div>
         <div class="px-4 d-flex flex-column flex-md-row gap-3 justify-content-end">
-          <?php if (isset($data['user_update'])) {
-            echo "
-            <button class='btn btn-primary ' onclick='update_user()'><i class='fa-solid fa-floppy-disk'></i> Lưu thay
-            đổi</button>
-            ";
-          } else {
-            echo "
-            <button class='btn btn-primary ' onclick='insert_user()'><i class='fa-solid fa-floppy-disk'></i> Lưu thay
-            đổi</button>
-            ";
-          } ?>
+          <?php
+          if (!isset($data['detail'])) {
+            if (isset($data['user_update'])) {
+              echo "
+                <button class='btn btn-primary ' onclick='update_user()'><i class='fa-solid fa-floppy-disk'></i> Lưu thay
+                đổi</button>
+                ";
+            } else {
+              echo "
+                <button class='btn btn-primary ' onclick='insert_user()'><i class='fa-solid fa-floppy-disk'></i> Lưu thay
+                đổi</button>
+                ";
+            }
+          }
+          ?>
           <a href="<?= ROOT ?>AdminUser" class="btn btn-danger "><i class="fa-solid fa-x"></i> Hủy</a>
         </div>
 
@@ -463,17 +467,17 @@
                 user_id: user_id
               },
               success: function (data, status) {
-                alert(data);
+                Swal.fire({
+                  icon: "success",
+                  title: "Thêm thành công",
+                  position: "center",
+                  confirmButtonColor: "#3459e6",
+                }).then((result) => {
+                  window.location.href = "<?= ROOT ?>AdminUser";
+                });
               }
             });
-            Swal.fire({
-              icon: "success",
-              title: "Thêm thành công",
-              position: "center",
-              confirmButtonColor: "#3459e6",
-            }).then((result) => {
-              window.location.href = "<?= ROOT ?>AdminUser";
-            });
+
           }
         },
       });
@@ -625,5 +629,9 @@
       });
     }
   }
+
+
+
+
 </script>
 <?php $this->view("include/AdminFooter", $data) ?>

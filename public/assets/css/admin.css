@@ -3,7 +3,10 @@
   --primary: #3459e6;
   --light: #f3f6f9;
   --dark: #191c24;
-  --bs-body-font-family: sans-serif;
+  --bs-body-font-family: "Poppins", sans-serif;
+}
+html {
+  font-family: "Poppins", sans-serif;
 }
 .avatar {
   width: 150px;

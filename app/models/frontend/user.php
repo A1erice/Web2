@@ -21,8 +21,8 @@ class User extends Database
       // nếu không bị lỗi nào thực hiện thêm vào cơ sở dữ liệu
       $date = date("Y-m-d H:i:s");
       $password = hash('sha1', $password);
-      $query = "INSERT INTO `user` (`id`, `role_id`, `email`, `username`, `password`, `phone`, `date`) 
-      VALUES (NULL, 5, ?, ?, ?, ?, ?);";
+      $query = "INSERT INTO `user` (`id`, `role_id`, `email`, `username`, `password`, `phone`, `date`, status) 
+      VALUES (NULL, 5, ?, ?, ?, ?, ?, 1);";
       $stmt = $this->conn->prepare($query);
       $result = $stmt->execute([$email, $username, $password, $phone, $date]);
       if ($result) {
@@ -39,7 +39,7 @@ class User extends Database
       $password = $POST['password'];
 
       $password = hash('sha1', $password);
-      $query = "select * from user where email = ? AND password = ?";
+      $query = "select * from user where email = ? AND password = ? and status = 1";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$email, $password]);
       $result = $stmt->fetchAll(PDO::FETCH_OBJ);

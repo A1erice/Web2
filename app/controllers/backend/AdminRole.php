@@ -71,5 +71,35 @@ class AdminRole extends Controller
       $role->get_detail($role_id);
     }
   }
+
+  function deleteRoleDetail()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $role = $this->model("backend/AdminRoleModel");
+      $role->deleteRoleDetail($_POST);
+    }
+  }
+
+  function update()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $role = $this->model("backend/AdminRoleModel");
+      if ($role->deleteRoleDetail($_POST) == "Xóa thành công") {
+        $role_id = $_POST['id'];
+        $selectedPermissions = $_POST['selectedPermissions'];
+        $roleDetail = $this->model("backend/AdminRoleDetailModel");
+        foreach ($selectedPermissions as $permission) {
+          $moduleID = $permission['moduleID'];
+          $functionName = $permission['functionName'];
+          // Insert each permission into the database
+          $roleDetail->insert($role_id, $moduleID, $functionName);
+        }
+        echo "Sửa thành công";
+      }
+
+
+    }
+  }
+
 }
 ?>

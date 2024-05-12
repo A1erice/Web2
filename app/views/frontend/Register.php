@@ -108,8 +108,7 @@
           if (data == 'Email đã có tài khoản khác sử dụng') {
             Swal.fire({
               icon: "error",
-              title: "",
-              text: data,
+              title: data,
               position: "center",
               footer: '',
               confirmButtonColor: "#3459e6",
@@ -117,8 +116,7 @@
           } else if (data == 'Đăng ký thành công') {
             Swal.fire({
               icon: "success",
-              title: "",
-              text: data,
+              title: data,
               position: "center",
               footer: '',
               confirmButtonColor: "#3459e6",

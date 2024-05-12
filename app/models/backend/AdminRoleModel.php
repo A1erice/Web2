@@ -115,11 +115,15 @@ class AdminRoleModel extends Database
             "<tr>
               <td>{$role->id}</td>
               <td>{$role->name}</td>
-              <td> <span class = 'badge rounded-pill text-bg-primary'>Đang Hoạt Động</span></td>
+              <td>
+                <div class='form-check form-switch'>
+                  <input  class='form-check-input' type='checkbox' role='switch' value='{$role->id}'>
+                </div>
+              </td>
               <td>
                 <button class='btn btn-sm btn-warning' onclick='get_detail({$role->id})'><i class='fa-solid fa-pen-to-square'></i></button>
                 <button class='btn btn-sm btn-danger' onclick='deleteRole({$role->id})'><i class='fa-solid fa-trash'></i></button>
-                <button class='btn btn-sm btn-primary' onclick=''><i class='fa-solid fa-eye'></i></button>
+                <button class='btn btn-sm btn-primary' onclick='get_detail({$role->id})'><i class='fa-solid fa-eye'></i></button>
               </td>
             </tr>";
         } else if ($role->status == 0) {
@@ -127,8 +131,11 @@ class AdminRoleModel extends Database
             "<tr>
               <td>{$role->id}</td>
               <td>{$role->name}</td>
-              <td> <span class = 'badge rounded-pill text-bg-danger'>Ngưng Hoạt Động</span></td>
               <td>
+                <div class='form-check form-switch'>
+                  <input checked class='form-check-input' type='checkbox' role='switch' value='{$role->id}'>
+                </div>
+              </td>              <td>
                 <button class='btn btn-sm btn-warning' onclick='get_detail({$role->id})'><i class='fa-solid fa-pen-to-square'></i></button>
                 <button class='btn btn-sm btn-danger' onclick='deleteRole({$role->id})'><i class='fa-solid fa-trash'></i></button>
                 <button class='btn btn-sm btn-primary' onclick='check_role({$role->id})'><i class='fa-solid fa-eye'></i></button>
@@ -250,19 +257,58 @@ class AdminRoleModel extends Database
   function deleteRole($POST)
   {
     $id = $POST['id'];
-    try {
+
+    $query = "SELECT * FROM role_detail WHERE role_id = ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$id]);
+    $rowCount = $stmt->rowCount();
+    if ($rowCount > 0) {
+      $detailQuery = "DELETE FROM role_detail where role_id = ?";
+      $stmt = $this->conn->prepare($detailQuery);
+      $stmt->execute([$id]);
+      $rowCount = $stmt->rowCount();
+      if ($rowCount > 0) {
+        try {
+          $query = 'DELETE FROM role WHERE id = ?';
+          $stmt = $this->conn->prepare($query);
+          $stmt->execute([$id]);
+          $rowCount = $stmt->rowCount();
+          if ($rowCount > 0) {
+            echo "Xóa thành công";
+          } else {
+            echo "Xóa thất bại";
+          }
+        } catch (PDOException $e) {
+          echo "Không thể xóa nhóm quyền";
+        }
+      }
+    } else {
       $query = 'DELETE FROM role WHERE id = ?';
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$id]);
       $rowCount = $stmt->rowCount();
-
       if ($rowCount > 0) {
         echo "Xóa thành công";
       } else {
         echo "Xóa thất bại";
       }
-    } catch (PDOException $e) {
-      echo "Không thể xóa nhóm quyền";
+    }
+
+
+
+  }
+
+  function deleteRoleDetail($POST)
+  {
+    $id = $POST['id'];
+    $detailQuery = "DELETE FROM role_detail where role_id = ?";
+    $stmt = $this->conn->prepare($detailQuery);
+    $stmt->execute([$id]);
+    $rowCount = $stmt->rowCount();
+    if ($rowCount > 0) {
+      return "Xóa thành công";
+    } else {
+      return "Xóa thất bại";
     }
   }
 
@@ -307,7 +353,7 @@ class AdminRoleModel extends Database
       }
       echo json_encode($response);
     } else {
-      echo "Không tìm thấy dữ liệu";  // Informative message in Vietnamese
+      echo "Không tìm thấy dữ liệu";
     }
   }
 

@@ -118,5 +118,13 @@ class AdminUser extends Controller
       $address->update($_POST);
     }
   }
+
+  function changeStatus()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $user = $this->model("backend/AdminUserModel");
+      $user->changeStatus($_POST);
+    }
+  }
 }
 ?>

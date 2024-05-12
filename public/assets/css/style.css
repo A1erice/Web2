@@ -6,8 +6,12 @@
 
 
 */
+
 :root {
-  /* --bs-body-font-family: "Nunito Sans", sans-serif; */
+  --bs-body-font-family: "Poppins", sans-serif;
+}
+html {
+  font-family: "Poppins", sans-serif;
 }
 .error_message {
   color: red;

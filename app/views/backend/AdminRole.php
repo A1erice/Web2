@@ -9,7 +9,7 @@
       <div class="bg-light text-center rounded p-4">
 
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h5 class="fw-bold">Danh sách nhóm quyền</h5>
+          <h5 class="fw-bold text-primary">Danh sách nhóm quyền</h5>
           <form class="d-none d-md-flex w-50">
             <input id="search_role" class="form-control border-0" type="search" placeholder="Tìm Kiếm">
           </form>
@@ -60,7 +60,51 @@
             </div>
           </div>
         </div>
+        <!-- Modal Nhóm quyền -->
 
+        <!-- Modal sửa Nhóm quyền -->
+        <div class="modal fade" id="updateRole_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+              <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white">Nhóm quyền</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3 text-start">
+                  <label class="mb-2" for="">Tên Nhóm Quyền</label>
+                  <input id="roleName_Update" type="text" class="form-control">
+                  <input id="roleID_Update" type="hidden" class="form-control">
+                  <span class="error_message" id="roleNameUpdate_Error"></span>
+                </div>
+                <div class="col-sm-12 col-xl-12 table-responsive">
+                  <table class="table align-middle table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Tên Chức Năng</th>
+                        <th scope="col">Thêm</th>
+                        <th scope="col">Sửa</th>
+                        <th scope="col">Xóa</th>
+                        <th scope="col">Xem</th>
+                        <th scope="col">Import</th>
+                        <th scope="col">Export</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableUpdate_Modules">
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                <button id="update" onclick="update()" type="button" class="btn btn-warning">Sửa</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Modal Nhóm quyền -->
 
         <div id="role_list" class="table-responsive ">
@@ -102,6 +146,7 @@
       },
       success: function (data, status) {
         $('#table_modules').html(data);
+        $('#tableUpdate_Modules').html(data);
       }
     });
   }
@@ -139,6 +184,7 @@
 
   function get_detail(id) {
     resetTableModule();
+    $('#roleID_Update').val(id);
     $.ajax({
       url: "<?= ROOT ?>AdminRole/getDetail",
       type: 'post',
@@ -147,26 +193,22 @@
       },
       success: function (data, status) {
         if (data.trim() === 'Không tìm thấy dữ liệu') {
-          console.log("Không tìm thấy chức năng của nhóm quyền");
+          Swal.fire({
+            title: "Không tìm thấy chức năng",
+            icon: "error",
+            confirmButtonColor: "#d33"
+          });
         } else {
           const jsonData = JSON.parse(data);
-          $('#role_name').val(jsonData[0].name);
+          $('#roleName_Update').val(jsonData[0].name);
 
           if (jsonData.length > 0) {
-            console.log(jsonData);
             jsonData.forEach(function (role) {
               loopAllModule(role.module_id, role.action);
             });
-            $('#role_modal').modal("show");
-          } else {
-            // Handle case where jsonData is empty (optional)
-            console.log("No permissions found for this role.");
+            $('#updateRole_Modal').modal("show");
           }
         }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        // Handle errors during AJAX request (optional)
-        console.error("Error fetching role details:", textStatus, errorThrown);
       }
     });
 
@@ -176,42 +218,33 @@
   // làm mới bảng chi tiết quyền
   function resetTableModule() {
     $('#role_name').val("");
+    $('#roleName_Update').val("");
     $("#table_modules input[type='checkbox']").each(function () {
-      $(this).prop("checked", false); // Set checkbox checked
+      $(this).prop("checked", false);
+    });
+    $("#tableUpdate_Modules input[type='checkbox']").each(function () {
+      $(this).prop("checked", false);
     });
   }
 
 
 
   function loopAllModule(moduleID, functionName) {
-    $("#table_modules input[type='checkbox']").each(function () {
+    $("#tableUpdate_Modules input[type='checkbox']").each(function () {
       // Get checkbox name and split it into parts
       var permissionValue = $(this).attr("name");
       var parts = permissionValue.split("-");
 
-      // Extract moduleID and functionName with case-insensitive comparison
+      // cắt ra tên chức năng và hành động thông qua các input 
       var checkboxModuleID = parts[0].toLowerCase().trim();
       var checkboxFunctionName = parts[2].toLowerCase().trim();
 
-      console.log("Module : " + checkboxModuleID.toLowerCase().trim());
-      console.log("FunctionName: " + checkboxFunctionName.toLowerCase().trim());
-
-      console.log("Module truyền vào : " + moduleID.toLowerCase().trim());
-      console.log("FunctionName truyền vào: " + functionName.toLowerCase().trim());
-
-
-      // Check for matching moduleID and functionName (case-insensitive)
+      // kiểm tra xem có cặp chức năng - hành động nào trùng nhau không 
       if (checkboxModuleID === moduleID.toLowerCase().trim() && checkboxFunctionName === functionName.toLowerCase().trim()) {
         $(this).prop("checked", true); // Set checkbox checked
-        console.log("Trùng");
-      } else {
-        console.log("Không trùng");
       }
     });
   }
-
-
-
 
 
   function insert() {
@@ -302,7 +335,7 @@
                 icon: "success",
                 confirmButtonColor: "#3459e6"
               });
-              fetch_data(); // Refresh the role list
+              fetch_data(); // làm mới danh sách nhóm quyền
             } else if (data === 'Xóa thất bại') {
               Swal.fire({
                 title: data,
@@ -311,7 +344,7 @@
               });
             } else {
               Swal.fire({
-                title: data,
+                title: "Đang có người sử dụng nhóm quyền",
                 icon: "error",
                 confirmButtonColor: "#d33"
               });
@@ -322,5 +355,59 @@
     });
   }
 
+
+  function update() {
+    var roleName_Update = $('#roleName_Update').val();
+    var id = $('#roleID_Update').val();
+    if (roleName_Update.trim() == '') {
+      $('#roleNameUpdate_Error').text("Vui lòng nhập tên nhóm quyền");
+    } else {
+      $('#roleNameUpdate_Error').text("");
+      // Tạo mảng chứa danh sách chi tiết quyền
+      var selectedPermissions = [];
+      // Lặp qua từng dòng module xem chức năng nào được chọn
+      $("#tableUpdate_Modules input[type='checkbox']").each(function () {
+        // kiểm tra chức năng có được check hay chưa
+        if ($(this).is(":checked")) {
+          // lấy ra chi tiết quyền chi tiết quyền được lưu trong name của từng input
+          // có dạng như sau (mã module - tên module - tên chức năng)
+          var permissionValue = $(this).attr("name");
+          // cắt chuỗi sau thành mảng 3 phần tử chưa moduleId moduleName và functionnamee
+          var parts = permissionValue.split("-");
+
+          // Extract ID and function name (assuming indexes 0 and 2)
+          var moduleID = parts[0];
+          var functionName = parts[2];
+
+          console.log(moduleID);
+          console.log(functionName);
+          // tạo đối tượng  chi tiết quyền 
+          var permission = {
+            moduleID: moduleID,
+            functionName: functionName
+          };
+          // lưu chi tiết quyền vào mảng danh sách chi tiết quyền
+          selectedPermissions.push(permission);
+        }
+      });
+      $.ajax({
+        url: "<?= ROOT ?>AdminRole/update",
+        type: 'post',
+        data: {
+          id: id,
+          selectedPermissions: selectedPermissions
+        },
+        success: function (data, status) {
+          Swal.fire({
+            title: data,
+            icon: "success",
+            confirmButtonColor: "#3459e6"
+          });
+          $('#updateRole_Modal').modal("hide");
+          fetch_data();
+        }
+      });
+    }
+  }
 </script>
 <?php $this->view("include/AdminFooter", $data) ?>
