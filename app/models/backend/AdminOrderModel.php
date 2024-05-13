@@ -3,6 +3,78 @@
 class AdminOrderModel extends Database
 {
 
+  function getData($start_from,$limit,$keyword,$bgDate,$endDate,$col,$sort){
+    $query = "";
+    $error = "";
+
+    //lấy tất cả dữ liệu cần thiết
+    $query .= "
+    SELECT o.*,
+    CONCAT(p.name, ', ', d.name, ', ', w.name, ', ', a.street_name) AS full_address
+    FROM `order` o
+    JOIN address a ON o.address = a.id
+    JOIN province p ON a.province_id = p.id
+    JOIN district d ON a.district_id = d.id
+    JOIN ward w ON a.ward_id = w.id ";
+
+    //Xừ lý where
+    $where = "";
+
+    //xử lý phân loại
+    if($keyword != ""){
+      if($keyword != "all"){
+        $where .= " o.order_status = {$keyword} ";
+      }
+    }
+    
+    //xử lý ngày
+    if($bgDate != "" || $endDate != ""){
+      if($where != ""){
+        $where .= " AND ";
+      }
+      if($bgDate != "" && $endDate != ""){
+        $where .= " o.date BETWEEN DATE_SUB('{$bgDate}', INTERVAL 1 DAY) AND DATE_ADD('$endDate', INTERVAL 1 DAY) ";
+      } else {
+        if ($bgDate != "") {
+          $where .= " o.date >= '{$bgDate}' ";
+        } else {
+          $where .= " o.date <= '{$endDate}' ";
+        }
+      }
+    }
+    //ghép where vào query
+    if($where != ""){
+      $query .= " WHERE ".$where;
+    }    
+
+    //Xử lý sort
+    // Sort cột
+    if ($col != "") {
+      $query .= " ORDER BY {$col} {$sort} ";
+    } else {
+      $query .= " ORDER BY o.id desc ";
+    }
+
+    // Chạy query để lấy số lượng
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $rowCount = $stmt->rowCount();
+
+    // Lấy dữ liệu trong một khoảng nhất định
+    $query .= " LIMIT {$start_from}, {$limit}";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $orders = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    $error .= $query; // Lưu lại câu truy vấn để debug
+
+    return [
+        "orders" => $orders,
+        "count" => $rowCount,
+        "error" => $error
+    ];
+  }
+
   // lấy toàn bộ bản ghi thuộc bảng màu sắc (có phân trang)
   function getAllOrder()
   {
@@ -17,56 +89,43 @@ class AdminOrderModel extends Database
     } else {
       $page = 1;
     }
+
+    $bgDate ="";
+    $endDate = "";
+    $col = "";
+    $sort = "";
+
     if (isset($_POST['keyword'])) {
       $keyword = $_POST['keyword'];
+      $bgDate = $_POST['bgDate'];
+      $endDate = $_POST['endDate'];
+      $col = $_POST['col'];
+      $sort = $_POST['sort'];
+
     } else {
       $keyword = 'all';
     }
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
-    if ($keyword != 'all') {
-      $query = "
-      SELECT o.*,
-      CONCAT(p.name, ', ', d.name, ', ', w.name, ', ', a.street_name) AS full_address
-      FROM `order` o
-      JOIN address a ON o.address = a.id
-      JOIN province p ON a.province_id = p.id
-      JOIN district d ON a.district_id = d.id
-      JOIN ward w ON a.ward_id = w.id
-      WHERE o.order_status = {$keyword}
-      ORDER BY o.id desc
-      LIMIT {$start_from}, {$limit}
-      ";
-    } else {
-      $query = "
-      SELECT o.*,
-      CONCAT(p.name, ', ', d.name, ', ', w.name, ', ', a.street_name) AS full_address
-      FROM `order` o
-      JOIN address a ON o.address = a.id
-      JOIN province p ON a.province_id = p.id
-      JOIN district d ON a.district_id = d.id
-      JOIN ward w ON a.ward_id = w.id
-      ORDER BY o.id desc
-      LIMIT {$start_from}, {$limit}
-      ";
-    }
-    $stmt = $this->conn->prepare($query);
-    $stmt->execute();
-    $orders = $stmt->fetchAll(PDO::FETCH_OBJ);
-    $display = "
+
+    $data = $this->getData($start_from,$limit,$keyword,$bgDate,$endDate,$col,$sort);
+
+    // $display .= $data['error']; //kiểm tra lỗi
+    $display .= "
     <div class='table-responsive mb-3'>
     <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
       <thead>
         <tr class='text-dark'>
-          <th scope='col'>Mã đơn hàng</th>
-          <th scope='col'>Ngày đặt hàng</th>
-          <th scope='col'>Xác Nhận</th>
+          <th scope='col' onclick='sortCol(\"o.id\")'>Mã đơn hàng</th>
+          <th scope='col' onclick='sortCol(\"o.date\")'>Ngày đặt hàng</th>
+          <th scope='col' onclick='sortCol(\"o.order_status\")'>Xác Nhận</th>
           <th scope='col'>Thao Tác</th>
         </tr>
       </thead>
       <tbody>
     ";
-    $count = $this->getSum($keyword);
+    $count = $data['count'];
+    $orders = $data['orders'];
     if ($count > 0) {
       foreach ($orders as $order) {
         if ($order->order_status == 0) {
@@ -116,7 +175,7 @@ class AdminOrderModel extends Database
 
 
     // tổng số bản ghi 
-    $total_rows = $this->getSum($keyword);
+    $total_rows = $data['count'];
     // tổng số trang
     $total_pages = ceil($total_rows / $limit);
 

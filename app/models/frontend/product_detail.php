@@ -123,6 +123,7 @@ class product_detail extends Database
     $stmt = $this->conn->prepare($query);   
     $rowCount = $stmt->rowCount(); 
 
+    //giới hạn số lượng sản phẩm lấy
     $query .= " LIMIT $limit OFFSET $offset ";
 
     $this->conn->exec("SET CHARACTER SET utf8mb4");
