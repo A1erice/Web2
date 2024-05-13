@@ -16,11 +16,11 @@
         <div class="row mb-2">
           <div class="form-group col-lg-4">
             <label class="form-label" for="">Từ ngày</label>
-            <input class="form-control" type="date">
+            <input id="bgDate" class="form-control" type="date">
           </div>
           <div class="form-group col-lg-4">
             <label class="form-label" for="">Đến ngày</label>
-            <input class="form-control" type="date">
+            <input id="endDate" class="form-control" type="date">
           </div>
           <div class="form-group col-lg-4">
             <label class="form-label" for="orderStatus">Phân loại</label>
@@ -79,6 +79,8 @@
         <div id="orders" class="category_list">
 
         </div>
+        <label hidden id="col"></label>
+        <label hidden id="sort"></label>
 
 
 
@@ -114,8 +116,11 @@
     $('#orderDetail_Modal').modal("show");
   }
 
-  function handleOrderStatusChange() {
-    var selectedOption = $(this).val();
+  function handleOrderStatusChange(page) {
+    if(page == null || isNaN(page)){
+      page = 1;
+    }
+    var selectedOption = $('#orderStatus').val();
     switch (selectedOption) {
       case 'all':
         keyword = 'all';
@@ -129,7 +134,7 @@
       default:
         break;
     }
-    fetch_data(1, keyword);
+    fetch_data(page, keyword);
   }
 
   function changeOrderStatus(id) {
@@ -143,14 +148,51 @@
     });
   }
 
+  $('#bgDate, #endDate').on('change',function(){
+    var bgDate = $('#bgDate').val();
+    var endDate = $('#endDate').val();
+    if(bgDate!="" && endDate !=""){
+      if(bgDate >= endDate){
+        Swal.fire({
+          title: "Ngày bắt đầu không thể lớn hơn ngày kết thúc!",
+          icon: "warning",
+          confirmButtonColor: "#3459e6"
+        });
+        return;
+      }
+    }
+    handleOrderStatusChange();
+  });
+
+  function sortCol(colName){
+    $('#col').val(colName);
+    var typeSort = $('#sort').val();
+    if (typeSort === 'ASC') {
+      typeSort = 'DESC';
+      $('#sort').val('DESC');
+    } else {
+      typeSort = 'ASC';
+      $('#sort').val('ASC');
+    }
+    handleOrderStatusChange();
+  }
+
   // hiển thị danh sách hoá đơn
   function fetch_data(page, keyword) {
+    var col = $('#col').val();
+    var sort = $('#sort').val();
+    var bgDate = $('#bgDate').val();
+    var endDate = $('#endDate').val();
     $.ajax({
       url: "<?= ROOT ?>AdminOrder/getAllOrder",
       type: 'post',
       data: {
         page: page,
-        keyword: keyword
+        keyword: keyword,
+        bgDate: bgDate,
+        endDate: endDate,
+        col: col,
+        sort: sort
       },
       success: function (data, status) {
         $('#orders').html(data);
@@ -159,7 +201,7 @@
   }
   // hàm khi nhấn vào số trang để đối trang
   function changePageFetch(page, keyword) {
-    fetch_data(page, keyword);
+    handleOrderStatusChange(page);
   }
 
 

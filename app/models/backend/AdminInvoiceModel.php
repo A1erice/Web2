@@ -324,7 +324,7 @@ class AdminInvoiceModel extends Database
     // tổng số trang
     $total_pages = ceil($total_rows / $limit);
 
-    $display .= " tổng số trang = " . $total_pages;
+    // $display .= " tổng số trang = " . $total_pages;
 
     // hiển thị số trang 
     $display .= "

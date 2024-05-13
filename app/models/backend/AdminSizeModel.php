@@ -97,7 +97,7 @@ class AdminSizeModel extends Database
       }
       $display .= "<li class='page-item {$active_class} '><a onclick='changePageFetch($i)' id = '$i' class='page-link' href='#'>$i</a></li>";
     }
-
+    
     $next_active = "";
     if ($page == $total_pages) {
       $next_active = "disabled";

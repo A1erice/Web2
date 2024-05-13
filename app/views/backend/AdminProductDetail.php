@@ -68,8 +68,6 @@
   <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 <script>
-
-
   $(document).ready(function () {
     getAllColor();
     getAllSize();
@@ -86,15 +84,22 @@
   }
 
 
-  function getAllProductDetailByProductID(product_id) {
+  function getAllProductDetailByProductID(product_id,page) {
     $.ajax({
       url: "<?= ROOT ?>AdminProductDetail/getAllProductDetail",
       type: "post",
-      data: { product_id: product_id },
+      data: { product_id: product_id,page:page },
       success: function (data, status) {
         $('#productDetail_List').html(data);
       }
     });
+  }
+
+  // chuyển trang 
+  function changePageFetch(page) {
+    var product_id = $('#product_id').val();
+
+    getAllProductDetailByProductID(product_id,page);
   }
 
   // lấy ra toàn bộ màu sắc 
