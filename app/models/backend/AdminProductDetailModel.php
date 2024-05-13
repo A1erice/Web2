@@ -2,7 +2,20 @@
 class AdminProductDetailModel extends Database
 {
   function getAllProductDetailByProductID($product_id)
-  {
+  { 
+    // số bản ghi trong 1 trang
+    $limit = 4;
+    // số trang hiện tại
+    $page = 0;
+    // dữ liệu hiển thị lên view
+    $display = "";
+    if (isset($_POST['page'])) {
+      $page = $_POST['page'];
+    } else {
+      $page = 1;
+    }
+    $start_from = ($page - 1) * $limit;
+    // bắt đầu từ 
     $query = "SELECT 
     pd.id, 
     c.name as color_name, 
@@ -15,7 +28,7 @@ class AdminProductDetailModel extends Database
     INNER JOIN color c ON pd.color_id = c.id 
     INNER JOIN size s ON pd.size_id = s.id 
     INNER JOIN product p ON pd.product_id = p.id 
-    WHERE p.id = ? ORDER BY pd.id;";
+    WHERE p.id = ? ORDER BY pd.id LIMIT {$start_from}, {$limit};";
 
     $stmt = $this->conn->prepare($query);
     $stmt->execute([$product_id]);
@@ -36,9 +49,7 @@ class AdminProductDetailModel extends Database
       </thead>
       <tbody>
     ";
-
-
-
+  
     $products = $stmt->fetchAll(PDO::FETCH_OBJ);
     foreach ($products as $product) {
       $display .=
@@ -60,6 +71,74 @@ class AdminProductDetailModel extends Database
       </tbody>
     </table>
     </div>";
+     // tổng số bản ghi 
+    //  $total_rows = $this->getSum($product->id);
+    //  echo $total_rows;
+     // tổng số trang
+     $total_pages = ceil($this->getSum($product_id)->total / $limit);
+     // hiển thị số trang 
+     $display .= "
+     <div class='col-12 pb-1'>
+       <nav aria-label='Page navigation'>
+       <ul class='pagination justify-content-center mb-3'>";
+       if ($page > 1) {
+        $prev_active = "";
+        $prev = $page - 1;
+        $display .= "
+        <li class='page-item {$prev_active}'>
+          <a onclick='changePageFetch($prev)' id = '{$prev}' class='page-link' href='#' aria-label='Previous'>
+            <span aria-hidden='true'>&laquo;</span>
+            <span class='sr-only'>Previous</span>
+          </a>
+        </li>";
+      } else {
+        $prev_active = "disabled";
+        $display .= "
+        <li class='page-item {$prev_active}'>
+          <a id = '0' class='page-link' href='#' aria-label='Previous'>
+            <span aria-hidden='true'>&laquo;</span>
+            <span class='sr-only'>Previous</span>
+          </a>
+        </li>";
+      }
+      for ($i = 1; $i <= $total_pages; $i++) {
+        $active_class = "";
+        if ($i == $page) {
+          $active_class = "active";
+  
+        }
+        $display .= "<li class='page-item {$active_class} '><a onclick='changePageFetch($i)' id = '$i' class='page-link' href='#'>$i</a></li>";
+      }
+
+      $next_active = "";
+      if ($page == $total_pages) {
+        $next_active = "disabled";
+        $display .= "
+            <li class='page-item'>
+            <a ' id='' class='page-link {$next_active}' href='#' aria-label='Next'>
+              <span aria-hidden='true'>&raquo;</span>
+              <span class='sr-only'>Next</span>
+            </a>
+          </li>
+        </ul>
+        </nav>
+        </div>
+          ";
+      } else {
+        $next = $page + 1;
+        $display .= "
+            <li class='page-item'>
+            <a onclick='changePageFetch($next)' id='{$next}' class='page-link {$next_active}' href='#' aria-label='Next'>
+              <span aria-hidden='true'>&raquo;</span>
+              <span class='sr-only'>Next</span>
+            </a>
+          </li>
+        </ul>
+        </nav>
+        </div>
+          ";
+      }
+    
     echo $display;
   }
 
@@ -236,7 +315,24 @@ class AdminProductDetailModel extends Database
       echo "Thất bại";
     }
   }
-
+  
+  function getSum($id)
+  {
+      // SQL query to count records with the given product_id
+      $query = "SELECT COUNT(*) AS total FROM `product_detail` WHERE `product_id`= ?";
+      
+      // Prepare the SQL query
+      $stmt = $this->conn->prepare($query);
+      
+      // Execute the query with the given product_id
+      $stmt->execute([$id]);
+      
+      // Fetch the result as an object
+      $result = $stmt->fetch(PDO::FETCH_OBJ);
+      
+      // Return the total count
+      return $result;
+  }
 
   // lấy  1 bản ghi chi tiết sản phẩm thông qua id
   function getProductDetailByID($id)
