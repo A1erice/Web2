@@ -22,7 +22,7 @@ class Checkout extends Controller
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $order = $this->model("frontend/OrderModel");
       $order->insert($_POST);
-      $order_id = $order->getOrderByUserId($_POST);
+      $order_id = $order->getLastestOrder($_POST);
       $order_detail = $this->model("frontend/OrderDetailModel");
       $order_detail_data = json_decode($_POST['order_detail'], true); // Chuyển chuỗi JSON thành mảng
 

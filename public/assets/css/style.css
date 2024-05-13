@@ -17,6 +17,10 @@ html {
   color: red;
   font-size: 0.7rem;
 }
+.previewImage_table {
+  height: 80px;
+  width: 80px;
+}
 
 /* CAROUSEL / SLIDER */
 .carousel-item {

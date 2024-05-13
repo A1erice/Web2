@@ -10,7 +10,7 @@
       <div class="bg-light rounded p-4">
 
         <div class="d-flex align-items-center justify-content-between mb-2">
-          <h5 class="fw-bold">Danh sách hoá đơn</h5>
+          <h5 class="fw-bold text-primary">Danh sách hoá đơn</h5>
         </div>
 
         <div class="row mb-2">
@@ -32,7 +32,50 @@
           </div>
         </div>
 
-        <!-- danh sách phiêu nhập -->
+        <!-- Modal -->
+        <div class="modal fade" id="orderDetail_Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Thông tin đơn hàng</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p class="mb-1">Mã đơn hàng: </p>
+                <p class="mb-1">Tên khách hàng: </p>
+                <p class="mb-1">Ngày đặt hàng: </p>
+                <p class="mb-1">Địa chỉ giao hàng: </p>
+                <p class="mb-1">Trạng thái: </p>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Ảnh</th>
+                      <th scope="col">Sản Phẩm</th>
+                      <th scope="col">Màu Sắc</th>
+                      <th scope="col">Kích Cỡ</th>
+                      <th scope="col">Số Lượng</th>
+                      <th scope="col">Thành Tiền</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="d-flex justify-content-end">
+                  Tổng tiền:
+                  <p class="text-danger fw-bold"> 6.000.000đ </p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- danh sách đơn hàng -->
         <div id="orders" class="category_list">
 
         </div>
@@ -55,12 +98,27 @@
     $('#orderStatus').change(handleOrderStatusChange);
     fetch_data();
   });
-  
+
+  // lấy ra chi tiết hóa đơn đưa vào form
+  function getDetail(id) {
+    $.ajax({
+      url: '<?= ROOT ?>order/getDetail',
+      method: "POST",
+      data: {
+        order_id: id
+      },
+      success: function (data, status) {
+        $('#orderDetail_Modal').html(data);
+      }
+    });
+    $('#orderDetail_Modal').modal("show");
+  }
+
   function handleOrderStatusChange() {
     var selectedOption = $(this).val();
-    switch(selectedOption) {
+    switch (selectedOption) {
       case 'all':
-        keyword = 'all'; 
+        keyword = 'all';
         break;
       case 'approved':
         keyword = '1';
@@ -79,12 +137,12 @@
       url: "<?= ROOT ?>AdminOrder/changeOrderStatus",
       type: 'post',
       data: { id: id },
-      success: function(data, status) {
-          alert(data);
+      success: function (data, status) {
+        alert(data);
       }
-  });
+    });
   }
-  
+
   // hiển thị danh sách hoá đơn
   function fetch_data(page, keyword) {
     $.ajax({
@@ -103,6 +161,27 @@
   function changePageFetch(page, keyword) {
     fetch_data(page, keyword);
   }
+
+
+  $('#orders').on('change', '.form-check-input', function () {
+    var orderId = $(this).val();
+    var isChecked = $(this).is(':checked') ? 1 : 0;
+    $.ajax({
+      url: "<?= ROOT ?>AdminOrder/updateOrderStatus",
+      type: 'post',
+      data: {
+        orderId: orderId,
+        status: isChecked
+      },
+      success: function (data, status) {
+        Swal.fire({
+          title: data,
+          icon: "success",
+          confirmButtonColor: "#3459e6"
+        }); fetch_data();
+      }
+    });
+  });
 </script>
 
 <!-- Content End -->

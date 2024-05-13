@@ -91,12 +91,11 @@ class AdminOrder extends Controller
       $Order->update($_POST);
     }
   }
-  function changeOrderStatus($id)
+  function updateOrderStatus($id)
   {
-    $order = $this->model("backend/AdminOrderModel");
-    if (isset($_POST['id'])) {
-      $order_id = $_POST['id'];
-      $order->updateOrderStatus($order_id);
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $order = $this->model("backend/AdminOrderModel");
+      $order->updateOrderStatus($_POST);
     }
   }
 

@@ -24,11 +24,31 @@ class AdminOrderModel extends Database
     }
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
-    if ($keyword != 'all')
-    {
-      $query = "SELECT * FROM `order` WHERE order_status = {$keyword} ORDER BY id desc LIMIT {$start_from}, {$limit}";
+    if ($keyword != 'all') {
+      $query = "
+      SELECT o.*,
+      CONCAT(p.name, ', ', d.name, ', ', w.name, ', ', a.street_name) AS full_address
+      FROM `order` o
+      JOIN address a ON o.address = a.id
+      JOIN province p ON a.province_id = p.id
+      JOIN district d ON a.district_id = d.id
+      JOIN ward w ON a.ward_id = w.id
+      WHERE o.order_status = {$keyword}
+      ORDER BY o.id desc
+      LIMIT {$start_from}, {$limit}
+      ";
     } else {
-      $query = "SELECT * FROM `order` ORDER BY id desc LIMIT {$start_from}, {$limit}";
+      $query = "
+      SELECT o.*,
+      CONCAT(p.name, ', ', d.name, ', ', w.name, ', ', a.street_name) AS full_address
+      FROM `order` o
+      JOIN address a ON o.address = a.id
+      JOIN province p ON a.province_id = p.id
+      JOIN district d ON a.district_id = d.id
+      JOIN ward w ON a.ward_id = w.id
+      ORDER BY o.id desc
+      LIMIT {$start_from}, {$limit}
+      ";
     }
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
@@ -38,12 +58,9 @@ class AdminOrderModel extends Database
     <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
       <thead>
         <tr class='text-dark'>
-          <th scope='col'>ID</th>
-          <th scope='col'>Tên Khách Hàng</th>
-          <th scope='col'>Ngày Mua</th>
-          <th scope='col'>Địa Chỉ</th>
-          <th scope='col'>Phương Thức Thanh Toán</th>
-          <th scope='col'>Tổng Tiền</th>
+          <th scope='col'>Mã đơn hàng</th>
+          <th scope='col'>Ngày đặt hàng</th>
+          <th scope='col'>Xác Nhận</th>
           <th scope='col'>Thao Tác</th>
         </tr>
       </thead>
@@ -52,34 +69,36 @@ class AdminOrderModel extends Database
     $count = $this->getSum($keyword);
     if ($count > 0) {
       foreach ($orders as $order) {
-        if($order->order_status == 0) {
+        if ($order->order_status == 0) {
           $display .=
-          "<tr>
+            "<tr>
             <td>{$order->id}</td>
-            <td>{$order->customer_name}</td>
             <td>{$order->date}</td>
-            <td>{$order->address}</td>
-            <td>{$order->payment_method}</td>
-            <td>{$order->order_total}</td>
             <td>
-              <input class='form-check-input' type='checkbox' role='switch' id='orderCheck' onchange='changeOrderStatus({$order->id})'>
+              <div class='form-check form-switch'>
+                <input  class='form-check-input' type='checkbox' role='switch' value='{$order->id}'>
+              </div>            
+            </td>
+            <td>
+              <button onclick='getDetail({$order->id})' class='btn btn-sm btn-primary'><i class='fa-solid fa-eye'></i></button>
             </td>
           </tr>";
         } else {
           $display .=
-          "<tr>
+            "<tr>
             <td>{$order->id}</td>
-            <td>{$order->customer_name}</td>
             <td>{$order->date}</td>
-            <td>{$order->address}</td>
-            <td>{$order->payment_method}</td>
-            <td>{$order->order_total}</td>
             <td>
-              <input class='form-check-input' type='checkbox' role='switch' id='orderCheck' checked='' onchange='changeOrderStatus({$order->id})'>
+              <div class='form-check form-switch'>
+                <input checked class='form-check-input' type='checkbox' role='switch' value='{$order->id}'>
+              </div>
+            </td>
+            <td>
+              <button onclick='getDetail({$order->id})' class='btn btn-sm btn-primary'><i class='fa-solid fa-eye'></i></button>
             </td>
           </tr>";
         }
-        
+
       }
     } else {
       $display .= "
@@ -186,8 +205,7 @@ class AdminOrderModel extends Database
   // lấy ra tổng số tất cả bản ghi
   function getSum($keyword)
   {
-    if ($keyword == 'all')
-    {
+    if ($keyword == 'all') {
       $query = "SELECT COUNT(*) AS total FROM `order`";
     } else {
       $query = "SELECT COUNT(*) AS total FROM `order` WHERE order_status = {$keyword} ";
@@ -200,34 +218,115 @@ class AdminOrderModel extends Database
     } else {
       return 0;
     }
-    
+
   }
-  
-  function updateOrderStatus($id)
+
+  function updateOrderStatus($POST)
   {
-      try {
-          $query = "SELECT * FROM `order` WHERE id = ?";
-          $stmt = $this->conn->prepare($query);
-          $stmt->execute([$id]);
-          $order = $stmt->fetchAll(PDO::FETCH_OBJ);
-  
-          $order_newstatus = ($order[0]->order_status == 0) ? 1 : 0;
-  
-          $query = "UPDATE `order` SET order_status = ? WHERE id = ?";
-          $stmt = $this->conn->prepare($query);
-          $stmt->execute([$order_newstatus, $id]);
-          $rowCount = $stmt->rowCount();
-          
-          if ($rowCount > 0) {
-              echo "Update successfully";
-          } else {
-              echo "No rows affected";
-          }
-      } catch (PDOException $e) {
-          echo "Error: " . $e->getMessage();
-      }
+    $id = $POST['orderId'];
+    $status = $POST['status'];
+    $query = 'UPDATE `order` set order_status = ? WHERE id = ?';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$status, $id]);
+    $rowCount = $stmt->rowCount();
+    if ($rowCount > 0) {
+      echo "Thay đổi trạng thái đơn hàng thành công";
+    } else {
+      echo "Thay đổi trạng thái đơn hàng thất bại";
+    }
   }
-  
+
+  function getDetail($POST)
+  {
+    $display = "
+    <div class='modal-dialog modal-dialog-centered modal-xl'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <h1 class='modal-title fs-5' id='exampleModalLabel'>Thông tin đơn hàng</h1>
+          <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+        </div>
+    ";
+    $order_id = $POST['order_id'];
+    $query = "
+    SELECT o.*,
+    CONCAT(a.street_name, ', ', p.name, ', ', w.name, ', ', d.name) AS full_address
+    FROM `order` o
+    JOIN address a ON o.address = a.id
+    JOIN province p ON a.province_id = p.id
+    JOIN district d ON a.district_id = d.id
+    JOIN ward w ON a.ward_id = w.id
+    WHERE o.id =  ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$order_id]);
+    $order = $stmt->fetch(PDO::FETCH_OBJ);
+    $display .= "
+    <div class='modal-body'>
+      <p class='mb-1'>Mã đơn hàng: {$order_id}</p>
+      <p class='mb-1'>Tên khách hàng: {$order->customer_name}</p>
+      <p class='mb-1'>Ngày đặt hàng: {$order->date}</p>
+      <p class='mb-1'>Địa chỉ giao hàng: {$order->full_address}</p>
+    ";
+    if ($order->order_status == 0) {
+      $display .= "
+      <p class='mb-1'>Trạng thái: Chờ xác nhận</p>
+      ";
+    } else if ($order->order_status == 1) {
+      $display .= "
+      <p class='mb-1'>Trạng thái: Đã xác nhận</p>
+      ";
+    }
+    $detailQuery = "
+    SELECT  p.name AS product_name, c.name AS color_name, s.name AS size_name,
+       od.quantity, od.subtotal, od.product_detail_id, pd.price, pd.image
+    FROM order_detail od
+    INNER JOIN product_detail pd ON od.product_detail_id = pd.id
+    INNER JOIN product p ON pd.product_id = p.id
+    INNER JOIN color c ON pd.color_id = c.id  -- Join with color table
+    INNER JOIN size s ON pd.size_id = s.id  -- Join with size table
+    WHERE od.order_id = ?;
+    ";
+    $stmt = $this->conn->prepare($detailQuery);
+    $stmt->execute([$order_id]);
+    $order_detail = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    $display .= "
+    <table class='table table-striped'>
+      <thead>
+        <tr>
+          <th scope='col'>Ảnh</th>
+          <th scope='col'>Sản Phẩm</th>
+          <th scope='col'>Màu Sắc</th>
+          <th scope='col'>Kích Cỡ</th>
+          <th scope='col'>Số Lượng</th>
+          <th scope='col'>Thành Tiền</th>
+        </tr>
+      </thead>
+      <tbody>";
+    foreach ($order_detail as $row) {
+      $display .= "
+        <tr>
+          <td scope='col'><img src ='{$row->image}' style='width:60px; height:60px; object-fit: cover;'></td>
+          <td scope='col'>{$row->product_name}</td>
+          <td scope='col'>{$row->color_name}</td>
+          <td scope='col'>{$row->size_name}</td>
+          <td scope='col'>{$row->quantity}</td>
+          <td scope='col'>" . currency_format($row->subtotal) . "</td>   
+        </tr>";
+    }
+    $display .= "
+        </tbody>
+      </table>
+      <div class='d-flex justify-content-end'>
+        Tổng tiền: 
+        <p class='text-danger fw-bold'>" . currency_format($order->order_total) . "</p>
+      </div>
+    </div>
+  <div class='modal-footer'>
+    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Đóng</button>
+  </div>";
+    echo $display;
+  }
+
 
   // // Tìm kiếm toàn bộ bản ghi thuộc bảng màu sắc có từ khóa liên quan (có phân trang)
   // function search($keyword)
