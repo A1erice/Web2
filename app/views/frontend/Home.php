@@ -1,5 +1,10 @@
 <?php $this->view("include/header", $data) ?>
 <!-- MAIN CONTENT -->
+<style>
+  html {
+    overflow: hidden;
+  }
+</style>
 <main class="main container-fluid p-0 home">
 
   <section class="main-section" id="section1" style="background-image: url('<?= ASSETS ?>img/banner_1.avif');">
@@ -40,7 +45,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-6 text-center">
           <div class="section-title">
-            <h2 class='text-primary fw-bold mb-4'>HÀNG MỚI VỀ</h2>
+            <h2 class='text-primary fw-bold mb-4 mt-3'>HÀNG MỚI VỀ</h2>
           </div>
         </div>
       </div>
@@ -119,7 +124,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-6 text-center">
           <div class="section-title">
-            <h2 class='text-primary fw-bold mb-4'>HÀNG BÁN CHẠY</h2>
+            <h2 class='text-primary fw-bold mb-4 mt-3'>HÀNG BÁN CHẠY</h2>
           </div>
         </div>
       </div>

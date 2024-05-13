@@ -1,5 +1,11 @@
 <?php $this->view("include/header", $data) ?>
 <!-- MAIN CONTENT -->
+
+<style>
+  html {
+    overflow: hidden;
+  }
+</style>
 <main class="main container-fluid p-0 home">
 
   <section class="About main-about" id="section1" style="background-image: url('<?= ASSETS ?>img/banner_1.avif');">
