@@ -2,7 +2,8 @@
 class product_detail extends Database
 {
 
-  function getData($offset,$limit,$searchText,$minPrice,$maxPrice,$category,$brand,$color,$size){
+  function getData($offset, $limit, $searchText, $minPrice, $maxPrice, $category, $brand, $color, $size)
+  {
     $query = "";
     $error = "";
 
@@ -17,18 +18,18 @@ class product_detail extends Database
     //Xử lý truy vấn where: từ khóa tìm kiếm, giá
     $where = "";
     //xử lý từ khóa tìm kiếm.
-    if($searchText != ""){
+    if ($searchText != "") {
       $where .= " p.name LIKE '%$searchText%' ";
     }
     //xử lý giá.
-    if($minPrice != "" || $maxPrice != ""){
-      if($where != ""){
+    if ($minPrice != "" || $maxPrice != "") {
+      if ($where != "") {
         $where .= " AND ";
       }
-      if($minPrice != "" && $maxPrice != ""){
+      if ($minPrice != "" && $maxPrice != "") {
         $where .= " pd.price >= $minPrice AND pd.price <= $maxPrice ";
       } else {
-        if($minPrice != ""){
+        if ($minPrice != "") {
           $where .= " pd.price >= $minPrice";
         } else {
           $where .= " pd.price <= $maxPrice";
@@ -38,90 +39,90 @@ class product_detail extends Database
 
     //xử lý thể loại
     if ($category != "") {
-      if($where != ""){
+      if ($where != "") {
         $where .= " AND ";
       }
       $parts = explode(",", $category);
       $conditions = []; // Mảng để chứa các điều kiện
-  
+
       foreach ($parts as $part) {
-          $conditions[] = "c.name = '$part'";
+        $conditions[] = "c.name = '$part'";
       }
-  
+
       if (!empty($conditions)) {
-  
-          // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
-          $where .= "(" . implode(" OR ", $conditions) . ")";
+
+        // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
+        $where .= "(" . implode(" OR ", $conditions) . ")";
       }
     }
 
     //xử lý thương hiệu
     if ($brand != "") {
-      if($where != ""){
+      if ($where != "") {
         $where .= " AND ";
       }
       $parts = explode(",", $brand);
       $conditions = []; // Mảng để chứa các điều kiện
-  
+
       foreach ($parts as $part) {
-          $conditions[] = "b.name = '$part'";
+        $conditions[] = "b.name = '$part'";
       }
-  
+
       if (!empty($conditions)) {
-  
-          // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
-          $where .= "(" . implode(" OR ", $conditions) . ")";
+
+        // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
+        $where .= "(" . implode(" OR ", $conditions) . ")";
       }
     }
 
     //xử lý màu
     if ($color != "") {
-      if($where != ""){
+      if ($where != "") {
         $where .= " AND ";
       }
       $parts = explode(",", $color);
       $conditions = []; // Mảng để chứa các điều kiện
-  
+
       foreach ($parts as $part) {
-          $conditions[] = " pd.color_id = (SELECT id FROM color WHERE name = '$part') ";
+        $conditions[] = " pd.color_id = (SELECT id FROM color WHERE name = '$part') ";
       }
-  
+
       if (!empty($conditions)) {
-  
-          // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
-          $where .= "(" . implode(" OR ", $conditions) . ")";
+
+        // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
+        $where .= "(" . implode(" OR ", $conditions) . ")";
       }
     }
 
     //xử lý size
     if ($size != "") {
-      if($where != ""){
+      if ($where != "") {
         $where .= " AND ";
       }
       $parts = explode(",", $size);
       $conditions = []; // Mảng để chứa các điều kiện
-  
+
       foreach ($parts as $part) {
-          $conditions[] = " pd.size_id = (SELECT id FROM size WHERE name = '$part') ";
+        $conditions[] = " pd.size_id = (SELECT id FROM size WHERE name = '$part') ";
       }
-  
+
       if (!empty($conditions)) {
-  
-          // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
-          $where .= "(" . implode(" OR ", $conditions) . ")";
+
+        // Xây dựng chuỗi điều kiện WHERE từ mảng $conditions
+        $where .= "(" . implode(" OR ", $conditions) . ")";
       }
     }
 
     //kết hợp where và query
-    if($where != ""){
-      $query .= " WHERE ".$where;
+    if ($where != "") {
+      $query .= " WHERE " . $where;
     }
 
     $query .= " GROUP BY p.id, pd.color_id ";//
 
     // lấy tổng số lượng
-    $stmt = $this->conn->prepare($query);   
-    $rowCount = $stmt->rowCount(); 
+    $stmt = $this->conn->prepare($query);
+    $rowCount = $stmt->rowCount();
 
     //giới hạn số lượng sản phẩm lấy
     $query .= " LIMIT $limit OFFSET $offset ";
@@ -129,12 +130,12 @@ class product_detail extends Database
     $this->conn->exec("SET CHARACTER SET utf8mb4");
     $stmt = $this->conn->prepare($query);
     try {
-    $stmt->execute();
-  } catch (PDOException $e) {
+      $stmt->execute();
+    } catch (PDOException $e) {
       echo 'Error: ' . $e->getMessage(); // In thông tin lỗi chi tiết
       // Ghi log lỗi vào file
       error_log('PDOException: ' . $e->getMessage(), 0);
-  }
+    }
     $products = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     // $error .= $query;
@@ -178,13 +179,13 @@ class product_detail extends Database
       $brand = urldecode($_POST['brand']);
       $color = urldecode($_POST['color']);
       $size = $_POST['size'];
-  }
+    }
 
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
     $limit = 12;
     $offset = ($page - 1) * $limit; // Calculate offset based on current page
-    $data = $this->getData($offset,$limit,$keyword,$minPrice,$maxPrice,$category,$brand,$color,$size);
+    $data = $this->getData($offset, $limit, $keyword, $minPrice, $maxPrice, $category, $brand, $color, $size);
     $display = "<div class='row pb-3'>";
     $display .= $data['error'];
 
@@ -363,12 +364,22 @@ class product_detail extends Database
     $sizes = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     foreach ($sizes as $size) {
-      $display .= "
-      <div class='custom-control custom-radio custom-control-inline'>
-        <input type='radio' class='btn-check ' name='sizes' id='{$size->size_id} - {$size->size_name}' autocomplete='off'>
-        <label class='btn btn-outline-primary ' for='{$size->size_id} - {$size->size_name}'>{$size->size_name}</label>
-      </div>
-      ";
+      if ($size->quantity > 0) {
+        $display .= "
+        <div class='custom-control custom-radio custom-control-inline'>
+          <input type='radio' class='btn-check ' name='sizes' id='{$size->size_id} - {$size->size_name}' autocomplete='off'>
+          <label class='btn btn-outline-primary ' for='{$size->size_id} - {$size->size_name}'>{$size->size_name}</label>
+        </div>
+        ";
+      } else if ($size->quantity == 0) {
+        $display .= "
+        <div class='custom-control custom-radio custom-control-inline'>
+          <input disabled type='radio' class='btn-check ' name='sizes' id='{$size->size_id} - {$size->size_name}' autocomplete='off'>
+          <label class='btn btn-outline-primary ' for='{$size->size_id} - {$size->size_name}'>{$size->size_name}</label>
+        </div>
+        ";
+      }
+
     }
     echo $display;
   }
@@ -454,5 +465,12 @@ class product_detail extends Database
     $stmt->execute([$id]);
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
     return $result;
+  }
+  function updateQuantity($id)
+  {
+    // Prepare and execute the update query with parameter binding
+    $query = "UPDATE product_detail SET quantity = quantity - 1 WHERE id = ?";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$id]);
   }
 }

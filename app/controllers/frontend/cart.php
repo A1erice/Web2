@@ -47,6 +47,7 @@ class Cart extends Controller
       $product_detail_choose = $product_detail->getProductDetailByProductIDColorIDSizeID($product_id, $color_id, $size_id);
       $cart_detail = $this->model("frontend/CartDetailModel");
       $cart_detail->insert($cart_id, $product_detail_choose[0]->id);
+      $product_detail->updateQuantity($product_detail_choose[0]->id);
     }
   }
 
