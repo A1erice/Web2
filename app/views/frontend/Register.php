@@ -1,7 +1,16 @@
 <?php $this->view("include/header", $data) ?>
+<style>
+  body {
+    overflow: hidden;
+    background-color:  rgba(52, 89, 230, 1);
+  }
+  header {
+    background-color: white;
+  }
+</style>
 <div class="container-fluid h-100 mb-5">
   <div class="row mb-5">
-    <div class="col-lg-4 col-md-6 col-sm-12 bg-white mx-auto p-4 rounded">
+    <div class="login-panel col-lg-4 col-md-6 col-sm-12 bg-white mx-auto p-4">
       <h5 class="text-center text-primary pt-3 mb-3 fw-bold">ĐĂNG KÝ</h5>
       <form action="" method="post">
         <div class="input-group mb-3 d-flex flex-column">
@@ -37,6 +46,14 @@
     </div>
   </div>
 </div>
+<script>
+  const container = document.querySelector('.login-panel');
+
+  // Simulate adding the active class after a short delay (adjust as needed)
+  setTimeout(() => {
+    container.classList.add('active');
+  }, 500);
+</script>
 <script>
   $('#register_btn').click(function () {
     // Lấy dữ liệu từ form đăng ký
@@ -132,4 +149,3 @@
     }
   });
 </script>
-<?php $this->view("include/footer") ?>

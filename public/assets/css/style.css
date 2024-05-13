@@ -283,3 +283,24 @@ html {
 .single-product .product-img img {
   transition: transform 0.3s ease; /* Add transition for smooth animation */
 }
+.login-panel {
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border: 2px solid rgb(183, 192, 227) !important;
+  overflow: hidden;
+  border-radius: 20px !important;
+  position: absolute; /* Make the container positionable */
+  top: -100vh; /* Set initial position 100 viewport heights above the fold */
+  transition: top 1s ease-in-out; /* Define animation properties */
+  z-index: 0;
+}
+.login-panel.active {
+  top: 50vh;
+}
+.nav-link.active {
+  /* Font weight for bold */
+  font-weight: bold;
+  /* Color for the active link */
+  color: rgba(52, 89, 230, 1) !important ;
+}

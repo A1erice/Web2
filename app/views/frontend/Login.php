@@ -1,8 +1,16 @@
 <?php $this->view("include/header", $data) ?>
-
+<style>
+  body {
+    overflow: hidden;
+    background-color:  rgba(52, 89, 230, 1);
+  }
+  header {
+    background-color: white;
+  }
+</style>
 <div class="container-fluid h-100">
   <div class="row mt-2">
-    <div class="col-lg-4 col-md-6 col-sm-12 bg-white mx-auto p-4 rounded">
+    <div class="login-panel col-lg-4 col-md-6 col-sm-12 bg-white mx-auto p-4">
       <h5 class="text-center text-primary pt-3 fw-bold mb-4">ĐĂNG NHẬP</h5>
       <form>
         <div class="mb-3">
@@ -15,16 +23,24 @@
           <input type="password" class="form-control" id="password_login">
           <span type="email" class="error_message" id="passwordError_login">
         </div>
-        <div class="mb-3 form-check">
+        <!-- <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
           <label class="form-check-label" for="exampleCheck1">Hiển thị mật khẩu</label>
-        </div>
+        </div> -->
         <button id="login_btn" type="button" class="btn btn-primary w-100">Đăng Nhập</button>
       </form>
     </div>
 
   </div>
 </div>
+<script>
+  const container = document.querySelector('.login-panel');
+
+  // Simulate adding the active class after a short delay (adjust as needed)
+  setTimeout(() => {
+    container.classList.add('active');
+  }, 500);
+</script>
 
 <script>
 
@@ -96,4 +112,3 @@
   });
 
 </script>
-<?php $this->view("include/footer") ?>

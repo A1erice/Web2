@@ -68,19 +68,33 @@
           <div class="offcanvas-body d-flex flex-column flex-lg-row">
             <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link  active" aria-current="page" href="<?= ROOT ?>home">Trang Chủ</a>
+                <a class="nav-link " id="home" aria-current="page" href="<?= ROOT ?>home">Trang Chủ</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="<?= ROOT ?>shop">Sản Phẩm</a>
+                <a class="nav-link " id="shop" href="<?= ROOT ?>shop">Sản Phẩm</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="<?= ROOT ?>about">Giới Thiệu</a>
+                <a class="nav-link " id="about" href="<?= ROOT ?>about">Giới Thiệu</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="<?= ROOT ?>contact">Liên Hệ</a>
+                <a class="nav-link " id="contact" href="<?= ROOT ?>contact">Liên Hệ</a>
               </li>
             </ul>
+            <script>
+              // Assuming you have a way to access the website title (e.g., document.title)
+              const title = document.title.toLowerCase();  // Convert title to lowercase for case-insensitive matching
 
+              const navLinks = document.querySelectorAll('.nav-link');
+
+              navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const targetPart = href.split('/').pop().toLowerCase();  // Extract the last part of the URL (assuming the page name is there)
+
+                if (title.includes(targetPart)) {
+                  link.classList.add('active');
+                }
+              });
+            </script>
             <!-- Login / Sign up -->
             <div class="d-flex flex-column flex-lg-row justify-content-center align-items-center gap-3">
               <?php if (isset($data['user_data'])) {
