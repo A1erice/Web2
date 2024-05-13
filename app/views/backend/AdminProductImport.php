@@ -9,8 +9,8 @@
     <div class="container-fluid pt-4 px-4">
       <div class="bg-light rounded p-4">
 
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <h5 class="fw-bold">Danh sách phiếu nhập</h5>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="fw-bold text-primary">Danh sách phiếu nhập</h5>
           <a class="btn btn-primary" href="<?= ROOT ?>AdminProductImport/productImportForm">
             <i class="fa-solid fa-circle-plus"></i> Thêm Phiếu Nhập
           </a>

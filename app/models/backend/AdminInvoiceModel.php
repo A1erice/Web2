@@ -29,8 +29,9 @@ class AdminInvoiceModel extends Database
     $display = "
     <div class='modal-dialog modal-dialog-scrollable modal-xl'>
       <div class='modal-content'>
-        <div class='modal-header bg-primary'>
-          <h5 class='modal-title text-white'>Chi tiết phiếu nhập</h5>
+        <div class='modal-header'>
+          <h5 class='modal-title fw-bold'>CHI TIẾT PHIẾU NHẬP</h5>
+          <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
         </div>
         <div class='modal-body row'>
           
@@ -38,7 +39,7 @@ class AdminInvoiceModel extends Database
     ";
 
     $query = "   
-        SELECT i.*, s.name AS supplier_name, u.username AS username
+        SELECT i.*, s.name AS supplier_name, u.fullname AS fullname, u.id AS user_id
         FROM invoice i
         INNER JOIN supplier s ON i.supplier_id = s.id
         INNER JOIN user u ON i.user_id = u.id
@@ -49,24 +50,24 @@ class AdminInvoiceModel extends Database
     $stmt->execute([$invoiceID]);
     $invoice = $stmt->fetch(PDO::FETCH_OBJ);
     $display .= "
-        <div class='mb-3 text-start col-lg-4'>
-          <label class='mb-2' for=''>Mã Phiếu Nhập</label>
-          <input id='' type='text' class='form-control' value='{$invoice->id}' placeholder='' disabled>
+        <div class='mb-3 text-start col-lg-12'>
+          Mã Phiếu Nhập : {$invoice->id}
         </div>
-        <div class='mb-3 text-start col-lg-4'>
-          <label class='mb-2' for=''>Nhà Cung Cấp</label>
-          <input id='' type='text' class='form-control' value='{$invoice->supplier_id} - {$invoice->supplier_name}' placeholder='' disabled>
+        <div class='mb-3 text-start col-lg-12'>
+          Nhà Cung Cấp : {$invoice->supplier_id} - {$invoice->supplier_name}
         </div>
-        <div class='mb-3 text-start col-lg-4'>
-          <label class='mb-2' for=''>Ngày Nhập</label>
-          <input id='' type='text' class='form-control' value='{$invoice->create_date}' placeholder='' disabled>
+        <div class='mb-3 text-start col-lg-12'>
+          Ngày Nhập: {$invoice->create_date}
+        </div>
+        <div class='mb-3 text-start col-lg-12'>
+          Nhân viên: {$invoice->user_id} - {$invoice->fullname}
         </div>
       
     ";
 
     $detailQuery = "
     SELECT p.name AS product_name, c.name AS color_name, s.name AS size_name,
-       id.quantity, id.subtotal, id.productDetail_id, pd.price
+       id.quantity, id.subtotal, id.productDetail_id, pd.price, pd.image
     FROM invoice_detail id
     INNER JOIN product_detail pd ON id.productDetail_id = pd.id
     INNER JOIN product p ON pd.product_id = p.id
@@ -83,6 +84,7 @@ class AdminInvoiceModel extends Database
                 <head>
                   <tr>
                     <th>Mã Chi Tiết</th>
+                    <th>Ảnh</th>
                     <th>Tên Sản Phẩm</th>
                     <th>Màu Sắc</th>
                     <th>Kích Cỡ</th>
@@ -98,6 +100,7 @@ class AdminInvoiceModel extends Database
         $display .= "
           <tr>
             <td>{$row->productDetail_id}</td>
+            <td scope='col'><img src ='{$row->image}' style='width:60px; height:60px; object-fit: cover;'></td>
             <td>{$row->product_name}</td>
             <td>{$row->color_name}</td>  
             <td>{$row->size_name}</td>   

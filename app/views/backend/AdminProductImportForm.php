@@ -143,10 +143,10 @@
 
     if (hasProducts) {
       saveInvoiceBtn.show(); // hiển thị nút nếu có sản phẩm
-      cancelInvoiceBtn.show(); 
+      cancelInvoiceBtn.show();
     } else {
       saveInvoiceBtn.hide(); // ẩn nút lưu nếu như không có sản phẩm
-      cancelInvoiceBtn.hide(); 
+      cancelInvoiceBtn.hide();
     }
   }
 
@@ -208,11 +208,15 @@
       data: { userId: userId, supplierId: supplierId, total: total, invoiceDetail: JSON.stringify(tableData) }, // Convert data to JSON string
       success: function (data, status) {
         Swal.fire({
-          title: data,
           icon: "success",
-          confirmButtonColor: "#3459e6"
+          title: "Thêm thành công",
+          position: "center",
+          confirmButtonColor: "#3459e6",
+        }).then((result) => {
+          window.location.href = "<?= ROOT ?>AdminProductImport";
         });
       },
+
       error: function (error) {
         console.error("Error sending data:", error);
         // Handle errors (e.g., display error message)
