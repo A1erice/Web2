@@ -16,22 +16,21 @@
         <div class="row">
           <div class=" col-lg-6">
             <label for="" class="mb-2">Nhân Viên</label>
-            <input id="user_id" class="form-control form-control-sm mb-2" type="text" disabled
-              value="<?= $_SESSION['user_id'] ?>">
+            <input id="user_id" class="form-control mb-2" type="text" disabled value="<?= $_SESSION['user_id'] ?>">
           </div>
           <div class=" col-lg-6">
             <label for="" class="mb-2">Nhà Cung Cấp</label>
-            <select id='suppliers' class="form-select form-select-sm mb-2" aria-label="Default select example">
+            <select id='suppliers' class="form-select mb-2" aria-label="Default select example">
             </select>
           </div>
           <div class=" col-lg-6">
             <label for="" class="mb-2">Sản Phẩm</label>
-            <select id='products' class="form-select form-select-sm mb-2" aria-label="Default select example">
+            <select id='products' class="form-select mb-2" aria-label="Default select example">
             </select>
           </div>
           <div class=" col-lg-6">
             <label for="" class="mb-2">Chi Tiết Sản Phẩm</label>
-            <select id='productDetails' class="form-select form-select-sm mb-2" aria-label="Default select example">
+            <select id='productDetails' class="form-select mb-2" aria-label="Default select example">
             </select>
           </div>
 

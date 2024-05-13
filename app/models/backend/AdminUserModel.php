@@ -5,7 +5,10 @@ class AdminUserModel extends Database
   function check_login()
   {
     if (isset($_SESSION['user_id'])) {
-      $query = "select * from user where id = ?";
+      $query = "SELECT u.*, r.name AS role_name
+      FROM user u
+      INNER JOIN role r ON u.role_id = r.id
+      WHERE u.id = ?";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$_SESSION['user_id']]);
       $result = $stmt->fetchAll(PDO::FETCH_OBJ);

@@ -280,11 +280,10 @@ class AdminInvoiceModel extends Database
       <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
         <thead>
           <tr class='text-dark'>
-            <th scope='col' onclick='SortCol(\"i.id\")'>ID</th>
-            <th scope='col' onclick='SortCol(\"i.create_date\")'>Ngày tạo</th>
+            <th scope='col' onclick='SortCol(\"i.id\")'>Mã Phiếu Nhập</th>
+            <th scope='col' onclick='SortCol(\"i.create_date\")'>Ngày Lập</th>
             <th scope='col' onclick='SortCol(\"employee\")'>Nhân viên</th>
             <th scope='col' onclick='SortCol(\"supplier\")'>Nhà cung cấp</th>
-            <th scope='col' onclick='SortCol(\"i.total\")'>Tổng tiền</th>
             <th scope='col'>Thao tác</th>
           </tr>
         </thead>
@@ -298,7 +297,6 @@ class AdminInvoiceModel extends Database
               <td>{$invoice['create_date']}</td>
               <td>{$invoice['employee']}</td>
               <td>{$invoice['supplier']}</td>
-              <td>" . currency_format($invoice['total']) . "</td>
               <td>
                 <button class='btn btn-sm btn-primary' onclick='getInvoiceDetail({$invoice['id']})'><i class='fa-solid fa-eye'></i></button>
               </td>
@@ -307,7 +305,7 @@ class AdminInvoiceModel extends Database
     } else {
       $display .= "
           <tr>
-            <td colspan = '3' class ='text-center'> Không có dữ liệu </td>
+            <td colspan = '6' class ='text-center'> Không có dữ liệu </td>
           </tr>
         ";
     }
