@@ -74,10 +74,10 @@
                 <a class="nav-link " href="<?= ROOT ?>shop">Sản Phẩm</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="about">Giới Thiệu</a>
+                <a class="nav-link " href="<?= ROOT ?>about">Giới Thiệu</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="contact">Liên Hệ</a>
+                <a class="nav-link " href="<?= ROOT ?>contact">Liên Hệ</a>
               </li>
             </ul>
 
