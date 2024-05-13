@@ -23,14 +23,13 @@ class AdminSupplierModel extends Database
     $suppliers = $stmt->fetchAll(PDO::FETCH_OBJ);
     $display = "
     <div class='table-responsive mb-3'>
-    <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
+    <table id='displayDataTable' class='table table-striped text-start align-middle table-bordered table-hover mb-0'>
       <thead>
         <tr class='text-dark'>
-          <th scope='col'>ID</th>
-          <th scope='col'>Nhà cung cấp</th>
+          <th scope='col'>Mã nhà cung cấp</th>
+          <th scope='col'>Tên nhà cung cấp</th>
           <th scope='col'>Số điện thoại</th>
           <th scope='col'>Email</th>
-          <th scope='col'>Địa chỉ</th>
           <th scope='col'>Thao Tác</th>
         </tr>
       </thead>
@@ -45,10 +44,10 @@ class AdminSupplierModel extends Database
             <td>{$supplier->name}</td>
             <td>{$supplier->phone}</td>
             <td>{$supplier->email}</td>
-            <td>{$supplier->address}</td>
             <td>
               <button class='btn btn-sm btn-warning' onclick='get_detail({$supplier->id})'><i class='fa-solid fa-pen-to-square'></i></button>
               <button class='btn btn-sm btn-danger' onclick='delete_supplier({$supplier->id})'><i class='fa-solid fa-trash'></i></button>
+              <button class='btn btn-sm btn-primary' onclick='show_detail({$supplier->id})'><i class='fa-solid fa-eye'></i></button>
             </td>
           </tr>";
       }

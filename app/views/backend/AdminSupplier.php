@@ -9,7 +9,7 @@
     <div class="container-fluid pt-4 px-4">
       <div class="bg-light rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h5 class="fw-bold">Danh sách nhà cung cấp</h5>
+          <h5 class="fw-bold text-primary">Danh sách nhà cung cấp</h5>
           <form class="d-none d-md-flex w-50">
             <input id="search_supplier" class="form-control border-0" type="search" placeholder="Tìm Kiếm">
           </form>
@@ -19,8 +19,8 @@
         </div>
 
         <!-- Modal thêm nhà cung cấp -->
-        <div class="modal fade" id="supplier_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal modal-lg fade" id="supplier_modal" data-bs-backdrop="static" data-bs-keyboard="false"
+          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header bg-primary text-white">
@@ -29,28 +29,49 @@
                   aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <form action="" method="POST">
-                  <div class="mb-2">
+                <form class="row" action="" method="POST">
+                  <div class="mb-2 col-lg-12">
                     <label for="" class="form-label">Tên nhà cung cấp</label>
-                    <input id="supplier_name" type="text" class="form-control form-control-sm" id="" placeholder=""
-                      name="color_name">
+                    <input id="supplier_name" type="text" class="form-control" id="" placeholder="" name="color_name">
                     <span id="supplierName_Error" class="error_message mt-0 mb-0"></span>
                   </div>
-                  <div class="mb-2">
+                  <div class="mb-2 col-lg-12">
                     <label for="" class="form-label">Số điện thoại</label>
-                    <input id="supplier_phone" type="text" class="form-control form-control-sm" id="" placeholder=""
-                      name="color_name">
+                    <input id="supplier_phone" type="text" class="form-control" id="" placeholder="" name="color_name">
                     <span id="supplierPhone_Error" class="error_message mt-0 mb-0"></span>
                   </div>
-                  <div class="mb-2">
+                  <div class="mb-2 col-lg-12">
                     <label for="" class="form-label">Email</label>
-                    <input id="supplier_email" type="text" class="form-control form-control-sm" id="" placeholder=""
-                      name="color_name">
+                    <input id="supplier_email" type="text" class="form-control" id="" placeholder="" name="color_name">
                     <span id="supplierEmail_Error" class="error_message mt-0 mb-0"></span>
                   </div>
-                  <div class="mb-2">
-                    <label for="" class="form-label">Địa chỉ</label>
-                    <input id="supplier_address" type="text" class="form-control form-control-sm" id="" placeholder=""
+                  <div class='col-lg-4'>
+                    <div class=''>
+                      <label for='provinces'>Tỉnh / Thành phố</label>
+                      <select class='form-select' id='provinces'>
+                      </select>
+                      <span class='text-danger error_message' id='province_error'></span>
+                    </div>
+                  </div>
+                  <div class='col-lg-4'>
+                    <div class=''>
+                      <label for='districts'>Quận / Huyện</label>
+                      <select class='form-select' id='districts'>
+                      </select>
+                      <span class='text-danger error_message' id='district_error'></span>
+                    </div>
+                  </div>
+                  <div class='col-lg-4'>
+                    <div class=''>
+                      <label for='wards'>Phường / Xã</label>
+                      <select class='form-select' id='wards'>
+                      </select>
+                      <span class='text-danger error_message' id='ward_error'></span>
+                    </div>
+                  </div>
+                  <div class="mb-2 col-lg-12">
+                    <label for="" class="form-label">Địa chỉ cụ thể</label>
+                    <input id="supplier_address" type="text" class="form-control" id="" placeholder=""
                       name="color_name">
                     <span id="supplierAddress_Error" class="error_message mt-0 mb-0"></span>
                   </div>
@@ -78,27 +99,27 @@
                 <form action="" method="POST">
                   <div class="mb-2">
                     <label for="" class="form-label">Tên nhà cung cấp</label>
-                    <input id="update_SupplierName" type="text" class="form-control form-control-sm" id=""
-                      placeholder="" name="color_name">
+                    <input id="update_SupplierName" type="text" class="form-control" id="" placeholder=""
+                      name="color_name">
                     <input type="hidden" id="hidden_data">
                     <span id="updateSupplierName_Error" class="error_message mt-0 mb-0"></span>
                   </div>
                   <div class="mb-2">
                     <label for="" class="form-label">Số điện thoại</label>
-                    <input id="update_SupplierPhone" type="text" class="form-control form-control-sm" id=""
-                      placeholder="" name="color_name">
+                    <input id="update_SupplierPhone" type="text" class="form-control" id="" placeholder=""
+                      name="color_name">
                     <span id="updateSupplierPhone_Error" class="error_message mt-0 mb-0"></span>
                   </div>
                   <div class="mb-2">
                     <label for="" class="form-label">Email</label>
-                    <input id="update_SupplierEmail" type="text" class="form-control form-control-sm" id=""
-                      placeholder="" name="color_name">
+                    <input id="update_SupplierEmail" type="text" class="form-control" id="" placeholder=""
+                      name="color_name">
                     <span id="updateSupplierEmail_Error" class="error_message mt-0 mb-0"></span>
                   </div>
                   <div class="mb-2">
                     <label for="" class="form-label">Địa chỉ</label>
-                    <input id="update_SupplierAddress" type="text" class="form-control form-control-sm" id=""
-                      placeholder="" name="color_name">
+                    <input id="update_SupplierAddress" type="text" class="form-control" id="" placeholder=""
+                      name="color_name">
                     <span id="updateSupplierAddress_Error" class="error_message mt-0 mb-0"></span>
                   </div>
                 </form>
@@ -126,6 +147,42 @@
 
 <script>
 
+  $(document).ready(function () {
+    $.ajax({
+      url: "<?= ROOT ?>Province",
+      type: "post",
+      data: {},
+      success: function (data, status) {
+        $('#provinces').html(data);
+      }
+    });
+
+
+    $('#provinces').on("change", function () {
+      var province_id = $('#provinces').val();
+      $.ajax({
+        url: "<?= ROOT ?>District",
+        type: "post",
+        data: { province_id: province_id },
+        success: function (data, status) {
+          $('#districts').html(data);
+          $('#wards').empty();  // This clears all existing options in wards select
+        }
+      });
+    });
+
+    $('#districts').on("change", function () {
+      var district_id = $('#districts').val();
+      $.ajax({
+        url: "<?= ROOT ?>Ward",
+        type: "post",
+        data: { district_id: district_id },
+        success: function (data, status) {
+          $('#wards').html(data);
+        }
+      });
+    });
+  });
 
   // hiển thị danh sách màu sắc
   function fetch_data(page) {
