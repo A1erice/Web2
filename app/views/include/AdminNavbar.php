@@ -17,7 +17,7 @@
       </a>
       <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
         <a href="<?= ROOT ?>AdminAddUser/update/<?= $data['user_data']->id ?>" class="dropdown-item">Hồ Sơ</a>
-        <a href="AdminLogout" class="dropdown-item">Đăng xuất</a>
+        <a href="<?= ROOT ?>AdminLogout" class="dropdown-item">Đăng xuất</a>
       </div>
     </div>
   </div>

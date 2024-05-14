@@ -8,7 +8,7 @@ class AdminUserModel extends Database
       $query = "SELECT u.*, r.name AS role_name
       FROM user u
       INNER JOIN role r ON u.role_id = r.id
-      WHERE u.id = ?";
+      WHERE u.id = ? AND r.name <> 'Khách Hàng'";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$_SESSION['user_id']]);
       $result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -29,7 +29,7 @@ class AdminUserModel extends Database
     $stmt = $this->conn->prepare($query);
     $stmt->execute([$role_id]);
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-    if (is_array($result)) {
+    if (!empty($result) && is_array($result)) {
       return $result;
     }
   }

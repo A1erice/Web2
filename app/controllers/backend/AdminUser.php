@@ -3,8 +3,10 @@ class AdminUser extends Controller
 {
   function index()
   {
-    $model = $this->model("backend/AdminUserModel");
-    $user_data = $model->check_login();
+    $user = $this->model("backend/AdminUserModel");
+    $user_data = $user->check_login();
+    $data['modules'] = $user->check_role($user_data->role_id);
+
     if (!is_null($user_data)) {
       $data['page_title'] = "Admin - User";
       $data['user_data'] = $user_data;

@@ -7,6 +7,7 @@ class AdminSupplier extends Controller
   {
     $user = $this->model("backend/AdminUserModel");
     $user_data = $user->check_login();
+    $data['modules'] = $user->check_role($user_data->role_id);
     if (!is_null($user_data)) {
       $data['page_title'] = "Admin - Supplier";
       $data['user_data'] = $user_data;

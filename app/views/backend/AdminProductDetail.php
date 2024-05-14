@@ -260,7 +260,7 @@
           confirmButtonColor: "#3459e6",
           icon: "success",
         });
-        $('#addProductDetail_Modal').modal("show");
+        $('#addProductDetail_Modal').modal("hide");
 
       // Hiển thị thông tin chi tiết sản phẩm và giá tiền trong mảng productDetails
       console.log(productDetails);
