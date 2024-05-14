@@ -6,6 +6,13 @@
 
 
 */
+@font-face {
+  font-family: "Title"; /* Descriptive name for your font */
+  src: url("public\assets\font\BemirsDemoVersionRegular-L360Z.ttf") format("truetype"),  /* TTF format */
+       url("public\assets\font\BemirsDemoVersionRegular-L360Z.otf") format("opentype");  /* OTF format (optional) */
+}
+
+
 header {
   border-bottom: 3px solid rgba(52, 89, 230, 1);
   
@@ -99,7 +106,7 @@ html {
 .main-section .content {
   position: absolute;
   top: 50%;
-  left: 70%;
+  left: 50%;
   transform: translate(-50%, -50%);
   text-align: right;
   color: #fff;
@@ -114,13 +121,30 @@ html {
   background-color: rgba(0, 0, 0, 0.5); 
 }
 
+/* Default styles */
 .main-section h1 {
   font-size: 7em;
+  font-family: "Title", sans-serif; /* Added a generic fallback */
 }
 
 .main-section p {
   font-size: 1.5em;
 }
+
+/* Styles for mobile screens */
+@media (max-width: 1000px) {
+  .main-section h1 {
+    font-size: 4em;
+  }
+
+  .main-section p {
+    font-size: 1em;
+  }
+  .quote-section .hide-image {
+    display: none !important;
+  }
+}
+
 .quote-section {
   background-color: white; /* Background color of the quote section */
   padding: 50px 0; /* Adjust padding as needed */
@@ -166,8 +190,6 @@ html {
 .main-about .content {
   position: absolute;
   top: 50%;
-  left: 30%;
-  transform: translate(-50%, -50%);
   text-align: left;
   color: #fff;
 }
@@ -179,7 +201,7 @@ html {
 }
 .last .content {
   position: absolute;
-  text-align: center;
+  text-align: center; 
   top: 40%;
   font-style: italic;
   color: #fff;
@@ -195,9 +217,11 @@ html {
   background-color: rgba(0, 0, 0, 0.5); 
 }
 
+/* Default styles */
 .About h1 {
   font-size: 7em;
 }
+
 .About h3 {
   font-size: 3em;
 }
@@ -205,6 +229,22 @@ html {
 .About p {
   font-size: 1.5em;
 }
+
+/* Styles for mobile screens */
+@media (max-width: 1000px) {
+  .About h1 {
+    font-size: 4em;
+  }
+
+  .About h3 {
+    font-size: 2em;
+  }
+
+  .About p {
+    font-size: 1em;
+  }
+}
+
 
 .checkbox-wrapper-2 .ikxBAC {
   appearance: none;
