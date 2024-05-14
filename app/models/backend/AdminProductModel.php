@@ -2,6 +2,223 @@
 class AdminProductModel extends Database
 {
 
+  function getStats(){
+    $display = "";
+
+
+ $tongtien = currency_format1($this->getDailyRevenue());
+    $display ="<div class='row g-4'>
+    <div class='col-sm-6 col-xl-3'>
+      <div class='bg-light rounded d-flex align-items-center justify-content-between p-4'>
+        <i class='fa fa-chart-line fa-3x text-primary'></i>
+        <div class='ms-3'>
+          <p class='mb-2'>Doanh thu ngày</p>
+          <div class='mb-0' id='showDay' >". $tongtien . "</div>
+        </div>
+      </div>
+</div>";
+    $display .="<div class='col-sm-6 col-xl-3'>
+    <div class='bg-light rounded d-flex align-items-center justify-content-between p-4'>
+      <i class='fa fa-chart-bar fa-3x text-primary'></i>
+      <div class='ms-3'>
+        <p class='mb-2'>Tổng doanh thu</p>
+        <h6 class='mb-0'>".currency_format1($this->getYearRenvenue()) ."</h6>
+      </div>
+    </div>
+  </div>";
+  $display .= "<div class='col-sm-6 col-xl-3'>
+  <div class='bg-light rounded d-flex align-items-center justify-content-between p-4'>
+    <i class='fa fa-chart-area fa-3x text-primary'></i>
+    <div class='ms-3'>
+      <p class='mb-2'>Lợi nhuận tháng</p>
+      <h6 class='mb-0'>". currency_format1($this->getMonthlyProfit())."</h6>
+    </div>
+  </div>
+  </div>";
+  $display .=  "<div class='col-sm-6 col-xl-3'>
+  <div class='bg-light rounded d-flex align-items-center justify-content-between p-4'>
+    <i class='fa fa-chart-pie fa-3x text-primary'></i>
+    <div class='ms-3'>
+      <p class='mb-2'>Tổng lợi nhuận</p>
+      <h6 class='mb-0'>". currency_format1($this->getTotalProfit()) ."</h6>
+    </div>
+  </div>
+</div>
+</div>";
+
+$display .= "
+
+";
+  
+
+    // // Lấy lợi nhuận tháng hiện tại
+  
+
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->execute();
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // $NhapMonth = $result['total'];
+
+    // $query = "
+    // SELECT SUM(order_total) AS total
+    // FROM `order`
+    // WHERE MONTH(date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE())";
+
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->execute();
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // $DTMonth = $result['total'];
+
+    // $LNMonth = $DTMonth - $NhapMonth;
+    // $LNMonth = currency_format($LNMonth);
+
+    // // Lấy tổng lợi nhuận
+    // $query = "
+    // SELECT SUM(total) AS total
+    // FROM `invoice`";
+
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->execute();
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // $totalNhap = $result['total'];
+    // $totalLN = $totalDT - $totalNhap;
+    // $totalLN = currency_format($totalLN);
+
+    // // Lấy doanh thu từng tháng
+    // $DTMonthArr = array();
+
+    // $month = 1;
+    // for($month = 1; $month <=12;$month++){
+    //   $query = "
+    //   SELECT SUM(order_total) AS total
+    //   FROM `order`
+    //   WHERE MONTH(date) = {$month} AND YEAR(date) = YEAR(CURDATE())";
+  
+    //   $stmt = $this->conn->prepare($query);
+    //   $stmt->execute();
+    //   $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+    //   $tempMonth = $result['total'];
+    //   $tempMonth = currency_format($tempMonth);
+
+    //   $DTMonthArr[$month] = $tempMonth;
+    // }
+    
+    // // Lấy lợi nhuận từng tháng
+    // $LNMonthArr = array();
+
+    // $month = 1;
+    // for($month = 1; $month <=12;$month++){
+    //   $query = "
+    //   SELECT SUM(total) AS total
+    //   FROM `invoice`
+    //   WHERE MONTH(create_date) = {$month} AND YEAR(create_date) = YEAR(CURDATE())";
+  
+    //   $stmt = $this->conn->prepare($query);
+    //   $stmt->execute();
+    //   $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+    //   $tempMonth = $result['total'];
+    //   $tempMonth = $DTMonthArr[$month] - $tempMonth;
+    //   $tempMonth = currency_format($tempMonth);
+
+    //   $LNMonthArr[$month] = $tempMonth;
+    // }
+
+    // $NewResult['TongDT'] = $totalDT;
+    // $NewResult['LoiNhuanThang'] =  $LNMonth;
+    // $NewResult['TongLoiNhuan'] = $totalLN;
+    // $NewResult['DTThang'] = $DTMonthArr;
+    // $NewResult['LNThang'] = $LNMonthArr;
+
+ echo $display;
+  }
+    function chart ()
+    {
+      
+    }
+
+function getDailyRevenue(){
+  $query = "";
+    // Lấy doanh thu ngày
+    $query = "
+    SELECT SUM(order_total) AS total
+    FROM `order`
+    WHERE DATE(date) = CURDATE()
+    GROUP BY date";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    if($result)
+    {
+      $tongtien=$result->total;
+    }else{
+      $tongtien = 0;
+  }
+
+ return $tongtien;
+}
+function getYearRenvenue(){
+    //Lấy tổng doanh thu
+    $query = "
+    SELECT SUM(order_total) AS total
+    FROM `order`
+    WHERE YEAR(date) = YEAR(CURDATE())
+  ";
+  $stmt = $this->conn->prepare($query);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_OBJ);
+  if($result)
+  {
+    $tongtien=$result->total;
+  }else{
+    $tongtien = 0;
+}
+
+return $tongtien;
+}
+function getMonthlyProfit(){
+  $query = "
+  SELECT 
+  COALESCE((SELECT SUM(order_total) FROM `order` WHERE MONTH(date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE())), 0) 
+  - 
+  COALESCE((SELECT SUM(total) FROM `invoice` WHERE MONTH(create_date) = MONTH(CURDATE()) AND YEAR(create_date) = YEAR(CURDATE())), 0) 
+  AS profit";
+  $stmt = $this->conn->prepare($query);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_OBJ);
+  if($result)
+  {
+    $tongtien=$result->profit;
+  }else{
+    $tongtien = 0;
+}
+ return $tongtien;
+}
+
+function getTotalProfit()
+{
+  $query = "SELECT 
+  COALESCE((SELECT SUM(order_total) FROM `order` ), 0) 
+  - 
+  COALESCE((SELECT SUM(total) FROM `invoice`), 0) 
+  AS profit";
+
+ $stmt = $this->conn->prepare($query);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_OBJ);
+  if($result)
+  {
+    $tongtien=$result->profit;
+  }else{
+    $tongtien = 0;
+}
+ return $tongtien;
+
+}
   // lấy toàn bộ bản ghi thuộc bảng sản phẩm (có phân trang)
   function getAll()
   {
@@ -72,8 +289,6 @@ class AdminProductModel extends Database
       </table>
     </div>
     ";
-
-
     // tổng số bản ghi 
     $total_rows = $this->getSum();
     // tổng số trang
@@ -159,7 +374,7 @@ class AdminProductModel extends Database
     $products = $stmt->fetchAll(PDO::FETCH_OBJ);
     $display .= "<option selected value='All'>All</option>";
     foreach ($products as $product) {
-      $display .= "<option id='{$product->name}'  value='{$product->id}'>{$product->name}</option>";
+      $display = "<option value='{$product->id}'>{$product->name}</option>";
     }
     echo $display;
   }
