@@ -2,6 +2,136 @@
 class AdminProductModel extends Database
 {
 
+  function getStats($POST){
+    if(!isset($POST['page'])){
+      return;
+    }
+
+    $query = "";
+
+    // Lấy doanh thu ngày
+    $query = "
+    SELECT SUM(order_total) AS total
+    FROM `order`
+    WHERE date = CURDATE()
+    GROUP BY date";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+    // show($result->total);
+    if($result->total == null){
+      $DTDay = 0;
+    } else {
+      $DTDay = currency_format($result->total);
+    }
+    
+    
+    // // Lấy tổng doanh thu
+    // $query = "
+    // SELECT SUM(order_total) AS total
+    // FROM `order`
+    // GROUP BY date";
+
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->execute();
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // $totalDT = $result['total'];
+    // if($totalDT == null){
+    //   $totalDT = 0;
+    // }
+    // $totalDT = currency_format($totalDT);
+
+    // // Lấy lợi nhuận tháng hiện tại
+    // $query = "
+    // SELECT SUM(total) AS total
+    // FROM `invoice`
+    // WHERE MONTH(create_date) = MONTH(CURDATE()) AND YEAR(create_date) = YEAR(CURDATE())";
+
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->execute();
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // $NhapMonth = $result['total'];
+
+    // $query = "
+    // SELECT SUM(order_total) AS total
+    // FROM `order`
+    // WHERE MONTH(date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE())";
+
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->execute();
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // $DTMonth = $result['total'];
+
+    // $LNMonth = $DTMonth - $NhapMonth;
+    // $LNMonth = currency_format($LNMonth);
+
+    // // Lấy tổng lợi nhuận
+    // $query = "
+    // SELECT SUM(total) AS total
+    // FROM `invoice`";
+
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->execute();
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // $totalNhap = $result['total'];
+    // $totalLN = $totalDT - $totalNhap;
+    // $totalLN = currency_format($totalLN);
+
+    // // Lấy doanh thu từng tháng
+    // $DTMonthArr = array();
+
+    // $month = 1;
+    // for($month = 1; $month <=12;$month++){
+    //   $query = "
+    //   SELECT SUM(order_total) AS total
+    //   FROM `order`
+    //   WHERE MONTH(date) = {$month} AND YEAR(date) = YEAR(CURDATE())";
+  
+    //   $stmt = $this->conn->prepare($query);
+    //   $stmt->execute();
+    //   $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+    //   $tempMonth = $result['total'];
+    //   $tempMonth = currency_format($tempMonth);
+
+    //   $DTMonthArr[$month] = $tempMonth;
+    // }
+    
+    // // Lấy lợi nhuận từng tháng
+    // $LNMonthArr = array();
+
+    // $month = 1;
+    // for($month = 1; $month <=12;$month++){
+    //   $query = "
+    //   SELECT SUM(total) AS total
+    //   FROM `invoice`
+    //   WHERE MONTH(create_date) = {$month} AND YEAR(create_date) = YEAR(CURDATE())";
+  
+    //   $stmt = $this->conn->prepare($query);
+    //   $stmt->execute();
+    //   $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+    //   $tempMonth = $result['total'];
+    //   $tempMonth = $DTMonthArr[$month] - $tempMonth;
+    //   $tempMonth = currency_format($tempMonth);
+
+    //   $LNMonthArr[$month] = $tempMonth;
+    // }
+
+    // $NewResult['TongDT'] = $totalDT;
+    // $NewResult['LoiNhuanThang'] =  $LNMonth;
+    // $NewResult['TongLoiNhuan'] = $totalLN;
+    // $NewResult['DTThang'] = $DTMonthArr;
+    // $NewResult['LNThang'] = $LNMonthArr;
+
+
+  }
+
   // lấy toàn bộ bản ghi thuộc bảng sản phẩm (có phân trang)
   function getAll()
   {

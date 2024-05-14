@@ -17,4 +17,11 @@ class AdminHome extends Controller
 
 
   }
+
+  function getStats(){
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $home = $this->model("backend/AdminProductModel");
+      $home->getStats($_POST);
+    }
+  }
 }
