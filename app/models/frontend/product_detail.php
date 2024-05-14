@@ -192,7 +192,8 @@ class product_detail extends Database
     $products = $data['products'];
 
     foreach ($products as $product) {
-      $price = currency_format($product->min_price);
+      $price = $product->min_price + (($product->min_price * 10) / 100);
+      $price = currency_format($price);
       $image = $product->min_image; // Assuming image path is stored in min_image
       $display .= "
         <div class='col-lg-4 col-md-6 col-sm-12 pb-1 mb-2'>

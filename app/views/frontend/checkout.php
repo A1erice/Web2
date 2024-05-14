@@ -71,7 +71,7 @@
           <?php
           $total = 0;
           foreach ($data['cart_data'] as $cart_item) {
-            $subtotal = $cart_item->price * $cart_item->quantity;
+            $subtotal = ($cart_item->price * 1.1) * $cart_item->quantity;
             $total += $subtotal;
             $subtotal = currency_format($subtotal);
             echo "
@@ -185,13 +185,6 @@
       $('#name_error').text("");
       isValid = true;
     }
-    if (address.trim() == "") {
-      $('#address_error').text("Vui lòng nhập địa chỉ giao hàng");
-      isValid = false;
-    } else {
-      $('#address_error').text("");
-      isValid = true;
-    }
 
     if (province == 0) {
       $('#province_error').text("Vui lòng chọn tỉnh / thành phố");
@@ -199,24 +192,31 @@
     } else {
       $('#province_error').text('');
       isValid = true;
+      if (district == 0) {
+        $('#district_error').text("Vui lòng chọn quận huyện");
+        isValid = false;
+      } else {
+        $('#district_error').text('');
+        isValid = true;
+        if (ward == 0) {
+          $('#ward_error').text("Vui lòng chọn phường xã");
+          isValid = false;
+        } else {
+          $('#ward_error').text('');
+          isValid = true;
 
+        }
+      }
+      if (address.trim() == "") {
+        $('#address_error').text("Vui lòng nhập địa chỉ giao hàng");
+        isValid = false;
+      } else {
+        $('#address_error').text("");
+        isValid = true;
+      }
     }
 
-    if (district == 0) {
-      $('#district_error').text("Vui lòng chọn quận huyện");
-      isValid = false;
-    } else {
-      $('#district_error').text('');
-      isValid = true;
 
-    }
-    if (ward == 0) {
-      $('#ward_error').text("Vui lòng chọn phường xã");
-      isValid = false;
-      isValid = true;
-    } else {
-      $('#ward_error').text('');
-    }
 
     if (isValid) {
       console.log("User id: " + user_id);

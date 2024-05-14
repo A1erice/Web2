@@ -261,6 +261,8 @@
           icon: "success",
         });
         $('#addProductDetail_Modal').modal("hide");
+        var product_id = <?= $data['product']->id ?>;
+        getAllProductDetailByProductID(product_id);
 
       // Hiển thị thông tin chi tiết sản phẩm và giá tiền trong mảng productDetails
       console.log(productDetails);

@@ -21,7 +21,7 @@ class AdminUserModel extends Database
 
   function check_role($role_id)
   {
-    $query = "SELECT DISTINCT m.name AS module_name
+    $query = "SELECT DISTINCT m.id AS module_id, m.name AS module_name
       FROM module m
       JOIN role_detail rd ON rd.module_id = m.id
       JOIN role r ON r.id = rd.role_id

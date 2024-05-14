@@ -88,7 +88,8 @@ class CartModel extends Database
       ";
       $total = 0;
       foreach ($result as $row) {
-        $price = $row['price'] * $row['quantity'];
+        $price = $row['price'] + (($row['price'] * 10 / 100));
+        $price = $price * $row['quantity'];
         $total += $price;
         $price = currency_format($price);
         // $price = currency_format($price);

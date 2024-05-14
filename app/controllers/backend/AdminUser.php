@@ -7,6 +7,8 @@ class AdminUser extends Controller
     $user_data = $user->check_login();
     $data['modules'] = $user->check_role($user_data->role_id);
 
+    $module_name = " Người Dùng " ?: (in_array("Người Dùng", array_column($data['modules'], 'module_name')) ? "Người Dùng" : "");
+    $role_detail = $this->model("backend/AdminRoleDetailModel");
     if (!is_null($user_data)) {
       $data['page_title'] = "Admin - User";
       $data['user_data'] = $user_data;
