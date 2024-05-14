@@ -12,6 +12,14 @@ function currency_format($number, $suffix = 'đ')
     return number_format($number, 0, ',', '.') . "{$suffix}";
   }
 }
+function currency_format1($number, $suffix = 'đ')
+{
+  if (!empty($number)) {
+    return number_format($number, 0, ',', '.') . "{$suffix}";
+  }else {
+    return"0đ";
+  }
+}
 
 function check_error()
 {

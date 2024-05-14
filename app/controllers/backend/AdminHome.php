@@ -3,7 +3,9 @@
 class AdminHome extends Controller
 {
   function index()
-  {
+  { $chart = $this->model("backend/AdminProductModel");
+    $chart_year = $chart->getYear();
+    $data['chart'] = $chart_year;
     $user = $this->model("backend/AdminUserModel");
     $user_data = $user->check_login();
     // $data['modules'] = $user->check_role($user_data->role_id);
@@ -23,4 +25,5 @@ class AdminHome extends Controller
       $home->getStats($_POST);
     }
   }
+
 }
