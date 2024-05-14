@@ -83,7 +83,6 @@
       const existingRow = tableBody.find(`tr[data-product-id="${selectedProductDetailId}"]`);
 
       if (!existingRow.length) {
-        // No existing row with the ID, proceed with AJAX request
         $.ajax({
           url: "<?= ROOT ?>AdminProductDetail/getProductDetailByID",
           type: "POST", // Assuming POST request

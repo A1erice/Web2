@@ -97,7 +97,7 @@ class AdminSizeModel extends Database
       }
       $display .= "<li class='page-item {$active_class} '><a onclick='changePageFetch($i)' id = '$i' class='page-link' href='#'>$i</a></li>";
     }
-    
+
     $next_active = "";
     if ($page == $total_pages) {
       $next_active = "disabled";
@@ -136,6 +136,9 @@ class AdminSizeModel extends Database
     $query = "SELECT * FROM size ORDER BY id";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
+    $display .= "
+    <option value='0'>Chọn kích cỡ</option>
+    ";
     $sizes = $stmt->fetchAll(PDO::FETCH_OBJ);
     foreach ($sizes as $size) {
       $display .= "

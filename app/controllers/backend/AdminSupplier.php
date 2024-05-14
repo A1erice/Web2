@@ -71,6 +71,13 @@ class AdminSupplier extends Controller
       $supplier->checkDuplicate($_POST);
     }
   }
+  function checkDuplicateUpdate()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $supplier = $this->model("backend/AdminSupplierModel");
+      $supplier->checkDuplicateUpdate($_POST);
+    }
+  }
 
   function delete()
   {
@@ -86,6 +93,14 @@ class AdminSupplier extends Controller
 
       $supplier = $this->model("backend/AdminSupplierModel");
       $supplier->getByID($_POST['id']);
+    }
+  }
+
+  function insertSupplierAddress()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      $address = $this->model("backend/AdminAddressModel");
+      $address->insertSupplierAddress($_POST);
     }
   }
 }

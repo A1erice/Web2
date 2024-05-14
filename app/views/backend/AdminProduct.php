@@ -12,7 +12,7 @@
         </form>
 
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h6 class="mb-0">Danh Sách Sản Phẩm</h6>
+          <h5 class="mb-0 fw-bold text-primary">DANH SÁCH SẢN PHẨM</h5>
           <a class="btn btn-primary" href="<?= ROOT ?>AdminAddProduct"><i class="fa-solid fa-circle-plus"></i>
             Thêm Sản Phẩm
           </a>

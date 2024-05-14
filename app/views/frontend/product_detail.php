@@ -5,7 +5,8 @@
   <div class="row px-xl-5">
     <div class="col-lg-5 pb-5">
       <div class='w-100'>
-        <img id="productDetail_img" class='w-100' src="<?= $data['product_detail'][0]->image ?>" alt="">
+        <img id="productDetail_img" class='w-100' style="height: 500px; width : 500px; object-fit:cover;"
+          src="<?php echo ASSETS . "img/" . $data['product_detail'][0]->image ?>" alt="">
       </div>
     </div>
 
@@ -155,7 +156,7 @@
       data: { product_id: product_id, color_id: parts[0] },
       success: function (data, status) {
         var productDetail = JSON.parse(data);
-        $('#productDetail_img').attr('src', productDetail.image); // Replace "image_url" with actual property name
+        $('#productDetail_img').attr('src', "<?= ASSETS ?>" + "img/" + productDetail.image); // Replace "image_url" with actual property name
       }
     });
 

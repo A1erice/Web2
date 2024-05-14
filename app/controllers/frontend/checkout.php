@@ -31,7 +31,6 @@ class Checkout extends Controller
         $product_detail_id = $item['product_detail_id'];
         $quantity = $item['quantity'];
         $price = $item['price'];
-        echo $product_detail_id . " " . $quantity . " " . $price;
         $subtotal = $price * $quantity;
         $order_detail->insert($order_id->id, $product_detail_id, $quantity, $subtotal);
       }

@@ -70,6 +70,26 @@ class AdminAddressModel extends Database
     }
   }
 
+
+  // thêm mới địa chỉ nhà cung cấp
+  function insertSupplierAddress($POST)
+  {
+    $address = $POST['address'];
+    $ward_id = $POST['ward'];
+    $district_id = $POST['district'];
+    $province_id = $POST['province'];
+    $address_id = $this->checkDuplicate($address, $ward_id, $district_id, $province_id);
+    if ($address_id == -1) {
+      $query = 'INSERT INTO `address` (street_name, ward_id, district_id, province_id) VALUES (?, ?, ?, ?)';
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$address, $ward_id, $district_id, $province_id]);
+      $latestAddress_id = $this->getLatestAddress();
+      echo $latestAddress_id;
+    } else {
+      echo $address_id;
+    }
+  }
+
   function update($POST)
   {
     $address = $POST['address'];

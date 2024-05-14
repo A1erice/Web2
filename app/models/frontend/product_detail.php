@@ -198,7 +198,7 @@ class product_detail extends Database
         <div class='col-lg-4 col-md-6 col-sm-12 pb-1 mb-2'>
           <div class='single-product border'>
             <div class='product-img w-100'>
-              <img class='w-100 h-100 object-fit-cover' src='{$image}'
+              <img class='w-100 h-100 object-fit-cover' src='" . ASSETS . "img/{$image}'
                 alt=''>
             </div>
             <div class='product-details p-2 w-100'>

@@ -100,7 +100,7 @@ class AdminInvoiceModel extends Database
         $display .= "
           <tr>
             <td>{$row->productDetail_id}</td>
-            <td scope='col'><img src ='{$row->image}' style='width:60px; height:60px; object-fit: cover;'></td>
+            <td scope='col'><img src ='" . ASSETS . "img/{$row->image}' style='width:60px; height:60px; object-fit: cover;'></td>
             <td>{$row->product_name}</td>
             <td>{$row->color_name}</td>  
             <td>{$row->size_name}</td>   
@@ -122,7 +122,7 @@ class AdminInvoiceModel extends Database
     $display .= "
       <div class='modal-footer d-flex justify-content-between align-items-center'>
         <p class=''>
-          Tổng Tiền: <span class='text-danger'>" . currency_format($invoice->total) . "</span>
+          Tổng Tiền: <span class='text-danger fw-bold'>" . currency_format($invoice->total) . "</span>
         </p>
         <button type='button' class='btn btn-danger' data-bs-dismiss='modal'>Thoát</button>
       </div>
