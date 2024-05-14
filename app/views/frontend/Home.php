@@ -1,219 +1,227 @@
 <?php $this->view("include/header", $data) ?>
 <!-- MAIN CONTENT -->
-<main class="main container-fluid p-0">
-  <!-- slider/carousel -->
-  <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-        aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active" data-interval="1000">
-        <div class="overlay-image" style="background-image: url('<?php echo ASSETS ?>img/banner1.avif')">
-        </div>
-        <div class="container">
-          <h2>It's Never Too Late</h2>
-          <p class="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit officia numquam quam molestias.
-          </p>
-          <a href="#" class="btn btn-primary">Shop now</a>
-        </div>
-      </div>
-
-      <div class="carousel-item" data-interval="500">
-        <div class="overlay-image" style="background-image: url('<?php echo ASSETS ?>img/banner2.avif')">
-        </div>
-        <div class="container">
-          <h2>New Collection Sneakers</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit officia numquam quam molestias.
-          </p>
-          <a href="#" class="btn btn-primary">Shop now</a>
-        </div>
-      </div>
-
-      <div class="carousel-item" data-interval="500">
-        <div class="overlay-image" style="background-image: url('<?php echo ASSETS ?>img/banner3.avif')">
-        </div>
-        <div class="container">
-          <h2>Find Out Now</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit officia numquam quam molestias.
-          </p>
-          <a href="#" class="btn btn-primary">Shop now</a>
-        </div>
-      </div>
-
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
+<style>
+  html {
+    overflow: hidden;
+  }
+</style>
+<main class="main container-fluid p-0 home">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-
-    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
   </div>
-  <!-- end slide carousel -->
-
-
-
-  <!-- FEATURE PRODUCT SECTION -->
-  <div class="product-section container-fluid p-5 bg-body-secondary">
-    <h3 class="text-primary text-center mb-5">BEST SELLERS</h3>
-
-    <div class="col-lg-12 col-md-12">
+</nav>
+  <section class="main-section" id="section1" style="background-image: url('<?= ASSETS ?>img/banner_1.avif');">
+    <div class="container">
       <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/1.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
+        <div class="col-lg-12">
+          <div class="content">
+            <p>Welcome to</p>
+            <h1>SickShoeShop</h1>
+            <p>The only shop that you can find the sickest shoes!</p>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/2.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/3.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-3"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/4.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/4.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-12 pb-1">
-          <div class="card product-item border-0 mb-4">
-            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-              <img class="img-fluid w-100" src="<?php echo ASSETS ?>img/4.jpg" alt="">
-            </div>
-            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-              <div class="d-flex justify-content-center">
-                <h6>$123.00</h6>
-                <h6 class="text-muted ml-2"><del>$123.00</del></h6>
-              </div>
-            </div>
-            <div class="card-footer d-flex justify-content-between bg-light border">
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View
-                Detail</a>
-              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add
-                To Cart</a>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-
-    </div>
-
-  </div>
-  <!-- END FEATURE PRODUCT SECTION -->
-
-
-  <!-- NEWLESTER -->
-  <div class="newlester-section d-md-flex flex-md-row-reverse gap-5 align-item-center container p-5">
-    <div class="about-us_img w-100">
-      <img class="img w-100" src="<?php echo ASSETS ?>img/newletter.avif" alt="">
-    </div>
-    <div class="about-us_content p-5 w-100 text-center">
-      <h3 class="text-primary fw-bold">Subcriber to our Newsletter</h3>
-      <p>
-        Signup for our weekly newsletter to get the latest news, updates and amazing offers deliverd directly in your
-        inbox
-      </p>
-      <div class="">
-        <label for="exampleFormControlInput1" class="form-label text-left">Email address</label>
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
       </div>
     </div>
-  </div>
-  <!-- END NEWSLETTER -->
+  </section>
+  <section class="quote-section" id="section2">
+    <div class="container col-lg-8">
+      <div class="row">
+        <div class="content a">
+          <h3>"Chúng tôi chuyên bán các loại giày khác nhau với đủ loại màu sắc</h3>
+        </div>
+        <div class="content b">
+          <h3>và kích thước, bao gồm cả giày nam và nữ!"</h3>
+        </div>
+      </div>
+    </div>
+  <!-- ảnh giới thiệu -->
+    <div class="d-flex flex-md-column flex-sm-column flex-lg-row  justify-content-center m-3 gap-2 mb-5">
+      <img class="col-lg-6 col-md-12 col-sm-12 object-fit-cover" src="<?= ASSETS ?>img/subbanner3.avif" alt="">
+      <img class="col-lg-6 col-md-12 col-sm-12 object-fit-cover hide-image" src="<?= ASSETS ?>img/subbanner4.avif" alt="">
+    </div>
+  </section>
+  <!-- hết ảnh giới thiệu-->
 
+  <section class="new-products"  id="section3">
+    <!-- Hàng mới về -->
+    <div class="container mb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+          <div class="section-title">
+            <h2 class='text-primary fw-bold mb-4 mt-3'>HÀNG MỚI VỀ</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- single product -->
+        <div class="col-lg-3 col-md-6">
+          <div class="single-product border">
+            <div class="product-img w-100">
+              <img class="w-100 h-100 object-fit-cover" src="http://localhost/EShop_MVC/public/assets//img/air-force-1-07-shoes-WrLlWX (1).png" alt="">
+            </div>
+            <div class="product-details p-2 w-100">
+              <p class='text-primary m-0 p-0'>NIKE</p>
+              <a href="http://localhost/EShop_MVC/shop/showProductDetail/71" class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Nike Air Force 1 Shadow</a>
+              <p class='text-seccondary m-0 p-0'>Giày nam</p>
+              <div class="price">
+                <h6 class="text-danger fw-bold">2.929.000đ</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="single-product border">
+            <div class="product-img w-100">
+              <img class="w-100 h-100 object-fit-cover" src="http://localhost/EShop_MVC/public/assets//img/air-force-1-07-shoes-WrLlWX.png" alt="">            </div>
+            <div class="product-details p-2 w-100">
+              <p class='text-primary m-0 p-0'>NIKE</p>
+              <a href="http://localhost/EShop_MVC/shop/showProductDetail/46" class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Nike Air Force 1 Shadow</a>              <p class='text-seccondary m-0 p-0'>Giày nam</p>
+              <div class="price">
+                <h6 class="text-danger fw-bold">600.000đ</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="single-product border">
+            <div class="product-img w-100">
+              <img class="w-100 h-100 object-fit-cover" src="http://localhost/EShop_MVC/public/assets//img/air-jordan-1-low-se-shoes-hgcLbC.jpeg" alt="">            </div>
+            <div class="product-details p-2 w-100">
+              <p class='text-primary m-0 p-0'>NIKE</p>
+              <a href="http://localhost/EShop_MVC/shop/showProductDetail/50" class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Air Jordan 1 Low SE</a>              <p class='text-seccondary m-0 p-0'>Giày nam</p>
+              <div class="price">
+                <h6 class="text-danger fw-bold">3.519.000đ</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="single-product border">
+            <div class="product-img w-100">
+              <img class="w-100 h-100 object-fit-cover" src="http://localhost/EShop_MVC/public/assets//img/air-jordan-1-low-g-golf-shoes-8bKbqs.jpeg" alt="">            </div>
+            <div class=" product-details p-2 w-100">
+              <p class='text-primary m-0 p-0'>NIKE</p>
+              <a href="http://localhost/EShop_MVC/shop/showProductDetail/58" class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Air Jordan 1 Low G</a>              <p class='text-seccondary m-0 p-0'>Giày nam</p>
+              <div class="price">
+                <h6 class="text-danger fw-bold">4.109.000đ</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- Hàng mới về -->
+  </section>
+  
+
+  <section class="best-products"  id="section4">
+    <div class="container mb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+          <div class="section-title">
+            <h2 class='text-primary fw-bold mb-4 mt-3'>HÀNG BÁN CHẠY</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- single product -->
+        <div class="col-lg-3 col-md-6">
+          <div class="single-product border">
+            <div class="product-img w-100">
+              <img class="w-100 h-100 object-fit-cover" src="http://localhost/EShop_MVC/public/assets//img/air-force-1-07-shoes-WrLlWX (1).png" alt="">
+            </div>
+            <div class="product-details p-2 w-100">
+              <p class='text-primary m-0 p-0'>NIKE</p>
+              <a href="http://localhost/EShop_MVC/shop/showProductDetail/71" class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Nike Air Force 1 Shadow</a>
+              <p class='text-seccondary m-0 p-0'>Giày nam</p>
+              <div class="price">
+                <h6 class="text-danger fw-bold">2.929.000đ</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="single-product border">
+            <div class="product-img w-100">
+              <img class="w-100 h-100 object-fit-cover" src="http://localhost/EShop_MVC/public/assets//img/air-force-1-07-shoes-WrLlWX.png" alt="">            </div>
+            <div class="product-details p-2 w-100">
+              <p class='text-primary m-0 p-0'>NIKE</p>
+              <a href="http://localhost/EShop_MVC/shop/showProductDetail/46" class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Nike Air Force 1 Shadow</a>              <p class='text-seccondary m-0 p-0'>Giày nam</p>
+              <div class="price">
+                <h6 class="text-danger fw-bold">600.000đ</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="single-product border">
+            <div class="product-img w-100">
+              <img class="w-100 h-100 object-fit-cover" src="http://localhost/EShop_MVC/public/assets//img/air-jordan-1-low-se-shoes-hgcLbC.jpeg" alt="">            </div>
+            <div class="product-details p-2 w-100">
+              <p class='text-primary m-0 p-0'>NIKE</p>
+              <a href="http://localhost/EShop_MVC/shop/showProductDetail/50" class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Air Jordan 1 Low SE</a>              <p class='text-seccondary m-0 p-0'>Giày nam</p>
+              <div class="price">
+                <h6 class="text-danger fw-bold">3.519.000đ</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="single-product border">
+            <div class="product-img w-100">
+              <img class="w-100 h-100 object-fit-cover" src="http://localhost/EShop_MVC/public/assets//img/air-jordan-1-low-g-golf-shoes-8bKbqs.jpeg" alt="">            </div>
+            <div class=" product-details p-2 w-100">
+              <p class='text-primary m-0 p-0'>NIKE</p>
+              <a href="http://localhost/EShop_MVC/shop/showProductDetail/58" class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Air Jordan 1 Low G</a>              <p class='text-seccondary m-0 p-0'>Giày nam</p>
+              <div class="price">
+                <h6 class="text-danger fw-bold">4.109.000đ</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- Hàng mới về -->
+  </section>
+  <section class="footer"  id="section5">
+    <?php $this->view("include/footer") ?>
+  </section>
 </main>
 <!-- END MAIN -->
 
-<?php $this->view("include/footer") ?>
+
+

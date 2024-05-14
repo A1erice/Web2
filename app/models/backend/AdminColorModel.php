@@ -140,6 +140,9 @@ class AdminColorModel extends Database
     $query = "SELECT * FROM color ORDER BY id";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
+    $display .= "
+    <option value='0'>Chọn màu sắc</option>
+    ";
     $colors = $stmt->fetchAll(PDO::FETCH_OBJ);
     foreach ($colors as $color) {
       $display .= "

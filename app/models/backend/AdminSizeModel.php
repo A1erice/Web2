@@ -53,14 +53,11 @@ class AdminSizeModel extends Database
         </tr>
       ";
     }
-
     $display .= "
         </tbody>
       </table>
     </div>
     ";
-
-
     // tổng số bản ghi 
     $total_rows = $this->getSum();
     // tổng số trang
@@ -139,6 +136,9 @@ class AdminSizeModel extends Database
     $query = "SELECT * FROM size ORDER BY id";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
+    $display .= "
+    <option value='0'>Chọn kích cỡ</option>
+    ";
     $sizes = $stmt->fetchAll(PDO::FETCH_OBJ);
     foreach ($sizes as $size) {
       $display .= "

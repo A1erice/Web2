@@ -77,73 +77,10 @@
 <script src="<?php echo ASSETS ?>js/bootstrap.bundle.js"></script>
 <script>
 
+
+
   $(document).ready(function () {
 
-    $('#login_btn').click(function () {
-      // Lấy dữ liệu từ form đăng nhập
-      var email = $('#email_login').val();
-      var password = $('#password_login').val();
-
-      // Hàm kiểm tra email hợp lệ
-      function isValidEmail(email) {
-        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(email);
-      }
-
-      // Kiểm tra đầu vào form đăng nhập
-      var hasError = false;
-      if (email.trim() === '') {
-        $('#emailError_login').text('Địa chỉ email không được để trống');
-        hasError = true;
-      } else if (!isValidEmail(email)) {
-        $('#emailError_login').text('Địa chỉ email không hợp lệ');
-        hasError = true;
-      } else {
-        $('#emailError_login').text('');
-      }
-
-      if (password.trim() === '') {
-        $('#passwordError_login').text('Mật khẩu không được để trống');
-        hasError = true;
-      } else {
-        $('#passwordError_login').text('');
-      }
-
-      // Nếu không có lỗi, gửi dữ liệu đăng nhập qua AJAX
-      if (!hasError) {
-        $.ajax({
-          url: '<?= ROOT ?>index.php?url=login',
-          type: 'post',
-          data: {
-            email: email,
-            password: password
-          },
-          success: function (data) {
-            if (data == 'Đăng nhập thành công') {
-              Swal.fire({
-                icon: "success",
-                title: "",
-                text: data,
-                position: "top",
-                footer: ''
-              }).then((result) => {
-                location.reload();
-              });
-            } else if (data == 'Tài khoản không tồn tại') {
-              Swal.fire({
-                icon: "error",
-                title: "",
-                text: data,
-                position: "top",
-                footer: ''
-              });
-            }
-
-          },
-
-        });
-      }
-    });
 
 
 
@@ -220,7 +157,8 @@
                 title: "",
                 text: data,
                 position: "top",
-                footer: ''
+                footer: '',
+                confirmButtonColor: "#3459e6",
               });
             } else if (data == 'Đăng ký thành công') {
               Swal.fire({
@@ -228,7 +166,8 @@
                 title: "",
                 text: data,
                 position: "top",
-                footer: ''
+                footer: '',
+                confirmButtonColor: "#3459e6",
               }).then((result) => {
                 location.reload();
               });
@@ -251,13 +190,12 @@
       method: "POST",
       data: { action: action },
       success: function (data) {
-        location.reload();
+        window.location.href = "<?= ROOT ?>home";
       }
     });
   }
 
 </script>
-<script src="<?php echo ASSETS ?>js/main.js"></script>
 
 </body>
 

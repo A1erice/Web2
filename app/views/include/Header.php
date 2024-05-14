@@ -16,6 +16,12 @@
   <link rel="stylesheet" href="<?php echo ASSETS ?>css/bootstrap.min.css" />
   <link rel="stylesheet" href="<?php echo ASSETS ?>css/style.css" />
 
+  <!-- gg fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
 
 
   <!-- Icon Font Stylesheet -->
@@ -45,7 +51,7 @@
     <nav class="navbar navbar-expand-lg">
       <div class="container">
         <!-- LOGO -->
-        <a class="navbar-brand fs-4 fw-bold text-primary" href="home">SICKSHOESHOP</a>
+        <a class="navbar-brand fs-4 fw-bold text-primary" href="<?= ROOT ?>Home">SICKSHOESHOP</a>
 
         <!-- Toggle Button -->
         <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="offcanvas"
@@ -66,154 +72,63 @@
           <div class="offcanvas-body d-flex flex-column flex-lg-row">
             <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link  active" aria-current="page" href="home">Home</a>
+                <a class="nav-link " id="home" aria-current="page" href="<?= ROOT ?>home">Trang Chủ</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="<?=ROOT.'shop'?>">Shop</a>
+                <a class="nav-link " id="shop" href="<?= ROOT ?>shop">Sản Phẩm</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="<?=ROOT.'about'?>">About</a>
+                <a class="nav-link " id="about" href="<?= ROOT ?>about">Giới Thiệu</a>
               </li>
               <li class="nav-item mx-auto mx-lg-2">
-                <a class="nav-link " href="<?=ROOT.'contact'?>">Contact</a>
+                <a class="nav-link " id="contact" href="<?= ROOT ?>contact">Liên Hệ</a>
               </li>
             </ul>
+            <script>
+              // Assuming you have a way to access the website title (e.g., document.title)
+              const title = document.title.toLowerCase();  // Convert title to lowercase for case-insensitive matching
+
+              const navLinks = document.querySelectorAll('.nav-link');
+
+              navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const targetPart = href.split('/').pop().toLowerCase();  // Extract the last part of the URL (assuming the page name is there)
+
+                if (title.includes(targetPart)) {
+                  link.classList.add('active');
+                }
+              });
+            </script>
             <!-- Login / Sign up -->
             <div class="d-flex flex-column flex-lg-row justify-content-center align-items-center gap-3">
               <?php if (isset($data['user_data'])) {
                 echo "                
                 <div class='nav-item dropdown'>
-                  <a href='#' class='dropdown-toggle btn btn-light text-dark' data-bs-toggle='dropdown'>
+                  <a href='#' class='nav-link dropdown-toggle' data-bs-toggle='dropdown'>
                   <i class='fa-solid fa-circle-user'></i>
-                    <span class='d-none d-lg-inline-flex'>
+                    <span class='d-flex align-items-center gap-2 d-lg-inline-flex'>
                       " . $data['user_data']->username . "
                     </span>
                   </a>
                   <div class='dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0'>
-                    <a href='profile' class='dropdown-item'>My Profile</a>
-                    <a href='order' class='dropdown-item'>My Order</a>
-                    <a id='logout_btn' onclick='logout()' class='dropdown-item'>Log Out</a>
+                    <a href='" . ROOT . "profile' class='dropdown-item'> <i class='fa-solid fa-circle-info'></i> Thông tin</a>
+                    <a href='" . ROOT . "cart' class='dropdown-item'> <i class='fa-solid fa-cart-shopping'></i> Giỏ hàng</a>
+                    <a href='" . ROOT . "order' class='dropdown-item'><i class='fa-solid fa-receipt'></i> Đơn hàng</a>
+                  ";
+
+                if ($data['user_data']->role_id != 5) {
+                  echo "<a href='" . ROOT . "AdminHome' class='dropdown-item'> <i class='fa-solid fa-gear'></i> Quản trị</a>";
+                }
+                echo "
+                    <a id='logout_btn' onclick='logout()' class='dropdown-item'> <i class='fa-solid fa-right-from-bracket'></i> Đăng xuất</a>
                   </div>
-              </div>
-              <a>
-              <i class='fa-solid fa-cart-shopping'></i>
-               Cart
-              </a>";
+                </div>";
               } else {
-                echo "<a class='text-decoration-none' href='' data-bs-toggle='modal' data-bs-target='#login_modal'>Login</a>
-                <a href='' class='text-white text-decoration-none px-4 py-2 bg-primary rounded-4' data-bs-toggle='modal' data-bs-target='#register_modal'>Sign Up</a>";
+                echo "
+                <a class='text-decoration-none' href='" . ROOT . "login'>Đăng Nhập</a>
+                <a href='" . ROOT . "register' class='text-white text-decoration-none px-4 py-2 bg-primary rounded-4'>Đăng Ký</a>";
               }
               ?>
-
-              <!-- login Modal -->
-              <div class="modal fade" id="login_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Đăng Nhập</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form action="" method="post">
-                        <div class="input-group mb-3">
-                          <div class="input-group">
-                            <span class="input-group-text">
-                              <i class="fa-solid fa-envelope"></i>
-                            </span>
-                            <input id="email_login" type="email" class="form-control" name="email" value=""
-                              placeholder="Email">
-                          </div>
-                          <span class="text-danger" name="" id="emailError_login">
-                        </div>
-                        <div class="input-group mb-3">
-                          <div class="input-group">
-                            <span class="input-group-text">
-                              <i class="fa-solid fa-lock"></i>
-                            </span>
-                            <input id="password_login" type="password" class="form-control" name="password"
-                              placeholder="Password">
-                          </div>
-                          <span class="text-danger" id="passwordError_login"></span>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                      <button id="login_btn" type="button" class="btn btn-primary">Đăng Nhập</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-
-              <!-- register Modal -->
-              <div class="modal fade" id="register_modal" data-bs-backdrop="static" data-bs-keyboard="false"
-                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Đăng Ký</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form action="" method="post">
-                        <div class="input-group mb-3 d-flex flex-column">
-                          <div class="input-group">
-                            <span class="input-group-text">
-                              <i class="fa-solid fa-user"></i>
-                            </span>
-                            <input type="text" class="form-control" name="username" id="username_register"
-                              value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>" placeholder="Username">
-                          </div>
-                          <span class="text-danger" name="" id="usernameError_register">
-                        </div>
-                        <div class="input-group mb-3 d-flex flex-column">
-                          <div class="input-group">
-                            <span class="input-group-text">
-                              <i class="fa-solid fa-phone"></i>
-                            </span>
-                            <input type="tel" class="form-control" name="phone" id="phone_register"
-                              value="<?= isset($_POST['phone']) ? $_POST['phone'] : '' ?>" placeholder="Phone">
-                          </div>
-                          <span class="text-danger" name="" id="phoneError_register">
-
-                        </div>
-                        <div class="input-group mb-3 d-flex flex-column">
-                          <div class="input-group">
-                            <span class="input-group-text">
-                              <i class="fa-solid fa-envelope"></i>
-                            </span>
-                            <input type="email" class="form-control" name="email" id="email_register"
-                              value="<?= isset($_POST['email']) ? $_POST['email'] : '' ?>" placeholder="Email">
-                          </div>
-                          <span class="text-danger" name="" id="emailError_register">
-
-                        </div>
-
-                        <div class="input-group mb-3 d-flex flex-column">
-                          <div class="input-group">
-                            <span class="input-group-text">
-                              <i class="fa-solid fa-lock"></i>
-                            </span>
-                            <input id="password_register" type="password" class="form-control" name="password_register"
-                              placeholder="Password">
-                          </div>
-                          <span class="text-danger" name="" id="passwordError_register">
-
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                      <button id="register_btn" type="button" class="btn btn-primary">Đăng Ký</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
             </div>
           </div>
         </div>

@@ -10,17 +10,14 @@
     <div class="nav-item dropdown">
       <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
         <?php if (isset($data['user_data']))
-          echo "<img class='rounded-circle me-lg-2' src='{$data['user_data']->img}' alt='' style='width: 40px; height: 40px;'>";
-        ?>
-
-        <?php if (isset($data['user_data']))
-          echo "<span class='d-none d-lg-inline-flex'>" . $data['user_data']->username . "</span>";
+          echo "
+          <img class='rounded-circle me-lg-2' src='" . ASSETS . "img/{$data['user_data']->img}' alt='' style='width: 40px; height: 40px;'>
+          <span class='d-none d-lg-inline-flex'>" . $data['user_data']->username . "</span>";
         ?>
       </a>
       <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-        <a href="#" class="dropdown-item">My Profile</a>
-        <a href="#" class="dropdown-item">Settings</a>
-        <a href="AdminLogout" class="dropdown-item">Log Out</a>
+        <a href="<?= ROOT ?>AdminAddUser/update/<?= $data['user_data']->id ?>" class="dropdown-item">Hồ Sơ</a>
+        <a href="AdminLogout" class="dropdown-item">Đăng xuất</a>
       </div>
     </div>
   </div>

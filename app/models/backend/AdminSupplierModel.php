@@ -23,14 +23,13 @@ class AdminSupplierModel extends Database
     $suppliers = $stmt->fetchAll(PDO::FETCH_OBJ);
     $display = "
     <div class='table-responsive mb-3'>
-    <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
+    <table id='displayDataTable' class='table table-striped text-start align-middle table-bordered table-hover mb-0'>
       <thead>
         <tr class='text-dark'>
-          <th scope='col'>ID</th>
+          <th scope='col'>Mã nhà cung cấp</th>
           <th scope='col'>Tên nhà cung cấp</th>
           <th scope='col'>Số điện thoại</th>
           <th scope='col'>Email</th>
-          <th scope='col'>Địa chỉ</th>
           <th scope='col'>Thao Tác</th>
         </tr>
       </thead>
@@ -45,17 +44,17 @@ class AdminSupplierModel extends Database
             <td>{$supplier->name}</td>
             <td>{$supplier->phone}</td>
             <td>{$supplier->email}</td>
-            <td>{$supplier->address}</td>
             <td>
               <button class='btn btn-sm btn-warning' onclick='get_detail({$supplier->id})'><i class='fa-solid fa-pen-to-square'></i></button>
               <button class='btn btn-sm btn-danger' onclick='delete_supplier({$supplier->id})'><i class='fa-solid fa-trash'></i></button>
+              <button class='btn btn-sm btn-primary' onclick='show_detail({$supplier->id})'><i class='fa-solid fa-eye'></i></button>
             </td>
           </tr>";
       }
     } else {
       $display .= "
         <tr>
-          <td> Không có dữ liệu </td>
+          <td colspan='5' class='text-center'> Không có dữ liệu </td>
         </tr>
       ";
     }
@@ -312,6 +311,7 @@ class AdminSupplierModel extends Database
   function getAllSuppliers($id)
   {
     $display = "";
+    $display .= "<option value='0'>Chọn nhà cung cấp</option>";
     $query = "SELECT * FROM supplier ORDER BY id";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
@@ -339,60 +339,120 @@ class AdminSupplierModel extends Database
   }
   function insert($POST)
   {
-    if (isset($POST['supplier_name'])) {
-      $supplier_name = $POST['supplier_name'];
-      $supplier_phone = $POST['supplier_phone'];
-      $supplier_email = $POST['supplier_email'];
-      $supplier_address = $POST['supplier_address'];
-      $query = 'INSERT INTO `supplier` (name, phone, email, address, status) VALUES (?, ?, ?, ?, ?)';
-      $stmt = $this->conn->prepare($query);
-      $stmt->execute([$supplier_name, $supplier_phone, $supplier_email, $supplier_address, 1]);
-      $rowCount = $stmt->rowCount();
-      if ($rowCount > 0) {
-        echo "Thêm thành công";
-      } else {
-        echo "Thất bại";
-      }
+    $supplier_name = $POST['supplier_name'];
+    $supplier_phone = $POST['supplier_phone'];
+    $supplier_email = $POST['supplier_email'];
+    $supplier_address = $POST['supplier_address'];
+    $ward = $POST['ward']; // Thay $supplier_address thành $ward
+    $province = $POST['province']; // Thay $supplier_address thành $province
+    $district = $POST['district']; // Thay $supplier_address thành $district
+    // Truy vấn để lấy address_id từ ward, district, province
+    $addressQuery = 'SELECT id FROM `address` WHERE province_id = ? AND district_id = ? AND ward_id = ? AND street_name = ?';
+    $addressStmt = $this->conn->prepare($addressQuery);
+    $addressStmt->execute([$province, $district, $ward, $supplier_address]);
+    $addressRow = $addressStmt->fetch(PDO::FETCH_ASSOC);
+    $address_id = $addressRow['id'];
+
+    // Thực hiện truy vấn thêm dữ liệu nhà cung cấp vào cơ sở dữ liệu
+    $query = 'INSERT INTO `supplier` (name, phone, email, address, status) VALUES (?, ?, ?, ?, ?)';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$supplier_name, $supplier_phone, $supplier_email, $address_id, 1]);
+    $rowCount = $stmt->rowCount();
+
+    if ($rowCount > 0) {
+      echo "Thêm thành công";
     } else {
-      echo "Lỗi";
+      echo "Thêm thất bại";
     }
   }
 
+  // kiểm tra trùng lặp dữ liệu nhà cung cấp
   function checkDuplicate($POST)
   {
-    if (isset($POST['supplier_name'])) {
-      $supplier_name = $POST['supplier_name'];
-      $query = 'SELECT * FROM supplier WHERE name = ? AND status = ?';
-      $stmt = $this->conn->prepare($query);
-      $stmt->execute([$supplier_name, 1]);
-      $rowCount = $stmt->rowCount();
-      if ($rowCount > 0) {
-        echo "Đã tồn tại";
-      } else {
-        echo "Duy nhất";
+    $phone = $POST['phone'];
+    $email = $POST['email'];
+    $address = $POST['address'];
+    $query = 'SELECT * FROM supplier WHERE (phone = ? OR email = ? OR address = ?) AND status = ?';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$phone, $email, $address, 1]);
+    $rowCount = $stmt->rowCount();
+    if ($rowCount > 0) {
+      $duplicateFields = array();
+      while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+        if ($row->phone == $phone) {
+          $duplicateFields[] = 'Số điện thoại';
+        }
+        if ($row->email == $email) {
+          $duplicateFields[] = 'Email';
+        }
+        if ($row->address == $address) {
+          $duplicateFields[] = 'Địa chỉ';
+        }
       }
+      $duplicateFieldsStr = implode(', ', $duplicateFields);
+      echo "Dữ liệu trùng lặp: $duplicateFieldsStr";
     } else {
-      echo "Lỗi";
+      echo "Không có dữ liệu trùng lặp";
     }
   }
 
-  function delete($id)
+  // kiểm tra trùng lặp dữ liệu nhà cung cấp
+  function checkDuplicateUpdate($POST)
   {
-    $query = 'DELETE FROM supplier WHERE id = ?';
+    $id = $POST['supplier_id'];
+    $phone = $POST['phone'];
+    $email = $POST['email'];
+    $address = $POST['address'];
+    $query = 'SELECT * FROM supplier WHERE (phone = ? OR email = ? OR address = ?) AND status = ? AND id <> ?';
     $stmt = $this->conn->prepare($query);
-    $stmt->execute([$id]);
+    $stmt->execute([$phone, $email, $address, 1, $id]);
     $rowCount = $stmt->rowCount();
     if ($rowCount > 0) {
-      echo "Thành công";
+      $duplicateFields = array();
+      while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+        if ($row->phone == $phone) {
+          $duplicateFields[] = 'Số điện thoại';
+        }
+        if ($row->email == $email) {
+          $duplicateFields[] = 'Email';
+        }
+        if ($row->address == $address) {
+          $duplicateFields[] = 'Địa chỉ';
+        }
+      }
+      $duplicateFieldsStr = implode(', ', $duplicateFields);
+      echo "Dữ liệu trùng lặp: $duplicateFieldsStr";
     } else {
-      echo "Thất bại";
+      echo "Không có dữ liệu trùng lặp";
+    }
+  }
+
+  function delete($POST)
+  {
+    $id = $POST['id'];
+    try {
+      $query = 'DELETE FROM supplier WHERE id = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute([$id]);
+      $rowCount = $stmt->rowCount();
+
+      if ($rowCount > 0) {
+        echo "Xóa thành công";
+      } else {
+        echo "Xóa thất bại";
+      }
+    } catch (PDOException $e) {
+      echo "Không thể xóa nhà cung cấp";
     }
 
   }
 
   function getByID($id)
   {
-    $query = 'SELECT * FROM supplier WHERE id = ?';
+    $query = 'SELECT s.*, a.province_id, a.district_id, a.ward_id, a.street_name
+    FROM supplier s
+    INNER JOIN address a ON s.address = a.id
+    WHERE s.id = ?';
     $stmt = $this->conn->prepare($query);
     $stmt->execute([$id]);
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -404,6 +464,10 @@ class AdminSupplierModel extends Database
       $response['email'] = $result[0]->email;
       $response['address'] = $result[0]->address;
       $response['status'] = $result[0]->status;
+      $response['province_id'] = $result[0]->province_id;
+      $response['district_id'] = $result[0]->district_id;
+      $response['ward_id'] = $result[0]->ward_id;
+      $response['street_name'] = $result[0]->street_name;
       echo json_encode($response);
     } else {
       echo "Không tìm thấy dữ liệu.";
@@ -412,15 +476,25 @@ class AdminSupplierModel extends Database
 
   function update($POST)
   {
-    if (isset($POST['update_supplierName'])) {
-      $supplier_id = $POST['hidden_data'];
-      $supplier_name = $POST['update_supplierName'];
-      $supplier_phone = $POST['update_supplierPhone'];
-      $supplier_email = $POST['update_supplierEmail'];
-      $supplier_address = $POST['update_supplierAddress'];
+    if (isset($POST['supplier_name'])) {
+      $supplier_id = $POST['supplier_id'];
+      $supplier_name = $POST['supplier_name'];
+      $supplier_phone = $POST['supplier_phone'];
+      $supplier_email = $POST['supplier_email'];
+      $supplier_address = $POST['supplier_address'];
+      $ward = $POST['ward']; // Thay $supplier_address thành $ward
+      $province = $POST['province']; // Thay $supplier_address thành $province
+      $district = $POST['district']; // Thay $supplier_address thành $district
+      // Truy vấn để lấy address_id từ ward, district, province
+      $addressQuery = 'SELECT id FROM `address` WHERE province_id = ? AND district_id = ? AND ward_id = ? AND street_name = ?';
+      $addressStmt = $this->conn->prepare($addressQuery);
+      $addressStmt->execute([$province, $district, $ward, $supplier_address]);
+      $addressRow = $addressStmt->fetch(PDO::FETCH_ASSOC);
+      $address_id = $addressRow['id'];
+
       $query = 'UPDATE supplier set name = ?, phone = ?, email = ?, address = ? WHERE id = ?';
       $stmt = $this->conn->prepare($query);
-      $stmt->execute([$supplier_name, $supplier_phone, $supplier_email, $supplier_address, $supplier_id]);
+      $stmt->execute([$supplier_name, $supplier_phone, $supplier_email, $address_id, $supplier_id]);
       $rowCount = $stmt->rowCount();
       if ($rowCount > 0) {
         echo "Sửa thành công";
@@ -431,5 +505,8 @@ class AdminSupplierModel extends Database
       echo "Thất bại";
     }
   }
+
+
+
 }
 ?>

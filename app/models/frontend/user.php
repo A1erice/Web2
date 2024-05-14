@@ -21,8 +21,8 @@ class User extends Database
       // nếu không bị lỗi nào thực hiện thêm vào cơ sở dữ liệu
       $date = date("Y-m-d H:i:s");
       $password = hash('sha1', $password);
-      $query = "INSERT INTO `user` (`id`, `role_id`, `email`, `username`, `password`, `phone`, `date`) 
-      VALUES (NULL, 5, ?, ?, ?, ?, ?);";
+      $query = "INSERT INTO `user` (`id`, `role_id`, `email`, `username`, `password`, `phone`, `date`, status) 
+      VALUES (NULL, 5, ?, ?, ?, ?, ?, 1);";
       $stmt = $this->conn->prepare($query);
       $result = $stmt->execute([$email, $username, $password, $phone, $date]);
       if ($result) {
@@ -34,12 +34,12 @@ class User extends Database
 
   function login($POST)
   {
-    if (isset ($POST['email']) && isset ($POST['password'])) {
+    if (isset($POST['email']) && isset($POST['password'])) {
       $email = $POST['email'];
       $password = $POST['password'];
 
       $password = hash('sha1', $password);
-      $query = "select * from user where email = ? AND password = ? AND role_id = 5";
+      $query = "select * from user where email = ? AND password = ? and status = 1";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$email, $password]);
       $result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -54,7 +54,7 @@ class User extends Database
 
   function check_login()
   {
-    if (isset ($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_id'])) {
       $query = "select * from user where id = ?";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$_SESSION['user_id']]);
@@ -67,7 +67,7 @@ class User extends Database
   }
   function get_user($id)
   {
-    if (isset ($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_id'])) {
       $query = "select * from user where id = ?";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$_SESSION['user_id']]);
@@ -81,7 +81,7 @@ class User extends Database
 
   function logout()
   {
-    if (isset ($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_id'])) {
       unset($_SESSION['user_id']);
     }
   }

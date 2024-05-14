@@ -3,7 +3,15 @@
   --primary: #3459e6;
   --light: #f3f6f9;
   --dark: #191c24;
-  --bs-body-font-family: "Nunito Sans", sans-serif;
+  --bs-body-font-family: "Poppins", sans-serif;
+}
+html {
+  font-family: "Poppins", sans-serif;
+}
+.avatar {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
 }
 
 .back-to-top {
@@ -20,8 +28,8 @@
 }
 
 .previewImage_table {
-  height: 60px;
-  width: 60px;
+  height: 80px;
+  width: 80px;
 }
 
 /*** Spinner ***/

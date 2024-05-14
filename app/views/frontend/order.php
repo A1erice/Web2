@@ -4,91 +4,91 @@
     <div class="col-12 d-flex align-items-center justify-content-between mb-3">
       <h6 class="mb-3">Đơn hàng của bạn</h6>
     </div>
-    <div class="col-12 table-responsive mb-3">
-      <table class="table text-start align-middle table-bordered table-hover mb-0">
-        <thead>
-          <tr class="text-dark">
-            <th scope="col"><input class="form-check-input" type="checkbox"></th>
-            <th scope="col">Date</th>
-            <th scope="col">Invoice</th>
-            <th scope="col">Customer</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input class="form-check-input" type="checkbox"></td>
-            <td>01 Jan 2045</td>
-            <td>INV-0123</td>
-            <td>Jhon Doe</td>
-            <td>$123</td>
-            <td>Paid</td>
-            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-          </tr>
-          <tr>
-            <td><input class="form-check-input" type="checkbox"></td>
-            <td>01 Jan 2045</td>
-            <td>INV-0123</td>
-            <td>Jhon Doe</td>
-            <td>$123</td>
-            <td>Paid</td>
-            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-          </tr>
-          <tr>
-            <td><input class="form-check-input" type="checkbox"></td>
-            <td>01 Jan 2045</td>
-            <td>INV-0123</td>
-            <td>Jhon Doe</td>
-            <td>$123</td>
-            <td>Paid</td>
-            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-          </tr>
-          <tr>
-            <td><input class="form-check-input" type="checkbox"></td>
-            <td>01 Jan 2045</td>
-            <td>INV-0123</td>
-            <td>Jhon Doe</td>
-            <td>$123</td>
-            <td>Paid</td>
-            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-          </tr>
-          <tr>
-            <td><input class="form-check-input" type="checkbox"></td>
-            <td>01 Jan 2045</td>
-            <td>INV-0123</td>
-            <td>Jhon Doe</td>
-            <td>$123</td>
-            <td>Paid</td>
-            <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Modal -->
+    <div class="modal fade" id="orderDetail_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Thông tin đơn hàng</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-1">Mã đơn hàng: </p>
+            <p class="mb-1">Tên khách hàng: </p>
+            <p class="mb-1">Ngày đặt hàng: </p>
+            <p class="mb-1">Địa chỉ giao hàng: </p>
+            <p class="mb-1">Trạng thái: </p>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Ảnh</th>
+                  <th scope="col">Sản Phẩm</th>
+                  <th scope="col">Màu Sắc</th>
+                  <th scope="col">Kích Cỡ</th>
+                  <th scope="col">Số Lượng</th>
+                  <th scope="col">Thành Tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+              Tổng tiền:
+              <p class="text-danger fw-bold"> 6.000.000đ </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-12 pb-1">
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mb-3">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <div id="displayOrderData">
+
     </div>
   </div>
 
 
 </div>
 <?php $this->view("include/footer", $data) ?>
+<script>
+
+  $(document).ready(function () {
+    fetch_data();
+  })
+  function fetch_data(page) {
+    var user_id = <?= $data['user_data']->id ?>;
+    $.ajax({
+      url: '<?= ROOT ?>order/getAll',
+      method: "POST",
+      data: {
+        page: page,
+        user_id: user_id
+      },
+      success: function (data, status) {
+        $('#displayOrderData').html(data);
+      }
+    });
+  }
+  function changePageFetch(page) {
+    fetch_data(page);
+  }
+
+  function getDetail(id) {
+    $.ajax({
+      url: '<?= ROOT ?>order/getDetail',
+      method: "POST",
+      data: {
+        order_id: id
+      },
+      success: function (data, status) {
+        $('#orderDetail_Modal').html(data);
+      }
+    });
+    $('#orderDetail_Modal').modal("show");
+  }
+
+</script>

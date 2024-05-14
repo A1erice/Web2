@@ -34,6 +34,7 @@ class App
     // Xử lý params
     $this->params = (count($url) > 0) ? $url : ["home"];
 
+    
     call_user_func_array([new $this->controller, $this->action], $this->params);
 
 

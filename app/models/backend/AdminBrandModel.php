@@ -180,7 +180,7 @@ class AdminBrandModel extends Database
     $stmt = $this->conn->prepare($query);
     $stmt->execute();
     $brands = $stmt->fetchAll(PDO::FETCH_OBJ);
-
+    $display .= "<option value='0'>Chọn thương hiệu</option>";
     if ($id == 0) {
       foreach ($brands as $brand) {
         $display .= "
