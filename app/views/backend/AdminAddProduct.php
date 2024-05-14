@@ -17,19 +17,20 @@
             <div class="col-sm-12 col-md-6 mb-3 ">
               <label for="" class="mb-2">Thể Loại</label>
               <select id="categories" class="form-select" aria-label="Default select example">
-
               </select>
+              <span id="category_error" class="error_message"></span>
             </div>
             <div class="col-sm-12 col-md-6 mb-3 ">
               <label for="" class="mb-2">Thương Hiệu</label>
               <select id="brands" class="form-select" aria-label="Default select example">
-
               </select>
+              <span id="brand_error" class="error_message"></span>
             </div>
             <div class="col-sm-12 col-md-6 mb-3 ">
               <label for="" class="mb-2">Nhà Cung Cấp</label>
               <select id='suppliers' class="form-select" aria-label="Default select example">
               </select>
+              <span id="supplier_error" class="error_message"></span>
             </div>
             <div class="col-sm-12 mb-3 ">
               <label for="" class="mb-2">Mô tả</label>
@@ -66,7 +67,7 @@
 
   function getAllBrands() {
     $.ajax({
-      url: "<?= ROOT ?>index.php?url=AdminBrand/getAllBrands",
+      url: "<?= ROOT ?>AdminBrand/getAllBrands",
       type: "post",
       data: { brand_id: 0 },
       success: function (data, status) {
@@ -77,7 +78,7 @@
 
   function getAllSuppliers() {
     $.ajax({
-      url: "<?= ROOT ?>index.php?url=AdminSupplier/getAllSuppliers",
+      url: "<?= ROOT ?>AdminSupplier/getAllSuppliers",
       type: "post",
       data: { supplier_id: 0 },
       success: function (data, status) {
@@ -97,12 +98,44 @@
     var product_brand = $("#brands").val();
     var product_supplier = $("#suppliers").val();
     var product_description = $("#product_description").val();
-
+    var hasError = true;
     if (product_name.trim() == "") {
       $('#productName_Error').text("Vui lòng nhập tên sản phẩm");
-
+      hasError = true;
     } else {
       $('#productName_Error').text("");
+      hasError = false;
+    }
+    if (product_category == 0) {
+      $('#category_error').text("Vui lòng nhập chọn thể loại sản phẩm");
+      hasError = true;
+    } else {
+      $('#category_error').text("");
+      hasError = false;
+    }
+    if (product_brand == 0) {
+      $('#brand_error').text("Vui lòng chọn thương hiệu sản phẩm");
+      hasError = true;
+    } else {
+      $('#brand_error').text("");
+      hasError = false;
+    }
+    if (product_supplier == 0) {
+      $('#supplier_error').text("Vui lòng chọn nhà cung cấp sản phẩm");
+      hasError = true;
+    } else {
+      $('#supplier_error').text("");
+      hasError = false;
+    }
+    if (product_description.trim() == "") {
+      $('#productDescription_Error').text("Vui lòng nhập mô tả sản phẩm");
+      hasError = true;
+    } else {
+      $('#productDescription_Error').text("");
+      hasError = false;
+    }
+
+    if (!hasError) {
       $.ajax({
         url: "<?= ROOT ?>AdminProduct/insert",
         type: "post",
@@ -118,7 +151,7 @@
             Swal.fire({
               title: "Thêm thành công!",
               text: "Thêm thành công sản phẩm",
-              position: 'top',
+              position: 'center',
               showConfirmButton: true,
               confirmButtonColor: "#3459e6",
               icon: "success",
@@ -130,17 +163,17 @@
             Swal.fire({
               title: "Thêm thất bại!",
               text: "Thêm sản phẩm thất bại",
-              position: 'top',
+              position: 'center',
               showConfirmButton: true,
               confirmButtonColor: "#3459e6",
               icon: "success",
             });
-          } else {
-            alert("Không có gì xảy ra");
           }
         }
       });
     }
+
+
   }
 
 </script>

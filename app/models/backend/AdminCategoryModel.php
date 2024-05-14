@@ -139,6 +139,7 @@ class AdminCategoryModel extends Database
   function getAllCategories($id)
   {
     $display = "";
+    $display .= "<option value='0'>Chọn thể loại</option>";
     $query = "SELECT * FROM category ORDER BY id ";
     $stmt = $this->conn->prepare($query);
     $stmt->execute();

@@ -3,7 +3,8 @@
 class AdminOrderModel extends Database
 {
 
-  function getData($start_from,$limit,$keyword,$bgDate,$endDate,$col,$sort){
+  function getData($start_from, $limit, $keyword, $bgDate, $endDate, $col, $sort)
+  {
     $query = "";
     $error = "";
 
@@ -21,18 +22,18 @@ class AdminOrderModel extends Database
     $where = "";
 
     //xử lý phân loại
-    if($keyword != ""){
-      if($keyword != "all"){
+    if ($keyword != "") {
+      if ($keyword != "all") {
         $where .= " o.order_status = {$keyword} ";
       }
     }
-    
+
     //xử lý ngày
-    if($bgDate != "" || $endDate != ""){
-      if($where != ""){
+    if ($bgDate != "" || $endDate != "") {
+      if ($where != "") {
         $where .= " AND ";
       }
-      if($bgDate != "" && $endDate != ""){
+      if ($bgDate != "" && $endDate != "") {
         $where .= " o.date BETWEEN DATE_SUB('{$bgDate}', INTERVAL 1 DAY) AND DATE_ADD('$endDate', INTERVAL 1 DAY) ";
       } else {
         if ($bgDate != "") {
@@ -43,9 +44,9 @@ class AdminOrderModel extends Database
       }
     }
     //ghép where vào query
-    if($where != ""){
-      $query .= " WHERE ".$where;
-    }    
+    if ($where != "") {
+      $query .= " WHERE " . $where;
+    }
 
     //Xử lý sort
     // Sort cột
@@ -69,9 +70,9 @@ class AdminOrderModel extends Database
     $error .= $query; // Lưu lại câu truy vấn để debug
 
     return [
-        "orders" => $orders,
-        "count" => $rowCount,
-        "error" => $error
+      "orders" => $orders,
+      "count" => $rowCount,
+      "error" => $error
     ];
   }
 
@@ -90,7 +91,7 @@ class AdminOrderModel extends Database
       $page = 1;
     }
 
-    $bgDate ="";
+    $bgDate = "";
     $endDate = "";
     $col = "";
     $sort = "";
@@ -108,7 +109,7 @@ class AdminOrderModel extends Database
     // bắt đầu từ 
     $start_from = ($page - 1) * $limit;
 
-    $data = $this->getData($start_from,$limit,$keyword,$bgDate,$endDate,$col,$sort);
+    $data = $this->getData($start_from, $limit, $keyword, $bgDate, $endDate, $col, $sort);
 
     // $display .= $data['error']; //kiểm tra lỗi
     $display .= "
@@ -162,7 +163,7 @@ class AdminOrderModel extends Database
     } else {
       $display .= "
         <tr>
-          <td> Không có dữ liệu </td>
+          <td colspan='4' class='text-center'> Không có dữ liệu </td>
         </tr>
       ";
     }

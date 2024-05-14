@@ -45,25 +45,25 @@
                     <input id="supplier_email" type="text" class="form-control" id="" placeholder="" name="color_name">
                     <span id="supplierEmail_Error" class="error_message mt-0 mb-0"></span>
                   </div>
-                  <div class='col-lg-4'>
+                  <div class='mb-2 col-lg-4'>
                     <div class=''>
-                      <label for='provinces'>Tỉnh / Thành phố</label>
+                      <label class="form-label" for='provinces'>Tỉnh / Thành phố</label>
                       <select class='form-select' id='provinces'>
                       </select>
                       <span class='text-danger error_message' id='province_error'></span>
                     </div>
                   </div>
-                  <div class='col-lg-4'>
+                  <div class='mb-2 col-lg-4'>
                     <div class=''>
-                      <label for='districts'>Quận / Huyện</label>
+                      <label class="form-label" for='districts'>Quận / Huyện</label>
                       <select class='form-select' id='districts'>
                       </select>
                       <span class='text-danger error_message' id='district_error'></span>
                     </div>
                   </div>
-                  <div class='col-lg-4'>
+                  <div class='mb-2 col-lg-4'>
                     <div class=''>
-                      <label for='wards'>Phường / Xã</label>
+                      <label class="form-label" for='wards'>Phường / Xã</label>
                       <select class='form-select' id='wards'>
                       </select>
                       <span class='text-danger error_message' id='ward_error'></span>
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Modal cập nhật nhà cung cấp -->
-        <div class="modal fade" id="updateSupplier_Modal" data-bs-backdrop="static" data-bs-keyboard="false"
+        <div class="modal fade modal-lg" id="updateSupplier_Modal" data-bs-backdrop="static" data-bs-keyboard="false"
           tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -96,27 +96,51 @@
                   aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <form action="" method="POST">
-                  <div class="mb-2">
+                <form action="" method="POST" class="row">
+                  <div class="mb-2 col-lg-12">
                     <label for="" class="form-label">Tên nhà cung cấp</label>
                     <input id="update_SupplierName" type="text" class="form-control" id="" placeholder=""
                       name="color_name">
                     <input type="hidden" id="hidden_data">
                     <span id="updateSupplierName_Error" class="error_message mt-0 mb-0"></span>
                   </div>
-                  <div class="mb-2">
+                  <div class="mb-2 col-lg-12">
                     <label for="" class="form-label">Số điện thoại</label>
                     <input id="update_SupplierPhone" type="text" class="form-control" id="" placeholder=""
                       name="color_name">
                     <span id="updateSupplierPhone_Error" class="error_message mt-0 mb-0"></span>
                   </div>
-                  <div class="mb-2">
+                  <div class="mb-2 col-lg-12">
                     <label for="" class="form-label">Email</label>
                     <input id="update_SupplierEmail" type="text" class="form-control" id="" placeholder=""
                       name="color_name">
                     <span id="updateSupplierEmail_Error" class="error_message mt-0 mb-0"></span>
                   </div>
-                  <div class="mb-2">
+                  <div class='mb-2 col-lg-4 '>
+                    <div class=''>
+                      <label class="form-label" for='provinces'>Tỉnh / Thành phố</label>
+                      <select class='form-select' id='province'>
+                      </select>
+                      <span class='text-danger error_message' id='provinceUpdate_Error'></span>
+                    </div>
+                  </div>
+                  <div class='mb-2 col-lg-4'>
+                    <div class=''>
+                      <label class="form-label" for='districts'>Quận / Huyện</label>
+                      <select class='form-select' id='district'>
+                      </select>
+                      <span class='text-danger error_message' id='districtUpdate_Error'></span>
+                    </div>
+                  </div>
+                  <div class='mb-2 col-lg-4'>
+                    <div class=''>
+                      <label class="form-label" for='wards'>Phường / Xã</label>
+                      <select class='form-select' id='ward'>
+                      </select>
+                      <span class='text-danger error_message' id='wardUpdate_Error'></span>
+                    </div>
+                  </div>
+                  <div class="mb-2 col-lg-12">
                     <label for="" class="form-label">Địa chỉ</label>
                     <input id="update_SupplierAddress" type="text" class="form-control" id="" placeholder=""
                       name="color_name">
@@ -148,6 +172,7 @@
 <script>
 
   $(document).ready(function () {
+
     $.ajax({
       url: "<?= ROOT ?>Province",
       type: "post",
@@ -182,12 +207,38 @@
         }
       });
     });
+    $('#province').on("change", function () {
+      var province_id = $('#province').val();
+      $.ajax({
+        url: "<?= ROOT ?>District",
+        type: "post",
+        data: { province_id: province_id },
+        success: function (data, status) {
+          $('#district').html(data);
+          $('#ward').empty();  // This clears all existing options in wards select
+        }
+      });
+    });
+
+    $('#district').on("change", function () {
+      var district_id = $('#district').val();
+      $.ajax({
+        url: "<?= ROOT ?>Ward",
+        type: "post",
+        data: { district_id: district_id },
+        success: function (data, status) {
+          $('#ward').html(data);
+        }
+      });
+    });
   });
+
+
 
   // hiển thị danh sách màu sắc
   function fetch_data(page) {
     $.ajax({
-      url: "<?= ROOT ?>index.php?url=AdminSupplier/getAll",
+      url: "<?= ROOT ?>AdminSupplier/getAll",
       method: "POST",
       data: {
         page: page
@@ -222,7 +273,7 @@
       success: function (data) {
         $("#displaySupplierData").html(data);
       }
-    })
+    });
   }
   // tìm kiếm 
   $('#search_supplier').on("keyup", function () {
@@ -241,6 +292,9 @@
     var supplier_phone = $('#supplier_phone').val();
     var supplier_email = $('#supplier_email').val();
     var supplier_address = $('#supplier_address').val();
+    var district = $('#districts').val();
+    var province = $('#provinces').val();
+    var ward = $('#wards').val();
 
 
     // Hàm kiểm tra số điện thoại hợp lệ
@@ -284,6 +338,27 @@
       $('#supplierEmail_Error').text('');
     }
 
+    if (province == 0) {
+      $('#province_error').text("Vui lòng chọn tỉnh / thành phố");
+      hasError = true;
+    } else {
+      $('#province_error').text('');
+    }
+
+    if (district == 0) {
+      $('#district_error').text("Vui lòng chọn quận huyện");
+      hasError = true;
+    } else {
+      $('#district_error').text('');
+
+    }
+    if (ward == 0) {
+      $('#ward_error').text("Vui lòng chọn phường xã");
+      hasError = true;
+    } else {
+      $('#ward_error').text('');
+    }
+
     if (supplier_address.trim() === '') {
       $('#supplierAddress_Error').text('Địa chỉ không được để trống');
       hasError = true;
@@ -294,63 +369,81 @@
     // Nếu không có lỗi, gửi dữ liệu qua AJAX
     if (!hasError) {
       $.ajax({
-        url: "<?= ROOT ?>AdminSupplier/checkDuplicate",
-        type: 'post',
+        url: "<?= ROOT ?>AdminSupplier/insertSupplierAddress",
+        method: "POST",
         data: {
-          supplier_name: supplier_name
+          address: supplier_address,
+          province: province,
+          district: district,
+          ward: ward
         },
         success: function (data, status) {
-          if (data == "Đã tồn tại") {
-            Swal.fire({
-              title: "Đã tồn tại",
-              text: "Nhà cung cấp đã tồn tại",
-              position: 'top',
-              showConfirmButton: true,
-              confirmButtonColor: "#3459e6",
-              icon: "error",
-            });
-          } else if (data == "Duy nhất") {
-            $.ajax({
-              url: "<?= ROOT ?>AdminSupplier/insert",
-              type: 'post',
-              data: {
-                supplier_name: supplier_name,
-                supplier_phone: supplier_phone,
-                supplier_email: supplier_email,
-                supplier_address: supplier_address,
-              },
-              success: function (data, status) {
-                if (data == "Thêm thành công") {
-                  Swal.fire({
-                    title: "Thành công",
-                    text: "Thêm thành công nhà cung cấp",
-                    position: 'top',
-                    showConfirmButton: true,
-                    confirmButtonColor: "#3459e6",
-                    icon: "success",
+          $.ajax({
+            url: "<?= ROOT ?>AdminSupplier/checkDuplicate",
+            type: 'post',
+            data: {
+              phone: supplier_phone,
+              email: supplier_email,
+              address: data
+            },
+            success: function (data, status) {
+              if (data == "Không có dữ liệu trùng lặp") {
+                $.ajax({
+                  url: "<?= ROOT ?>AdminSupplier/insert",
+                  type: 'post',
+                  data: {
+                    supplier_name: supplier_name,
+                    supplier_phone: supplier_phone,
+                    supplier_email: supplier_email,
+                    supplier_address: supplier_address,
+                    province: province,
+                    district: district,
+                    ward: ward
+                  },
+                  success: function (data, status) {
+                    if (data == "Thêm thành công") {
+                      Swal.fire({
+                        title: "Thành công",
+                        text: "Thêm thành công nhà cung cấp",
+                        position: 'top',
+                        showConfirmButton: true,
+                        confirmButtonColor: "#3459e6",
+                        icon: "success",
 
-                  });
-                  $('#supplier_name').val("");
-                  $('#supplier_phone').val("");
-                  $('#supplier_email').val("");
-                  $('#supplier_address').val("");
-                  fetch_data();
-                  $('#supplier_modal').modal('hide');
-                } else if (data == "Thêm thất bại") {
-                  Swal.fire({
-                    title: "Thêm thất bại",
-                    text: "Không thêm được nhà cung cấp",
-                    position: 'top',
-                    showConfirmButton: true,
-                    confirmButtonColor: "#3459e6",
-                    icon: "error",
-                  });
-                }
+                      });
+                      $('#supplier_name').val("");
+                      $('#supplier_phone').val("");
+                      $('#supplier_email').val("");
+                      $('#supplier_address').val("");
+                      fetch_data();
+                      $('#supplier_modal').modal('hide');
+                    } else if (data == "Thêm thất bại") {
+                      Swal.fire({
+                        title: "Thêm thất bại",
+                        text: "Không thêm được nhà cung cấp",
+                        position: 'top',
+                        showConfirmButton: true,
+                        confirmButtonColor: "#3459e6",
+                        icon: "error",
+                      });
+                    }
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: data,
+                  text: "Không thêm được nhà cung cấp",
+                  position: 'top',
+                  showConfirmButton: true,
+                  confirmButtonColor: "#3459e6",
+                  icon: "error",
+                });
               }
-            });
-          }
+            }
+          });
         }
-      })
+      });
+
     }
   }
 
@@ -398,15 +491,93 @@
     });
   }
 
-  // lấy dữ liệu qua id
-  function get_detail(id) {
+  function show_detail(id) {
+    $('#update_btn').hide();
     $('#hidden_data').val(id);
     $.post("<?= ROOT ?>AdminSupplier/getByID", { id: id }, function (data, status) {
       var supplier_id = JSON.parse(data);
+      var province_id = supplier_id.province_id;
+      $.ajax({
+        url: "<?= ROOT ?>Province",
+        type: "post",
+        data: {},
+        success: function (data, status) {
+          $('#province').html(data);
+          $('#province').val(province_id);
+        }
+      });
+
+      var district_id = supplier_id.district_id;
+      $.ajax({
+        url: "<?= ROOT ?>District/getAll",
+        type: "post",
+        data: {},
+        success: function (data, status) {
+          $('#district').html(data);
+          $('#district').val(district_id);
+        }
+      });
+      var ward_id = supplier_id.ward_id;
+      $.ajax({
+        url: "<?= ROOT ?>Ward/getAll",
+        type: "post",
+        data: {},
+        success: function (data, status) {
+          $('#ward').html(data);
+          $('#ward').val(ward_id);
+        }
+      });
+
       $('#update_SupplierName').val(supplier_id.name);
       $('#update_SupplierPhone').val(supplier_id.phone);
       $('#update_SupplierEmail').val(supplier_id.email);
-      $('#update_SupplierAddress').val(supplier_id.address);
+      $('#update_SupplierAddress').val(supplier_id.street_name);
+    });
+    $('#updateSupplier_Modal').modal("show");
+  }
+
+  // lấy dữ liệu qua id
+  function get_detail(id) {
+    $('#update_btn').show();
+    $('#hidden_data').val(id);
+    $.post("<?= ROOT ?>AdminSupplier/getByID", { id: id }, function (data, status) {
+      var supplier_id = JSON.parse(data);
+      var province_id = supplier_id.province_id;
+      $.ajax({
+        url: "<?= ROOT ?>Province",
+        type: "post",
+        data: {},
+        success: function (data, status) {
+          $('#province').html(data);
+          $('#province').val(province_id);
+        }
+      });
+
+      var district_id = supplier_id.district_id;
+      $.ajax({
+        url: "<?= ROOT ?>District/getAll",
+        type: "post",
+        data: {},
+        success: function (data, status) {
+          $('#district').html(data);
+          $('#district').val(district_id);
+        }
+      });
+      var ward_id = supplier_id.ward_id;
+      $.ajax({
+        url: "<?= ROOT ?>Ward/getAll",
+        type: "post",
+        data: {},
+        success: function (data, status) {
+          $('#ward').html(data);
+          $('#ward').val(ward_id);
+        }
+      });
+
+      $('#update_SupplierName').val(supplier_id.name);
+      $('#update_SupplierPhone').val(supplier_id.phone);
+      $('#update_SupplierEmail').val(supplier_id.email);
+      $('#update_SupplierAddress').val(supplier_id.street_name);
     });
     $('#updateSupplier_Modal').modal("show");
   }
@@ -418,6 +589,9 @@
     var supplier_phone = $('#update_SupplierPhone').val();
     var supplier_email = $('#update_SupplierEmail').val();
     var supplier_address = $('#update_SupplierAddress').val();
+    var district = $('#district').val();
+    var province = $('#province').val();
+    var ward = $('#ward').val();
     var hidden_data = $('#hidden_data').val();
 
 
@@ -462,6 +636,28 @@
       $('#updateSupplierEmail_Error').text('');
     }
 
+    if (province == 0) {
+      $('#province_error').text("Vui lòng chọn tỉnh / thành phố");
+      hasError = true;
+    } else {
+      $('#provinceUpdate_Error').text('');
+    }
+
+    if (district == 0) {
+      $('#district_error').text("Vui lòng chọn quận huyện");
+      hasError = true;
+    } else {
+      $('#districtUpdate_Error').text('');
+
+    }
+    if (ward == 0) {
+      $('#ward_error').text("Vui lòng chọn phường xã");
+      hasError = true;
+    } else {
+      $('#wardUpdate_Error').text('');
+    }
+
+
     if (supplier_address.trim() === '') {
       $('#updateSupplierAddress_Error').text('Địa chỉ không được để trống');
       hasError = true;
@@ -471,50 +667,84 @@
 
     if (!hasError) {
       $.ajax({
-        url: "<?= ROOT ?>AdminSupplier/update",
-        type: 'post',
+        url: "<?= ROOT ?>AdminSupplier/insertSupplierAddress",
+        method: "POST",
         data: {
-          update_supplierName: supplier_name,
-          update_supplierPhone: supplier_phone,
-          update_supplierEmail: supplier_email,
-          update_supplierAddress: supplier_address,
-          hidden_data: hidden_data
+          address: supplier_address,
+          province: province,
+          district: district,
+          ward: ward
         },
         success: function (data, status) {
-          if (data == "Sửa thành công") {
-            Swal.fire({
-              title: "Sửa Thành công",
-              text: "Sửa thành công nhà cung cấp",
-              position: 'top',
-              showConfirmButton: true,
-              confirmButtonColor: "#3459e6",
-              icon: "success",
+          $.ajax({
+            url: "<?= ROOT ?>AdminSupplier/checkDuplicateUpdate",
+            type: 'post',
+            data: {
+              phone: supplier_phone,
+              email: supplier_email,
+              address: data,
+              supplier_id: hidden_data
+            },
+            success: function (data, status) {
+              if (data == "Không có dữ liệu trùng lặp") {
+                $.ajax({
+                  url: "<?= ROOT ?>AdminSupplier/update",
+                  type: 'post',
+                  data: {
+                    supplier_id: hidden_data,
+                    supplier_name: supplier_name,
+                    supplier_phone: supplier_phone,
+                    supplier_email: supplier_email,
+                    supplier_address: supplier_address,
+                    province: province,
+                    district: district,
+                    ward: ward
+                  },
+                  success: function (data, status) {
+                    if (data == "Sửa thành công") {
+                      Swal.fire({
+                        title: "Thành công",
+                        text: "Sửa thành công nhà cung cấp",
+                        position: 'top',
+                        showConfirmButton: true,
+                        confirmButtonColor: "#3459e6",
+                        icon: "success",
 
-            });
-            $('#update_SupplierName').val("");
-            $('#update_SupplierPhone').val("");
-            $('#update_SupplierEmail').val("");
-            $('#update_SupplierAddress').val("");
-            fetch_data();
-            $('#updateSupplier_Modal').modal('hide');
-          } else if (data == "Sửa thất bại") {
-            Swal.fire({
-              title: "Sửa thất bại",
-              text: "Sửa nhà cung cấp thất bại",
-              position: 'top',
-              showConfirmButton: true,
-              confirmButtonColor: "#3459e6",
-              icon: "error",
-            });
-          }
+                      });
+                      $('#update_SupplierName').val("");
+                      $('#update_SupplierPhone').val("");
+                      $('#update_SupplierEmail').val("");
+                      $('#update_SupplierAddress').val("");
+                      fetch_data();
+                      $('#updateSupplier_Modal').modal('hide');
+                    } else if (data == "Sửa thất bại") {
+                      Swal.fire({
+                        title: "Thêm thất bại",
+                        text: "Không sửa được nhà cung cấp",
+                        position: 'top',
+                        showConfirmButton: true,
+                        confirmButtonColor: "#3459e6",
+                        icon: "error",
+                      });
+                    }
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: data,
+                  text: "Không sửa được nhà cung cấp",
+                  position: 'top',
+                  showConfirmButton: true,
+                  confirmButtonColor: "#3459e6",
+                  icon: "error",
+                });
+              }
+            }
+          });
         }
       });
     }
   }
-
-
-
-
 </script>
 
 <!-- Content End -->

@@ -29,7 +29,7 @@ class AdminProductModel extends Database
     $products = $stmt->fetchAll(PDO::FETCH_OBJ);
     $display = "
     <div class='table-responsive mb-3'>
-    <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
+    <table id='displayDataTable' class='table table-striped text-start align-middle table-bordered table-hover mb-0'>
       <thead>
         <tr class='text-dark'>
           <th scope='col'>ID</th>
@@ -62,7 +62,7 @@ class AdminProductModel extends Database
     } else {
       $display .= "
         <tr>
-          <td> Không có dữ liệu </td>
+          <td colspan='6' class='text-center'> Không có dữ liệu </td>
         </tr>
       ";
     }

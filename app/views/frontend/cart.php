@@ -1,13 +1,12 @@
 <?php $this->view("include/header", $data) ?>
 
 <!-- Cart Start -->
-<div class="container-fluid pt-5">
+<div class="container-fluid pt-5 h-100">
   <div class="row px-xl-5">
-    <h5 class="fw-bold mb-2">Giỏ hàng của bạn</h5>
+    <h5 class="fw-bold mb-2 text-primary">Giỏ hàng của bạn</h5>
     <div id="cart" class="col-lg-12 table-responsive mb-5">
     </div>
   </div>
-
 </div>
 <!-- Cart End -->
 <script>

@@ -195,20 +195,24 @@
 
     if (province == 0) {
       $('#province_error').text("Vui lòng chọn tỉnh / thành phố");
-      isValid = true;
+      isValid = false;
     } else {
       $('#province_error').text('');
+      isValid = true;
+
     }
 
     if (district == 0) {
       $('#district_error').text("Vui lòng chọn quận huyện");
-      isValid = true;
+      isValid = false;
     } else {
       $('#district_error').text('');
+      isValid = true;
 
     }
     if (ward == 0) {
       $('#ward_error').text("Vui lòng chọn phường xã");
+      isValid = false;
       isValid = true;
     } else {
       $('#ward_error').text('');
@@ -251,9 +255,11 @@
             success: function (data, status) {
               Swal.fire({
                 icon: "success",
-                title: data,
+                title: "Thêm thành công",
                 confirmButtonColor: "#3459e6",
-              });
+              }).then((result) => {
+                window.location.href = "<?= ROOT ?>shop";
+              });;
             }
           });
         }

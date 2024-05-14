@@ -238,6 +238,7 @@
         $('#province').val(province_id);
       }
     });
+    
     var district_id = <?php echo isset($data['user_update']) ? $data['user_update']->district_id : '0'; ?>;
     $.ajax({
       url: "<?= ROOT ?>District/getAll",

@@ -156,6 +156,7 @@ class OrderModel extends Database
       echo "Thất bại";
     }
   }
+  
 
   function getOrderByUserId($POST)
   {
@@ -264,7 +265,7 @@ class OrderModel extends Database
     foreach ($order_detail as $row) {
       $display .= "
         <tr>
-          <td scope='col'><img src ='{$row->image}' style='width:60px; height:60px; object-fit: cover;'></td>
+          <td scope='col'><img src ='". ASSETS ."img/{$row->image}' style='width:60px; height:60px; object-fit: cover;'></td>
           <td scope='col'>{$row->product_name}</td>
           <td scope='col'>{$row->color_name}</td>
           <td scope='col'>{$row->size_name}</td>

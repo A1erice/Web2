@@ -9,7 +9,7 @@ class CartModel extends Database
       $query = "INSERT INTO `cart` (user_id) VALUES (?)";
       $stmt = $this->conn->prepare($query);
       $stmt->execute([$user_id]);
-    } 
+    }
   }
 
   function getCurrentCartID()
@@ -98,22 +98,10 @@ class CartModel extends Database
           <td class='align-middle'>{$row['color_name']} </td>
           <td class='align-middle'>{$row['size_name']} </td>
           <td class='align-middle'>
-            <div class='input-group quantity mx-auto' style='width: 100px;'>
-              <div class='input-group-btn'>
-                <button class='btn btn-sm btn btn-minus'>
-                  <i class='fa fa-minus'></i>
-                </button>
-              </div>
-              <input type='text' class='form-control form-control-sm bg-secondary text-center' value='{$row['quantity']}'>
-              <div class='input-group-btn'>
-                <button class='btn btn-sm btn btn-plus'>
-                  <i class='fa fa-plus'></i>
-                </button>
-              </div>
-            </div>
+            {$row['quantity']}
           </td>
           <td class='align-middle'>$price</td>
-          <td class='align-middle'><img src='{$row['image']}' alt='' style='width: 120px; height: 80px; object-fit: cover;'></td>
+          <td class='align-middle'><img src='" . ASSETS . "img/{$row['image']}' alt='' style='width: 120px; height: 80px; object-fit: cover;'></td>
           <td class='align-middle'><button onclick='deleteCartDetail({$row['id']})' class='btn btn-sm btn-danger'><i class='fa fa-trash'></i></button></td>
         </tr>";
 
