@@ -122,6 +122,7 @@ class product_detail extends Database
 
     // lấy tổng số lượng
     $stmt = $this->conn->prepare($query);
+    $stmt->execute();
     $rowCount = $stmt->rowCount();
 
     //giới hạn số lượng sản phẩm lấy
@@ -216,7 +217,7 @@ class product_detail extends Database
     $display .= "</div>";
 
     // tổng số bản ghi 
-    $total_rows = $this->getSum();
+    $total_rows = $data['count'];
     // tổng số trang
     $total_pages = ceil($total_rows / $limit);
 

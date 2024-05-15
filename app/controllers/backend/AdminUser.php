@@ -7,8 +7,19 @@ class AdminUser extends Controller
     $user_data = $user->check_login();
     $data['modules'] = $user->check_role($user_data->role_id);
 
-    $module_name = " Người Dùng " ?: (in_array("Người Dùng", array_column($data['modules'], 'module_name')) ? "Người Dùng" : "");
+    $module_name = "Người Dùng" ?: (in_array("Người Dùng", array_column($data['modules'], 'module_name')) ? "Người Dùng" : "");
     $role_detail = $this->model("backend/AdminRoleDetailModel");
+    $add_btn = $role_detail->checkRoleDetail($user_data->role_id, $module_name, " Thêm ");
+    $edit_btn = $role_detail->checkRoleDetail($user_data->role_id, $module_name, " Sửa ");
+    $delete_btn = $role_detail->checkRoleDetail($user_data->role_id, $module_name, " Xóa ");
+    $detail_btn = $role_detail->checkRoleDetail($user_data->role_id, $module_name, " Xem ");
+
+    $data['add_btn'] = $add_btn;
+    $data['edit_btn'] = $edit_btn;
+    $data['delete_btn'] = $delete_btn;
+    $data['detail_btn'] = $detail_btn;
+
+    
     if (!is_null($user_data)) {
       $data['page_title'] = "Admin - User";
       $data['user_data'] = $user_data;

@@ -192,21 +192,23 @@
     } else {
       $('#province_error').text('');
       isValid = true;
-      if (district == 0) {
-        $('#district_error').text("Vui lòng chọn quận huyện");
-        isValid = false;
-      } else {
-        $('#district_error').text('');
-        isValid = true;
-        if (ward == 0) {
-          $('#ward_error').text("Vui lòng chọn phường xã");
-          isValid = false;
-        } else {
-          $('#ward_error').text('');
-          isValid = true;
+    }
 
-        }
-      }
+
+    if (district == 0) {
+      $('#district_error').text("Vui lòng chọn quận huyện");
+      isValid = false;
+    } else {
+      $('#district_error').text('');
+      isValid = true;
+    }
+
+    if (ward == 0) {
+      $('#ward_error').text("Vui lòng chọn phường xã");
+      isValid = false;
+    } else {
+      $('#ward_error').text('');
+      isValid = true;
       if (address.trim() == "") {
         $('#address_error').text("Vui lòng nhập địa chỉ giao hàng");
         isValid = false;
@@ -214,9 +216,8 @@
         $('#address_error').text("");
         isValid = true;
       }
+
     }
-
-
 
     if (isValid) {
       console.log("User id: " + user_id);

@@ -32,9 +32,7 @@
                   <select id="sizes" class="form-select flex-grow-1" aria-label="Default select example">
                   </select>
                 </div>
-                <div class="mb-4 text-start">
-                  <input type="text" class="form-control" id="productDetail_price" placeholder="Giá sản phẩm">
-                </div>
+
                 <!-- <div class="mb-4 text-start">
                   <input type="file" class="form-control" id="productDetail_img">
                   <span class="error_message" id='productDetailImage_Error'></span>
@@ -215,6 +213,13 @@
       var priceInput = $("<input class='form-control w-50'>").attr('type', 'text');
       priceCell.append(priceInput);
 
+      if(selectedColorText == "Chọn màu sắc") {
+        return;
+      }
+
+      if(selectedSizeText == "Chọn kích cỡ") {
+        return;
+      }
       newRow.append(productNameCell, colorCell, sizeCell, priceCell);
       $('#productDetailTableBody').append(newRow);
     });
@@ -367,6 +372,16 @@
     var color_id = $('#colors_update').val();
     var size_id = $('#sizes_update').val();
     var productDetail_price = $('#productDetailUpdate_price').val();
+    if(!Number(productDetail_price)) {
+      Swal.fire({
+          text: "Sửa thất bại",
+          position: 'center',
+          showConfirmButton: true,
+          confirmButtonColor: "#3459e6",
+          icon: "error",
+          });
+          return;
+    }
     var productDetailUpdate_Image = $('#productDetailUpdateImage_Temp').val();
     $.ajax({
       url: "<?= ROOT ?>AdminProductDetail/update",

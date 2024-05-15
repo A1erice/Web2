@@ -78,6 +78,14 @@ class AdminProduct extends Controller
 
   function getDetail($id)
   {
+    $user = $this->model("backend/AdminUserModel");
+    $user_data = $user->check_login();
+    if (!is_null($user_data)) {
+      $data['modules'] = $user->check_role($user_data->role_id);
+    } else {
+      $data['page_title'] = "Admin - Login";
+      $this->view("backend/AdminLogin", $data);
+    }
     $productModel = $this->model("backend/AdminProductModel");
     $productData = $productModel->getByID($id);
     $data['page_title'] = "Admin - Product Form";
