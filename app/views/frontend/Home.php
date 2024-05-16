@@ -56,11 +56,11 @@
           <div class="single-product border">
             <div class="product-img w-100">
               <img class="w-100 h-100 object-fit-cover"
-                src="http://localhost/EShop_MVC/public/assets//img/air-force-1-07-shoes-WrLlWX (1).png" alt="">
+                src="http://localhost/Web2/public/assets//img/air-force-1-07-shoes-WrLlWX (1).png" alt="">
             </div>
             <div class="product-details p-2 w-100">
               <p class='text-primary m-0 p-0'>NIKE</p>
-              <a href="http://localhost/EShop_MVC/shop/showProductDetail/71"
+              <a href="http://localhost/Web2/shop/showProductDetail/71"
                 class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Nike Air Force 1 Shadow</a>
               <p class='text-seccondary m-0 p-0'>Giày nam</p>
               <div class="price">
@@ -73,11 +73,11 @@
           <div class="single-product border">
             <div class="product-img w-100">
               <img class="w-100 h-100 object-fit-cover"
-                src="http://localhost/EShop_MVC/public/assets//img/air-force-1-07-shoes-WrLlWX.png" alt="">
+                src="http://localhost/Web2/public/assets//img/air-force-1-07-shoes-WrLlWX.png" alt="">
             </div>
             <div class="product-details p-2 w-100">
               <p class='text-primary m-0 p-0'>NIKE</p>
-              <a href="http://localhost/EShop_MVC/shop/showProductDetail/46"
+              <a href="http://localhost/Web2/shop/showProductDetail/46"
                 class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Nike Air Force 1 Shadow</a>
               <p class='text-seccondary m-0 p-0'>Giày nam</p>
               <div class="price">
@@ -90,11 +90,11 @@
           <div class="single-product border">
             <div class="product-img w-100">
               <img class="w-100 h-100 object-fit-cover"
-                src="http://localhost/EShop_MVC/public/assets//img/air-jordan-1-low-se-shoes-hgcLbC.jpeg" alt="">
+                src="http://localhost/Web2/public/assets//img/air-jordan-1-low-se-shoes-hgcLbC.jpeg" alt="">
             </div>
             <div class="product-details p-2 w-100">
               <p class='text-primary m-0 p-0'>NIKE</p>
-              <a href="http://localhost/EShop_MVC/shop/showProductDetail/50"
+              <a href="http://localhost/Web2/shop/showProductDetail/50"
                 class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Air Jordan 1 Low SE</a>
               <p class='text-seccondary m-0 p-0'>Giày nam</p>
               <div class="price">
@@ -107,11 +107,11 @@
           <div class="single-product border">
             <div class="product-img w-100">
               <img class="w-100 h-100 object-fit-cover"
-                src="http://localhost/EShop_MVC/public/assets//img/air-jordan-1-low-g-golf-shoes-8bKbqs.jpeg" alt="">
+                src="http://localhost/Web2/public/assets//img/air-jordan-1-low-g-golf-shoes-8bKbqs.jpeg" alt="">
             </div>
             <div class=" product-details p-2 w-100">
               <p class='text-primary m-0 p-0'>NIKE</p>
-              <a href="http://localhost/EShop_MVC/shop/showProductDetail/58"
+              <a href="http://localhost/Web2/shop/showProductDetail/58"
                 class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Air Jordan 1 Low G</a>
               <p class='text-seccondary m-0 p-0'>Giày nam</p>
               <div class="price">
@@ -142,11 +142,11 @@
           <div class="single-product border">
             <div class="product-img w-100">
               <img class="w-100 h-100 object-fit-cover"
-                src="http://localhost/EShop_MVC/public/assets//img/air-force-1-07-shoes-WrLlWX (1).png" alt="">
+                src="http://localhost/Web2/public/assets//img/air-force-1-07-shoes-WrLlWX (1).png" alt="">
             </div>
             <div class="product-details p-2 w-100">
               <p class='text-primary m-0 p-0'>NIKE</p>
-              <a href="http://localhost/EShop_MVC/shop/showProductDetail/71"
+              <a href="http://localhost/Web2/shop/showProductDetail/71"
                 class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Nike Air Force 1 Shadow</a>
               <p class='text-seccondary m-0 p-0'>Giày nam</p>
               <div class="price">
@@ -159,11 +159,11 @@
           <div class="single-product border">
             <div class="product-img w-100">
               <img class="w-100 h-100 object-fit-cover"
-                src="http://localhost/EShop_MVC/public/assets//img/air-force-1-07-shoes-WrLlWX.png" alt="">
+                src="http://localhost/Web2/public/assets//img/air-force-1-07-shoes-WrLlWX.png" alt="">
             </div>
             <div class="product-details p-2 w-100">
               <p class='text-primary m-0 p-0'>NIKE</p>
-              <a href="http://localhost/EShop_MVC/shop/showProductDetail/46"
+              <a href="http://localhost/Web2/shop/showProductDetail/46"
                 class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Nike Air Force 1 Shadow</a>
               <p class='text-seccondary m-0 p-0'>Giày nam</p>
               <div class="price">
@@ -176,11 +176,11 @@
           <div class="single-product border">
             <div class="product-img w-100">
               <img class="w-100 h-100 object-fit-cover"
-                src="http://localhost/EShop_MVC/public/assets//img/air-jordan-1-low-se-shoes-hgcLbC.jpeg" alt="">
+                src="http://localhost/Web2/public/assets//img/air-jordan-1-low-se-shoes-hgcLbC.jpeg" alt="">
             </div>
             <div class="product-details p-2 w-100">
               <p class='text-primary m-0 p-0'>NIKE</p>
-              <a href="http://localhost/EShop_MVC/shop/showProductDetail/50"
+              <a href="http://localhost/Web2/shop/showProductDetail/50"
                 class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Air Jordan 1 Low SE</a>
               <p class='text-seccondary m-0 p-0'>Giày nam</p>
               <div class="price">
@@ -193,11 +193,11 @@
           <div class="single-product border">
             <div class="product-img w-100">
               <img class="w-100 h-100 object-fit-cover"
-                src="http://localhost/EShop_MVC/public/assets//img/air-jordan-1-low-g-golf-shoes-8bKbqs.jpeg" alt="">
+                src="http://localhost/Web2/public/assets//img/air-jordan-1-low-g-golf-shoes-8bKbqs.jpeg" alt="">
             </div>
             <div class=" product-details p-2 w-100">
               <p class='text-primary m-0 p-0'>NIKE</p>
-              <a href="http://localhost/EShop_MVC/shop/showProductDetail/58"
+              <a href="http://localhost/Web2/shop/showProductDetail/58"
                 class="fw-bold link-offset-2 link-underline link-underline-opacity-0">Air Jordan 1 Low G</a>
               <p class='text-seccondary m-0 p-0'>Giày nam</p>
               <div class="price">

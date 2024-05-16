@@ -224,7 +224,7 @@ class AdminInvoiceModel extends Database
 
   }
 
-  // lấy toàn bộ bản ghi thuộc bảng nhóm quyền (có phân trang)
+  // lấy toàn bộ bản ghi thuộc bảng phiếu nhập (có phân trang)
   function getAllInvoices()
   {
     // số bản ghi trong 1 trang
@@ -280,7 +280,7 @@ class AdminInvoiceModel extends Database
       <table id='displayDataTable' class='table text-start align-middle table-bordered table-hover mb-0'>
         <thead>
           <tr class='text-dark'>
-            <th scope='col' onclick='SortCol(\"i.id\")'>Mã Phiếu Nhập</th>
+            <th scope='col' onclick='SortCol(\"i.id\")'>Mã Phiếu Nhập <i class='fa-solid fa-sort'></i></th>
             <th scope='col' onclick='SortCol(\"i.create_date\")'>Ngày Lập</th>
             <th scope='col' onclick='SortCol(\"employee\")'>Nhân viên</th>
             <th scope='col' onclick='SortCol(\"supplier\")'>Nhà cung cấp</th>

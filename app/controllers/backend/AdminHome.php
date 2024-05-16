@@ -3,9 +3,7 @@
 class AdminHome extends Controller
 {
   function index()
-  { $chart = $this->model("backend/AdminProductModel");
-    $chart_year = $chart->getYear();
-    $data['chart'] = $chart_year;
+  { 
     $user = $this->model("backend/AdminUserModel");
     $user_data = $user->check_login();
     if (!is_null($user_data)) {
@@ -16,13 +14,6 @@ class AdminHome extends Controller
     } else {
       $data['page_title'] = "Admin - Login";
       $this->view("backend/AdminLogin", $data);
-    }
-  }
-
-  function getStats(){
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      $home = $this->model("backend/AdminProductModel");
-      $home->getStats($_POST);
     }
   }
 
